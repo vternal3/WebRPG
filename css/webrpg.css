@@ -1,0 +1,53 @@
+html, body {
+	width:  100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: 0;
+	overflow: hidden; /*  Disable scrollbars */
+	display: block;  /* No floating content on sides */
+}
+
+canvas {
+	position: absolute; 
+	left: 0px; 
+	top: 0px;
+	/* border: 12px solid black; */
+}
+
+#container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+#container canvas {
+	position: absolute;
+}
+
+#top_right_overlay {
+	position: relative;
+	float: right;
+}
+
+#top_left_overlay {
+	position: relative;
+	float: left;
+}
+
+#middle {
+	width: 100%;
+	height: 100%;
+}
+
+#bottom_right_overlay {
+	position: relative;
+	float: right;
+	bottom: 50px;
+}
+
+#bottom_left_overlay {
+	position: relative;
+	float: left;
+	bottom: 50px;
+}
