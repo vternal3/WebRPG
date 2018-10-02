@@ -37,15 +37,24 @@ setInterval(function() {
 	draw();
 }, 1000/FPS);
 
-
+var nickname = "";
+function start()
+{
+	nickname = document.getElementById("nickname").value;
+	document.getElementById("login").classList.add("nodisplay");
+	document.getElementById("top_left_overlay").classList.add("nodisplay");
+	document.getElementById("top_right_overlay").classList.add("nodisplay");
+	document.getElementById("bottom_right_overlay").classList.add("nodisplay");
+	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
+}
 function update() {
 	
 }
 
 function draw() {
-  canvas.fillStyle = "#111"; // Set color to grey
-  canvas.font = '72px Courier New';
-  canvas.fillText("Hello World!", canvas.canvas.width / 2 - 250, 50);
+  //canvas.fillStyle = "#111"; // Set color to grey
+  //canvas.font = '72px Courier New';
+  //canvas.fillText("Hello World Dev!", canvas.canvas.width / 2 - 250, 50);
 }
 
 function preload() {
