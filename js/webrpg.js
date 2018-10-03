@@ -32,6 +32,11 @@ var player = {
 	}
 };
 
+//prevents form submit from refreshing page.
+$("#login_form").submit(function(e) {
+    e.preventDefault(); 
+});
+
 setInterval(function() {
 	update();
 	draw();
@@ -46,6 +51,7 @@ function start()
 	document.getElementById("top_right_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_right_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
+	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
 }
 function update() {
 	
