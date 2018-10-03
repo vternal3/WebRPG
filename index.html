@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>WebRPG</title>
+		<title>webrpg.io</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		
@@ -28,24 +28,23 @@
 		<![endif]-->
 		
 		<div id="container">
+			<ul id="messages"></ul>
 			<div id="top_left_overlay"><a href="#top_left">Top Left</a></div>
 			<div id="top_right_overlay"><a href="#top_right">Top Right</a></div>
 			<div id="middle" style="clear: both;">
-			
-			<!-- Login Form -->
-			<div id="login" class="main">
-				<p class="sign" align="center">webrpg.io</p>
-				<form id="login_form" class="form1" onsubmit="return start();">
-					<input id="nickname" class="un " type="text" align="center" placeholder="Nickname" />
-					<!-- <input class="pass" type="password" align="center" placeholder="Password"> -->
-					<input class="submit" type="submit" value="Play" align="center"/>
-					<!--
-					<p class="forgot" align="center"><a href="#create">Create An Account</a>
-					&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
-				</form>	
-			</div>
-			<!-- End of Login Form -->
-			
+				<!-- Login Form -->
+				<div id="login" class="main">
+					<p class="sign" align="center">webrpg.io</p>
+					<form id="login_form" class="form1" onsubmit="return start();">
+						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" />
+						<!-- <input class="pass" type="password" align="center" placeholder="Password"> -->
+						<input class="submit" type="submit" value="Play" align="center"/>
+						<!--
+						<p class="forgot" align="center"><a href="#create">Create An Account</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
+					</form>	
+				</div>
+				<!-- End of Login Form -->
 			</div>
 			<div id="bottom_right_overlay"><a href="#bottom_right">Bottom Right</a></div>
 			<div id="bottom_left_overlay"><a href="#bottom_left">Bottom Left</a></div>
@@ -63,6 +62,10 @@
 		
 		<!-- WebRPG Scripts-->
 		<script src="js/webrpg.js"></script>
+		
+		<!-- Socket.io Scripts -->
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="js/socket.io.js"></script>
 		
 		<!-- Google Analytics Scripts -->
 		<script>

@@ -41,21 +41,21 @@ canvas {
 }
 #bottom_middle_overlay {
 	position: absolute;
-	bottom: 5px;
+	bottom: 25px;
 	left:50%;
-	margin-left:-85px;
+	margin-left:-40px;
 }
 
 #bottom_right_overlay {
 	position: relative;
 	float: right;
-	bottom: 50px;
+	bottom: 70px;
 	display:inline-block;
 }
 
 #bottom_left_overlay {
 	position: relative;
 	float: left;
-	bottom: 50px;
+	bottom: 70px;
 	display:inline-block;
 }
