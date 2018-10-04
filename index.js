@@ -3,12 +3,10 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-//Will need to put web inside a 'public' directory
-//instead of socket.io being located in the root.
-app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 io.on('connection', function(socket){
