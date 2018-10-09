@@ -1,0 +1,106 @@
+TODO: 
+[X] Move project to C:\
+[X] move bottom links up more in the css file webrpg.css
+[X] move site into /public and node_module up one level
+[ ] buy webrpg.io
+	[ ] get SSL working for node.js and express server
+[X] rename WebRPG to webrpg
+[X] create custom right click menu for later
+[ ] make MySQL SSL secured
+[ ] create MySQL tables for users and other game information
+[X] get client and server node.js code setup
+	[X] first get server side working
+	[ ] ... more details as we go
+[X] get input controls working with the client and server
+[X] create a user sign up authentication work flow
+[ ] get client side login/signup form validation working
+[ ] get server side login/signup form validation working
+[ ] combine networking code with using authentication code
+[ ] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
+[ ] 
+[ ] update create_webrpg_db with correct table creation
+[ ] move all except input to server side
+[ ] create 4 way d-pad input keys
+[ ] create input for start,select,x,y,a,b,left_tab,right_tab
+[ ] setup sprite sheet animation for 4 way movement
+[ ] create a simple Stats character sheet including:
+	[ ] Attack
+	[ ] Defense
+	[ ] Speed
+	[ ] Health Points
+	[ ] Magic Points
+[ ] create a monster with:
+	[ ] spritesheet
+	[ ] stats
+	[ ] movement AI
+	[ ] attack AI
+[ ] create a shop
+[ ] create a player with 3 different magic abilities
+[ ] create 3 different monsters to test different effectiveness of spells against
+[ ] create globe experience collection
+[ ] create item collection triggers for different power ups / item collections
+[ ] create a bestiary of all enemies
+	[ ] elemental affinities and status immunities are discovered after using a spell / ability on the enemy
+[ ] status effects list:
+	[ ]
+[ ] have auto populated menu which brings the top items that can cure your current effect to the top of the menu automaticaly when you are affected by the status effect, along side other main actions such as attack defend etc.
+[ ] in general make making choices quick in the game by automating dynamicaly to each enemy encounter
+[ ] main choices: attack (either phyical or magical), defend (either phsyical or magical), remedy (either item or spell)
+[ ] create charging attacks like secret of mana (both physical and magical)
+[ ] be able to jump
+	[ ] have a double jump
+	[ ] allow for jump height(s) to increase in height by leveling
+		[ ] puzzles and areas are unreachable until you can jump heigh enough.
+[ ] have item instanses where an item is visable to you until you have collected it once then it is no longer visable to you, but others who have not collected the item they can still see it in it's location for them to collect as well.
+[ ] have special monsters which require unique abilities/magic/items/attacks/etc to defeat them and make long quests lines to learn or obtain the skill(s) nessasary to defeate the special type of monster.
+[ ] have a quest log that is short and simple and to the point so at any time you can read it quickly and know where you are going and what you need to do in your quest... don't have long quest dialogs.
+[ ] possibly be able to add two companions to your party and be able to switch between them... this feature will be on the back burner for a while tho.
+
+
+
+
+[ ] create a screenshot page
+[ ] create a features list page
+[ ] create a requirements page
+[ ] create a press kit
+[ ] create a Privacy Policy
+[ ] create a Terms of Service
+[ ] create twitter account webrpg.io
+[ ] create facebook account webrpg.io
+[ ] create reddit account webrpg.io
+[ ] create discord account webrpg.io
+[ ] create background music to main page
+[ ] add button to toggle background music on/off
+[ ] create an itch.io account to post game to https://itch.io/developers
+
+
+
+
+
+[ ] Level Up Weapons by equipping them and using them
+[ ] Level up materia by having them equiped and using them
+[ ] Action RPG
+[ ] Combo actions
+[ ] Cast magic spells in real time
+[ ] Cast buff magic
+[ ] 12 or more different spell effects and elements
+[ ] Towns with:
+	[ ] Smart NPC
+	[ ] Armor shops
+	[ ] Item shops
+	[ ] Specialty shops i.e. job specific items
+	[ ] ** maybe special item drops locations in boxes or jars or something
+	[ ] Quests from NPC's
+	[ ] Quests from builition boards
+[ ] Weapons with elemental defenses
+[ ] Each monster is particuarly weak against a players elements, but no two players elements are the same weakness.
+[ ] MMO
+[ ] Global Score for things like killing monsters, earning levels, crafting weapons etc.
+[ ] No level cap, infinite levels, but an ever increasing gap between exp earned to level up.
+[ ] **Maybe perma death.
+[ ] Playing options: Either persistant or session based
+	[ ] persistant means you need to create an account. prompt when a player leaves game
+ 		and when player first starts
+[ ] 	session base means you don't mind losing your character after you stop playing.
+[ ] Have a demo of the game that players can just hop into without creating an account.
+[ ] Get the player right into the action.

@@ -9,7 +9,6 @@
 		
 		<link rel="manifest" href="site.webmanifest">
 		<link rel="apple-touch-icon" href="icon.png">
-		<!-- Place favicon.ico in the root directory -->
 		
 		<!-- Boiler Plate Stylesheets -->
 		<link rel="stylesheet" href="css/normalize.css">
@@ -26,7 +25,6 @@
 		<!--[if lte IE 9]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
 		<![endif]-->
-		
 		<div id="container">
 			<ul id="messages"></ul>
 			<div id="top_left_overlay"><a href="#top_left">Top Left</a></div>
@@ -43,6 +41,28 @@
 						<p class="forgot" align="center"><a href="#create">Create An Account</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
 					</form>	
+					<div align="center"><a href="javascript:;" onclick="signup_form();">create account</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="login_form();">login</a></div>
+					<div align="center" id="loginform"  style="display:none;">
+						<form method="post" action="/" autocomplete="on">
+							<input id="login-username" type="text" name="username" value="" placeholder="username" />
+							<br/>
+							<input id="login-password" type="password" name="password" placeholder="password" />
+							<br/>
+							<button id="btn-login" name="login_button" type="submit">Login</button>
+						</form>
+						<div align="center"><a href="#" onclick="return url_update();">forgot password</a></div>
+					</div>
+					<div align="center" id="signupform"  style="display:none;">
+						<form method="post" action="/" autocomplete="off">
+							<input type="text" name="user_name" placeholder="User Name" />
+							<br/>
+							<input type="password" name="password" placeholder="Password" />
+							<br/>
+							<input type="password" name="confirm_password" placeholder="Confirm Password" />
+							<br/>
+							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
+						</form>
+					</div>
 				</div>
 				<!-- End of Login Form -->
 			</div>
@@ -51,10 +71,23 @@
 			<div id="bottom_middle_overlay"><a href="#bottom_middle1">Link 1</a> <span style="color:white;"> | </span> <a href="#bottom_middle2">Link 2</a></div>
 		</div>
 		
+		<!-- Custom Right Click Context Menu -->
+		<ul class='custom-menu'>
+			<li data-action="first">First thing</li>
+			<li data-action="second">Second thing</li>
+			<li data-action="third">Third thing</li>
+		</ul>
+		
+		<!-- Phaser Scripts -->
+		<!-- <script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script> -->
+		
 		<!-- jQuery Scripts -->
 		<script src="js/vendor/modernizr-3.6.0.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+		
+		<!-- Utility Scripts -->
+		<script src="js/utility.js"></script>
 		
 		<!-- Boiler Plate Scripts-->
 		<script src="js/plugins.js"></script>
@@ -62,10 +95,10 @@
 		
 		<!-- WebRPG Scripts-->
 		<script src="js/webrpg.js"></script>
+        <script src="js/game.js"></script>
 		
 		<!-- Socket.io Scripts -->
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="js/socket.io.js"></script>
 		
 		<!-- Google Analytics Scripts -->
 		<script>

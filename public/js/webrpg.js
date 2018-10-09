@@ -53,6 +53,23 @@ function start()
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
 }
+function url_update()
+{
+	window.history.pushState("object or string", "Title", "/new-url");
+}
+
+function login_form()
+{
+	document.getElementById("signupform").style.display = "none";
+	document.getElementById("loginform").style.display = "initial";
+}
+
+function signup_form()
+{
+	document.getElementById("signupform").style.display = "initial";
+	document.getElementById("loginform").style.display = "none";
+}
+
 function update() {
 	
 }
