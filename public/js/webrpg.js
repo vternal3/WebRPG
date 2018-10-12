@@ -64,6 +64,9 @@ function login_form()
 {
 	document.getElementById("signupform").style.display = "none";
 	document.getElementById("loginform").style.display = "initial";
+	if(document.getElementById("forgot-email").value != "") {
+		document.getElementById("login_email").value = document.getElementById("forgot-email").value;
+	}
 	document.getElementById("forgotform").style.display = "none";
 	document.getElementById("forgot_new_password").style.display = "none";
 	document.getElementById("forgot_succeed").style.display = "none";
@@ -85,7 +88,9 @@ function forgot_form()
 	document.getElementById("signupform").style.display = "none";
 	document.getElementById("loginform").style.display = "none";
 	document.getElementById("forgotform").style.display = "initial";
-	document.getElementById("forgot-email").value = document.getElementById("login_email").value;
+	if(document.getElementById("login_email").value != "") {
+		document.getElementById("forgot-email").value = document.getElementById("login_email").value;
+	}
 	document.getElementById("forgot_new_password").style.display = "none";
 	document.getElementById("forgot_succeed").style.display = "none";
 	document.getElementById("forgot_message").innerHTML = "";
