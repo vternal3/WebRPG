@@ -25,8 +25,9 @@
 		<!--[if lte IE 9]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
 		<![endif]-->
+		
+		<!-- <div id="test">test</div> -->
 		<div id="container">
-			<ul id="messages"></ul>
 			<div id="top_left_overlay"><a href="#top_left">Top Left</a></div>
 			<div id="top_right_overlay"><a href="#top_right">Top Right</a></div>
 			<div id="middle" style="clear: both;">
@@ -41,28 +42,51 @@
 						<p class="forgot" align="center"><a href="#create">Create An Account</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
 					</form>	
-					<div align="center"><a href="javascript:;" onclick="signup_form();">create account</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="login_form();">login</a></div>
+					<div align="center"><a href="javascript:;" id="signup_form_link" onclick="signup_form();">signup</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="login_form_link" onclick="login_form();">login</a></div>
 					<div align="center" id="loginform"  style="display:none;">
+						<div align="center"><label id="login_message"></label></div>
 						<form method="post" action="/" autocomplete="on">
-							<input id="login-username" type="text" name="username" value="" placeholder="username" />
+							<input id="login_email" type="text" name="login_email" value="" placeholder="Email"  required/>
 							<br/>
-							<input id="login-password" type="password" name="password" placeholder="password" />
+							<input id="login-password" type="password" name="password" placeholder="Password"  required/>
 							<br/>
 							<button id="btn-login" name="login_button" type="submit">Login</button>
 						</form>
-						<div align="center"><a href="#" onclick="return url_update();">forgot password</a></div>
+						<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
 					</div>
 					<div align="center" id="signupform"  style="display:none;">
+						<div align="center"><label id="signup_message"></label></div>
 						<form method="post" action="/" autocomplete="off">
-							<input type="text" name="user_name" placeholder="User Name" />
+							<input type="text" name="user_name" placeholder="Username"  required/>
 							<br/>
-							<input type="password" name="password" placeholder="Password" />
+							<input type="email" name="email" placeholder="Email"  required/>
 							<br/>
-							<input type="password" name="confirm_password" placeholder="Confirm Password" />
+							<input type="password" name="password" placeholder="Password"  required/>
+							<br/>
+							<input type="password" name="confirm_password" placeholder="Confirm Password"  required/>
 							<br/>
 							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
 						</form>
 					</div>
+					<div align="center" id="forgotform"  style="display:none;">
+						<div align="center"><label id="forgot_message"></label></div>
+						<form method="post" action="/" autocomplete="on">
+							<input id="forgot-email" type="email" name="email" value="" placeholder="Email"  required/>
+							<br/>
+							<button id="btn-forgot" name="forgot_button" type="submit">Submit</button>
+						</form>
+					</div>
+					<div align="center" id="forgot_new_password"  style="display:none;">
+						<div align="center"><label id="forgot_new_password_message"></label></div>
+						<form id="forgot_password_form" method="post" action="/" autocomplete="off">
+							<input id="new_password" type="password" name="new_password" value="" placeholder="New Password"  required/>
+							<br/>
+							<input id="confirm_password" type="password" name="confirm_password" value="" placeholder="Confirm Password"  required/>
+							<br/>
+							<button id="btn-forgot" name="forgot_button" type="submit">Update Password</button>
+						</form>
+					</div>
+					<div align="center" id="forgot_succeed"  style="display:none;"><div align="center"><label id="forgot_succeed_label" align="center"></label></div></div>
 				</div>
 				<!-- End of Login Form -->
 			</div>
@@ -70,7 +94,6 @@
 			<div id="bottom_left_overlay"><a href="#bottom_left">Bottom Left</a></div>
 			<div id="bottom_middle_overlay"><a href="#bottom_middle1">Link 1</a> <span style="color:white;"> | </span> <a href="#bottom_middle2">Link 2</a></div>
 		</div>
-		
 		<!-- Custom Right Click Context Menu -->
 		<ul class='custom-menu'>
 			<li data-action="first">First thing</li>

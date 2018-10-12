@@ -1,8 +1,15 @@
 {
   "name": "webrpg.io",
   "version": "0.0.1",
-  "description": "my first socket.io app",
+  "description": "webrpg.io app",
+  "main": "app.js",
+  "scripts": {
+	"start": "nodemon server"
+  },
+  "author": "Jeb Bradwell",
+  "license": "MIT",
   "dependencies": {
+    "async-waterfall": "^0.1.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
@@ -14,10 +21,17 @@
     "express-session": "^1.15.6",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
+    "node-datetime": "^2.1.2",
+    "nodemailer": "^4.6.8",
+    "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "req-flash": "0.0.3",
     "serve-favicon": "^2.5.0",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "xoauth2": "^1.2.0"
+  },
+  "devDependencies": {
+	"nodemon": "^1.11.0"
   }
 }

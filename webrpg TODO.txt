@@ -13,10 +13,13 @@ TODO:
 	[ ] ... more details as we go
 [X] get input controls working with the client and server
 [X] create a user sign up authentication work flow
-[ ] get client side login/signup form validation working
-[ ] get server side login/signup form validation working
+[X] make it so that email is repopulated on login if failed to login
+[X] populate the forgot password email field with login email value
+[ ] remember to change forgot email's http part to https once SSL is working/after you buy webrpg.io domain name.
+[X] get client side login/signup form validation working
+[X] get server side login/signup form validation working
 [ ] combine networking code with using authentication code
-[ ] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
+[X] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
 [ ] 
 [ ] update create_webrpg_db with correct table creation
 [ ] move all except input to server side
@@ -72,6 +75,8 @@ TODO:
 [ ] create background music to main page
 [ ] add button to toggle background music on/off
 [ ] create an itch.io account to post game to https://itch.io/developers
+[ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums
+
 
 
 
