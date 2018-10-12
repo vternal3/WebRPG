@@ -4,24 +4,25 @@ TODO:
 [X] move site into /public and node_module up one level
 [ ] buy webrpg.io
 	[ ] get SSL working for node.js and express server
+	[ ] make MySQL SSL secured
+	[ ] remember to change forgot email's http part to https once SSL is working/after you buy webrpg.io domain name.
 [X] rename WebRPG to webrpg
 [X] create custom right click menu for later
-[ ] make MySQL SSL secured
-[ ] create MySQL tables for users and other game information
-[X] get client and server node.js code setup
+[X] create MySQL tables for users
+[X] get client and server node.js code setup for login/signup/forgot password
 	[X] first get server side working
-	[ ] ... more details as we go
 [X] get input controls working with the client and server
 [X] create a user sign up authentication work flow
 [X] make it so that email is repopulated on login if failed to login
 [X] populate the forgot password email field with login email value
-[ ] remember to change forgot email's http part to https once SSL is working/after you buy webrpg.io domain name.
 [X] get client side login/signup form validation working
 [X] get server side login/signup form validation working
-[ ] combine networking code with using authentication code
 [X] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
 [ ] 
-[ ] update create_webrpg_db with correct table creation
+[ ] remove username from user table and login, signup workflows.
+[ ] update create_webrpg_db with correct table creation query
+[ ] combine socket.io networking code with using authentication code
+[ ] get unique usernames working for socket.io networking code from the login/signup code.
 [ ] move all except input to server side
 [ ] create 4 way d-pad input keys
 [ ] create input for start,select,x,y,a,b,left_tab,right_tab
