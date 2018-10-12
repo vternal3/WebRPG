@@ -42,7 +42,7 @@
 						<p class="forgot" align="center"><a href="#create">Create An Account</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
 					</form>	
-					<div align="center"><a href="javascript:;" id="signup_form_link" onclick="signup_form();">signup</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="login_form_link" onclick="login_form();">login</a></div>
+					<div align="center"><a href="javascript:;" id="signup_form_link" onclick="signup_form();">signup</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="login_form_link" onclick="login_form_update();">login</a></div>
 					<div align="center" id="loginform"  style="display:none;">
 						<div align="center"><label id="login_message"></label></div>
 						<form method="post" action="/" autocomplete="on">
@@ -93,7 +93,9 @@
 			<div id="bottom_right_overlay"><a href="#bottom_right">Bottom Right</a></div>
 			<div id="bottom_left_overlay"><a href="#bottom_left">Bottom Left</a></div>
 			<div id="bottom_middle_overlay"><a href="#bottom_middle1">Link 1</a> <span style="color:white;"> | </span> <a href="#bottom_middle2">Link 2</a></div>
+			
 		</div>
+		<div id="phaser-example" style="display:none;"></div>
 		<!-- Custom Right Click Context Menu -->
 		<ul class='custom-menu'>
 			<li data-action="first">First thing</li>
@@ -102,7 +104,7 @@
 		</ul>
 		
 		<!-- Phaser Scripts -->
-		<!-- <script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script> -->
+		<script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
 		
 		<!-- jQuery Scripts -->
 		<script src="js/vendor/modernizr-3.6.0.min.js"></script>

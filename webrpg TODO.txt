@@ -18,7 +18,8 @@ TODO:
 [X] get client side login/signup form validation working
 [X] get server side login/signup form validation working
 [X] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
-[ ] 
+
+[ ] implement express-recaptcha on login, signup, forgot password work flows.
 [ ] remove username from user table and login, signup workflows.
 [ ] update create_webrpg_db with correct table creation query
 [ ] combine socket.io networking code with using authentication code

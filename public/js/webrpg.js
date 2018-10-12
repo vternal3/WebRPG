@@ -55,12 +55,20 @@ function start(name)
 	document.getElementById("bottom_right_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
-	document.getElementById("test").innerHTML = nickename;
+	//document.getElementById("test").innerHTML = nickename;
 	window.history.pushState("object or string", "Clear return params", "/#");
 	
+	// TODO: Add more to this functionality
+	window.onbeforeunload = function () {return false;}
+	
+	//Sleep for a second to let the main page fade out.
+	//TODO: make this div fade in eventually
+	setTimeout(function() {
+		document.getElementById("phaser-example").style.display = "initial";
+	}, 600);
 }
 
-function login_form()
+function login_form_update()
 {
 	document.getElementById("signupform").style.display = "none";
 	document.getElementById("loginform").style.display = "initial";
@@ -139,8 +147,7 @@ $(document).ready(function(){
 	if(window.location.href.includes("login_success")) {
 		//fade out main page elements and start the game 
 		var username = window.location.href.split(/[=,&]+/)[2];
-		window.history.pushState("object or string", "Clear return params", "/#");
-		console.log(username);
+		//window.history.pushState("object or string", "Clear return params", "/#");
 		start(username);
 	}
 	//Signup failed
@@ -213,6 +220,7 @@ $(document).ready(function(){
 	}
 	//set token which should be the 3rd=2 element split from '/'s 
 	document.getElementById('forgot_password_form').action = "/" + window.location.href.split(/[\/]+/)[2];
+	
 	
 });
 
