@@ -9,20 +9,25 @@ var express = require('express')
 require('dotenv').config();
 var session = require('express-session');
 var app = express();
-var server = require('http').Server(app);
-// var server = require('https').Server(app);
+//Redirect 'http' requests to secure 'https'
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(80);
+var fs = require("fs");
+const options = {
+  key: fs.readFileSync(process.env.DOMAIN_KEY),
+  cert: fs.readFileSync(process.env.DOMAIN_CERT)
+};
+var port = process.env.PORT;
+var server = require('https').createServer(options, app);
+server.listen(port, function(){
+	console.log("listening on *:" + port);
+});
+
 var io = require('socket.io')(server);
-
-// var fs = require("fs");
-
-// const options = {
-  // key: fs.readFileSync("/srv/www/keys/my-site-key.pem"),
-  // cert: fs.readFileSync("/srv/www/keys/chain.pem")
-// };
-
 var mysql      = require('mysql');
 var bodyParser=require("body-parser");
-var port = 8082;
 var connection = mysql.createConnection({
 	host     : process.env.DB_HOST,
 	user     : process.env.DB_USERNAME,
@@ -31,11 +36,12 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 global.db = connection;
- 
+ setInterval(function () {
+	 console.log("Keep MySQL Alive");
+    global.db.query('SELECT 1');
+}, 3600000); //Once every hour do a query to keep connection alive
 // all environments // Middleware
 app.set('port', process.env.PORT || port);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public')));
@@ -70,11 +76,7 @@ app.post('/:token', user.index);
 app.get('/logout', user.logout);//call for logout
 app.get('/:token', user.index);
 
-//Middleware
-// app.listen(port, function(){
-	// console.log("listening on *:" + port);
-// });
-
+// server socket.io code
 var players = {};
 
 var star = {
@@ -87,8 +89,18 @@ var scores = {
   red: 0
 };
 
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  return out;
+}
+
 io.on('connection', function(socket){
-	console.log('a user connected');
+	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
+		return;
+	console.log('ADDRESS: '+ socket.handshake.address + ' TIME: ' + socket.handshake.time);
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
 		// remove this player from our players object
@@ -106,6 +118,24 @@ io.on('connection', function(socket){
 		playerId: socket.id,
 		team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
 	};
+	
+	//Request username
+	socket.on('requestEmail', function (id) {
+		var sql="SELECT `email` FROM `users` WHERE `id`="+db.escape(id);                           
+		
+		db.query(sql, function(err, results){ 
+			if (err) throw err;
+			if(results.length == 1) {
+				players[socket.id].email = results[0].email;
+				//send username 
+				socket.emit('emailSent', players[socket.id].email);
+			} else {
+				
+			}
+		});
+	});
+	
+	
 	
 	// send the players object to the new player
 	socket.emit('currentPlayers', players);
@@ -140,10 +170,3 @@ io.on('connection', function(socket){
 		io.emit('scoreUpdate', scores);
 	});
 });
-
-server.listen(port, function(){
-console.log(`listening on *:${server.address().port}`);
-});
-// server.createServer(options, app).listen(3000, function(){
-// console.log(`listening on *:${server.address().port}`);
-// });

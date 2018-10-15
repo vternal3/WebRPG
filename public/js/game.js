@@ -67,6 +67,8 @@ function create() {
 	this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
 	
 	this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
+	
+	this.nameText = this.add.text(292, 16, '', { fontSize: '32px', fill: '#00FF00' });
 	  
 	this.socket.on('scoreUpdate', function (scores) {
 		self.blueScoreText.setText('Blue: ' + scores.blue);
@@ -80,8 +82,23 @@ function create() {
 			this.socket.emit('starCollected');
 		}, null, self);
 	});
+	//send ID to the server
+	this.socket.emit('requestEmail', window.location.href.split(/[=,&]+/)[2]);
+	
+	this.socket.on('emailSent', function (email) {
+		self.nameText.setText(email);
+	});
+	window.history.pushState("object or string", "Clear return params", "/#");
+	//TODO: Send a one time token to request updates, then on server side 
+	//set the socket id that is associated with the one time token as set
+	//for heart beat refresh id... any other id that tries will be blocked
+	//until the heart beat refresh has stopped recieving refresh requests 
+	//from the socket id. Also login attempts to the account will be rejected
+	//until the heart beat refresh has stopped and the account's live flag 
+	//has been set to 0 (zero)
 }
 var agvel = 0;
+var once = 1;
 function update() {
 	if (this.ship) {
 		if (this.cursors.left.isDown) {

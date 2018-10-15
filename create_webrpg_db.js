@@ -1,8 +1,8 @@
 require('dotenv').config()
 
 var mysql = require(process.env.DB_CONNECTION);
-var sql = "";
-var database_name = 'webrpg';
+
+var database_name = process.env.DB_DATABASE;
 var tables = ['users'];
 
 //CONNECT to mysql
@@ -18,13 +18,13 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
-//CREATE database 'database_name'
+//CREATE database
 con.query("CREATE DATABASE IF NOT EXISTS " + database_name, function (err, result) {
 	if (err) throw err;
 	console.log("Database created");
 });
 
-//CHANGE to database 'database_name'
+//CHANGE to database
 con.changeUser({database : database_name}, function(err) {
   if (err) throw err;
   console.log("Changed to " + database_name + " Database");
@@ -32,15 +32,15 @@ con.changeUser({database : database_name}, function(err) {
 
 //CREATE TABLE
 
-sql = `CREATE TABLE users (
-id int(11) NOT NULL AUTO_INCREMENT, 
-name varchar(255) NOT NULL, 
-email varchar(255) NOT NULL, 
-password varchar(255) NOT NULL, 
-created_at datetime NOT NULL, 
-updated_at datetime NOT NULL, 
-PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1`
+var sql = `CREATE TABLE users (
+  id int(5) NOT NULL,
+  email varchar(254) DEFAULT NULL,
+  password varchar(60) NOT NULL,
+  resetPasswordToken varchar(40) DEFAULT NULL,
+  resetPasswordExpires datetime DEFAULT NULL,
+  crpToken varchar(40) DEFAULT NULL,
+  loggedIn tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1`;
 
 con.query(sql, function (err, result) {
 	if (err) throw err;

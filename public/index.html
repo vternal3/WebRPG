@@ -57,9 +57,7 @@
 					<div align="center" id="signupform"  style="display:none;">
 						<div align="center"><label id="signup_message"></label></div>
 						<form method="post" action="/" autocomplete="off">
-							<input type="text" name="user_name" placeholder="Username"  required/>
-							<br/>
-							<input type="email" name="email" placeholder="Email"  required/>
+							<input type="email" name="signup_email" placeholder="Email"  required/>
 							<br/>
 							<input type="password" name="password" placeholder="Password"  required/>
 							<br/>
@@ -83,7 +81,7 @@
 							<br/>
 							<input id="confirm_password" type="password" name="confirm_password" value="" placeholder="Confirm Password"  required/>
 							<br/>
-							<button id="btn-forgot" name="forgot_button" type="submit">Update Password</button>
+							<button id="btn-forgot-update" name="forgot_button" type="submit">Update Password</button>
 						</form>
 					</div>
 					<div align="center" id="forgot_succeed"  style="display:none;"><div align="center"><label id="forgot_succeed_label" align="center"></label></div></div>
@@ -96,6 +94,7 @@
 			
 		</div>
 		<div id="phaser-example" style="display:none;"></div>
+		
 		<!-- Custom Right Click Context Menu -->
 		<ul class='custom-menu'>
 			<li data-action="first">First thing</li>

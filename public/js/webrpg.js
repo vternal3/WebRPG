@@ -45,6 +45,8 @@ setInterval(function() {
 var nickname = "";
 function start(name)
 {
+	// TODO: Add more to this functionality
+	window.onbeforeunload = function () {return false;}
 	if(name == "")
 		nickname = document.getElementById("nickname").value;
 	else
@@ -56,10 +58,9 @@ function start(name)
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
 	//document.getElementById("test").innerHTML = nickename;
-	window.history.pushState("object or string", "Clear return params", "/#");
+	//window.history.pushState("object or string", "Clear return params", "/#");
 	
-	// TODO: Add more to this functionality
-	window.onbeforeunload = function () {return false;}
+	
 	
 	//Sleep for a second to let the main page fade out.
 	//TODO: make this div fade in eventually
@@ -146,9 +147,9 @@ $(document).ready(function(){
 	//Login succeeded
 	if(window.location.href.includes("login_success")) {
 		//fade out main page elements and start the game 
-		var username = window.location.href.split(/[=,&]+/)[2];
+		var id = window.location.href.split(/[=,&]+/)[2];
 		//window.history.pushState("object or string", "Clear return params", "/#");
-		start(username);
+		start(id);
 	}
 	//Signup failed
 	if(window.location.href.includes("signup_error")) {

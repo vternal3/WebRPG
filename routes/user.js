@@ -10,14 +10,13 @@ var salt_factor = 12;
 //------------------------------------login/signup functionality----------------------------------------------
 exports.index = function(req, res){
 	//User signup response
-    if(req.method == "POST" && req.body.user_name != undefined) {
-		console.log("signup attempt by '" + req.body.user_name + "'");
+    if(req.method == "POST" && req.body.signup_email != undefined) {
+		console.log("signup attempt by '" + req.body.signup_email + "'");
 		
 		var post		= req.body;
-		var name 		= post.user_name;
 		var pass 		= post.password;
 		var confirmpass = post.confirm_password;
-		var email = post.email;
+		var email 		= post.signup_email;
 		//check that all fields are legit return any errors if not
 		if(pass != confirmpass){
 			console.log("passwords are not the same");
@@ -26,7 +25,7 @@ exports.index = function(req, res){
 		}
 		
 		//First check if the email address already exists
-		var sql = "SELECT `email` FROM `users` WHERE `email`='"+email+"'";
+		var sql = "SELECT `email` FROM `users` WHERE `email`="+db.escape(email);
 		var query = db.query(sql, function(err, results) {
 			if (err) throw err;
 			//Email is not unique
@@ -39,16 +38,17 @@ exports.index = function(req, res){
 				var salt = bcrypt.genSaltSync(salt_factor);
 				pass = bcrypt.hashSync(pass,salt);
 	  
-				var sql = "INSERT INTO `users` (`email`, `user_name`, `password`, `resetPasswordToken`, `resetPasswordExpires`) VALUES ('" + email + "','" + name + "','" + pass + "','" + undefined + "','" + undefined + "')";
+				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"')";
 
 				var query = db.query(sql, function(err, results) {
 					if (err) throw err;
 					if(results.affectedRows == 1) {
-						console.log("'" + name + "' successfully signup");
+						console.log("'" + email + "' successfully signup");
+						//TODO: add login and or update index.html to recognize signup_success with crp token here
 						res.redirect('/?signup_success');
 						return;
 					} else {
-						console.log("'" + name + "' un-successfully signup could not insert into database");
+						console.log("'" + email + "' un-successfully signup could not insert into database");
 						res.redirect('/?signup_error=Our Error Please Contact vternal3@gmail.com');
 						return;
 					}
@@ -63,19 +63,19 @@ exports.index = function(req, res){
 		var email = post.login_email;
 		var pass = post.password;
 		
-		var sql="SELECT `id`, `email`, `user_name`, `password` FROM `users` WHERE `email`='"+email+"'";                           
+		var sql="SELECT `id`, `email`, `password` FROM `users` WHERE `email`="+db.escape(email);                           
 		
 		db.query(sql, function(err, results){ 
 			if (err) throw err;
 			if(results.length && bcrypt.compareSync(pass, results[0].password)){
 				req.session.userId = results[0].id;
 				req.session.user = results[0];
-				console.log("'" + results[0].user_name + "' successfully logged in");
-				res.redirect('/?login_success&name=' + results[0].user_name);
+				console.log("'" + results[0].email + "' successfully logged in");
+				res.redirect('/?login_success&id=' + results[0].id);
 				return;
 			}
 			else{
-				console.log("'" + name + "' un-successfully login");
+				console.log("'" + email + "' un-successfully login");
 				res.redirect('/?login_error&email=' + email);
 				return;
 			}       
@@ -87,7 +87,7 @@ exports.index = function(req, res){
 		var email = req.body.email;
 		
 		//First check if the email address already exists
-		var sql = "SELECT `id`, `email` FROM `users` WHERE `email`='"+email+"'";
+		var sql = "SELECT `id`, `email` FROM `users` WHERE `email`="+db.escape(email);
 		var query = db.query(sql, function(err, results) {
 			if (err) throw err;
 			//Email exists
@@ -112,7 +112,7 @@ exports.index = function(req, res){
 								   d.getMinutes(),
 								   d.getSeconds()].join(':');
 						
-						var sql = "UPDATE users SET resetPasswordToken = '" + token + "', resetPasswordExpires = '" + dformat + "' WHERE id = " + results[0].id;
+						var sql = "UPDATE users SET resetPasswordToken = '" + token + "', resetPasswordExpires = '" + dformat + "' WHERE id = " + db.escape(results[0].id);
 
 						var query = db.query(sql, function(err, results) {
 							if (err) throw err;
@@ -130,7 +130,7 @@ exports.index = function(req, res){
 									subject: 'webrpg.io Password Reset',
 									text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
 									  'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-									  'http://' + req.headers.host + '/' + token + '\n\n' +
+									  'https://' + req.headers.host + '/' + token + '\n\n' +
 									  'If you did not request this, please ignore this email and your password will remain unchanged.\n'
 								};
 								smtpTransport.sendMail(mailOptions, function(err, info) {
@@ -172,7 +172,7 @@ exports.index = function(req, res){
 		var salt = bcrypt.genSaltSync(salt_factor);
 		new_password = bcrypt.hashSync(new_password,salt);
 		if(token.length == 40) {
-			var sql = "SELECT * FROM `users` WHERE `resetPasswordToken`='" + token + "'";
+			var sql = "SELECT * FROM `users` WHERE `resetPasswordToken`=" + db.escape(token);
 			var query = db.query(sql, function(err, results) {
 				if (err) throw err;
 				if(results.length == 1) {
@@ -181,7 +181,7 @@ exports.index = function(req, res){
 					var date2 = Date.now();
 					var email = results[0].email;
 					if(date2 < date1) {
-						var sql = "UPDATE users SET password = '" + new_password + "', resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + results[0].id;
+						var sql = "UPDATE users SET password = '" + new_password + "', resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
 							var smtpTransport = nodemailer.createTransport({
@@ -203,12 +203,13 @@ exports.index = function(req, res){
 							});	
 						});
 						console.log("forgot POST attempt success");
+						//TODO: log the user in and send them to the main page with a logout link instead of the login link
 						res.redirect("/?forgot_post_success");
 						return;
 						return;
 					} else {
 						//update token and expiration to undefined
-						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + results[0].id;
+						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
 						});
@@ -227,11 +228,14 @@ exports.index = function(req, res){
 			return;
 		}
 		//Forgot GET response
-	}else if(req.method == "GET" && req.params.token){
+	// } else if(req.method == "GET" && req.params.token == ".well-known"){
+		// console.log("redirecting to .well-known");
+		// res.redirect("public/.well-known");
+	} else if(req.method == "GET" && req.params.token.length == 40){
 		console.log("forgot GET token attempt by " + req.params.token);
 		var token = req.params.token;
 		if(token.length == 40) {
-			var sql = "SELECT * FROM `users` WHERE `resetPasswordToken`='" + token + "'";
+			var sql = "SELECT * FROM `users` WHERE `resetPasswordToken`=" + db.escape(token);
 			
 			var query = db.query(sql, function(err, results) {
 				if (err) throw err;
@@ -244,7 +248,7 @@ exports.index = function(req, res){
 						return;
 					} else {
 						//update token and expiration to undefined
-						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + results[0].id;
+						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
 						});
@@ -261,6 +265,7 @@ exports.index = function(req, res){
 			return;
 		}
 	} else {
+		// res.sendFile( __dirname + "/" + req.params.token );  
 		console.log("MAJOR ERROR");
 	}
 };

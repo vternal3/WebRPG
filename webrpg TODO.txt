@@ -2,10 +2,10 @@ TODO:
 [X] Move project to C:\
 [X] move bottom links up more in the css file webrpg.css
 [X] move site into /public and node_module up one level
-[ ] buy webrpg.io
-	[ ] get SSL working for node.js and express server
-	[ ] make MySQL SSL secured
-	[ ] remember to change forgot email's http part to https once SSL is working/after you buy webrpg.io domain name.
+[X] buy webrpg.io
+	[X] get SSL working for node.js and express server
+	[X] make MySQL SSL secured
+	[X] remember to change forgot email's http part to https once SSL is working/after you buy webrpg.io domain name.
 [X] rename WebRPG to webrpg
 [X] create custom right click menu for later
 [X] create MySQL tables for users
@@ -19,11 +19,13 @@ TODO:
 [X] get server side login/signup form validation working
 [X] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
 
+[ ] secure all SQL query's with : https://github.com/mysqljs/mysql#escaping-query-values
 [ ] implement express-recaptcha on login, signup, forgot password work flows.
 [ ] remove username from user table and login, signup workflows.
-[ ] update create_webrpg_db with correct table creation query
-[ ] combine socket.io networking code with using authentication code
-[ ] get unique usernames working for socket.io networking code from the login/signup code.
+	[ ] create a character / username feature in the client canvas login.
+[X] update create_webrpg_db with correct table creation query
+[X] combine socket.io networking code with using authentication code
+[X] get unique usernames working for socket.io networking code from the login/signup code.
 [ ] move all except input to server side
 [ ] create 4 way d-pad input keys
 [ ] create input for start,select,x,y,a,b,left_tab,right_tab
