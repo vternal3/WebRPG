@@ -191,7 +191,9 @@ exports.index = function(req, res) {
 							if (err) throw err;
 							if(results.affectedRows == 1) {
 								var smtpTransport = nodemailer.createTransport({
-									service: 'gmail',
+									host: process.env.EMAIL_HOST,
+									port: process.env.EMAIL_PORT,
+									secure: true, // use SSL
 									auth: {
 										user: process.env.EMAIL_ADDRESS,
 										pass: process.env.EMAIL_PASSWORD
@@ -199,7 +201,7 @@ exports.index = function(req, res) {
 								});
 								var mailOptions = {
 									to: email,
-									from: 'noreply@gmail.com',
+									from: 'noreply@webrpg.io',
 									subject: 'webrpg.io Password Reset',
 									text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
 									  'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -258,7 +260,9 @@ exports.index = function(req, res) {
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
 							var smtpTransport = nodemailer.createTransport({
-								service: 'gmail',
+								host: process.env.EMAIL_HOST,
+								port: process.env.EMAIL_PORT,
+								secure: true, // use SSL
 								auth: {
 									user: process.env.EMAIL_ADDRESS,
 									pass: process.env.EMAIL_PASSWORD
@@ -266,7 +270,7 @@ exports.index = function(req, res) {
 							});
 							var mailOptions = {
 								to: email,
-								from: 'noreply@gmail.com',
+								from: 'noreply@webrpg.io',
 								subject: 'Your webrpg.io password has been changed',
 								text: 'Hello,\n\n' +
 								'This is a confirmation that the password for your account ' + email + ' has just been changed.\n'

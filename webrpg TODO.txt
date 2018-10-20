@@ -32,6 +32,7 @@ steps are to run npm update to update all package dependancies
 [X] remove packages that are not needed anymore inside package.json & inside server.js and user.js
 [ ] create a 'validated' column in table 'users'
 [ ] create email validation workflow similar to forgot password workflow
+[ ] add client and server side response text for unvalidated accounts for login workflow.
 [ ] create ZOHO email addresses
 [ ] change email credentials to ZOHO noreply@webrpg.io for forgot password workflow
 [ ] change email credentials to ZOHO noreply@webrpg.io for email validation workflow
