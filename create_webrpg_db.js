@@ -39,7 +39,8 @@ var sql = `CREATE TABLE users (
   resetPasswordToken varchar(40) DEFAULT NULL,
   resetPasswordExpires datetime DEFAULT NULL,
   crpToken varchar(40) DEFAULT NULL,
-  loggedIn tinyint(1) DEFAULT NULL
+  loggedIn tinyint(1) DEFAULT NULL,
+  socket varchar(20) DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1`;
 
 con.query(sql, function (err, result) {

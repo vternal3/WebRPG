@@ -1,9 +1,7 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const xoauth2 = require('xoauth2');
 const async = require('async-waterfall');
-const dateTime = require('node-datetime');
 require('dotenv').config();
 const request = require('request');
 
@@ -68,7 +66,7 @@ exports.index = function(req, res) {
 				var salt = bcrypt.genSaltSync(salt_factor);
 				pass = bcrypt.hashSync(pass,salt);
 	  
-				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"','" + null + "')";
+				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`, `socket`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"','" + null + "')";
 
 				var query = db.query(sql, function(err, results) {
 					if (err) throw err;

@@ -137,9 +137,9 @@ function create() {
 $(document).ready(function(){
 	//Login failed
 	if(window.location.href.includes("login_error")) {
-		var message = window.location.href.split(/[=,&]+/)[2];
+		var message = window.location.href.split(/[=,&]+/)[1];
 		message = message.replace(/%20/g, " ");
-		var email = window.location.href.split(/[=,&]+/)[4];
+		var email = window.location.href.split(/[=,&]+/)[3];
 		document.getElementById("login_form_link").click();
 		document.getElementById("login_email").value = email;
 		document.getElementById("login_message").innerHTML = "<span style='color:red;'>" + message + "</span>";

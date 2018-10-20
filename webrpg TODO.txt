@@ -25,6 +25,17 @@ TODO:
 [X] update create_webrpg_db with correct table creation query
 [X] combine socket.io networking code with using authentication code
 [X] get unique usernames working for socket.io networking code from the login/signup code.
+[X] update PORT to SERVER_PORT
+[X] Add HTTP_PORT to env file and change inside server listening
+steps are to run npm update to update all package dependancies
+[X] remove './routes' dependancy from dependancy list in server.js
+[X] remove packages that are not needed anymore inside package.json & inside server.js and user.js
+[ ] create a 'validated' column in table 'users'
+[ ] create email validation workflow similar to forgot password workflow
+[ ] create ZOHO email addresses
+[ ] change email credentials to ZOHO noreply@webrpg.io for forgot password workflow
+[ ] change email credentials to ZOHO noreply@webrpg.io for email validation workflow
+[ ] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [ ] create a character / username feature in the client canvas login.
 [ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
 [ ] move all except input to server side
