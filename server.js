@@ -11,6 +11,7 @@ var session = require('express-session');
 var app = express();
 //Redirect 'http' requests to secure 'https'
 http.createServer(function (req, res) {
+	//TODO: add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
     res.end();
 }).listen(80);
@@ -36,8 +37,10 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 global.db = connection;
+//Code to keep the connection to MySQL so that
+//connection doesn't time out.
  setInterval(function () {
-	 console.log("Keep MySQL Alive");
+	console.log("Keep MySQL Alive");
     global.db.query('SELECT 1');
 }, 3600000); //Once every hour do a query to keep connection alive
 // all environments // Middleware
@@ -103,6 +106,19 @@ io.on('connection', function(socket){
 	console.log('ADDRESS: '+ socket.handshake.address + ' TIME: ' + socket.handshake.time);
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
+		//log the player who disconnected out by changing its 
+		//loggedIn column to 0 and set socket to null.
+		var sql = "UPDATE users SET socket = '" + null + "', loggedIn = '" + 0 + "' WHERE socket = " + db.escape(socket.id);
+		db.query(sql, function(err, results){ 
+			if (err) throw err;
+			if(results.length == 1) {
+				console.log("successfully updated socket and loggedIn");
+			}
+			else {
+				console.log("Error updating socket and loggedIn");
+			}
+		});
+		
 		// remove this player from our players object
 		delete players[socket.id];
 		// emit a message to all players to remove this player
@@ -119,16 +135,28 @@ io.on('connection', function(socket){
 		team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
 	};
 	
-	//Request username
-	socket.on('requestEmail', function (id) {
-		var sql="SELECT `email` FROM `users` WHERE `id`="+db.escape(id);                           
+	//TODO: Seperate out this call into a 'crpTokenHandshake' call
+	//and only update using crpToken for the WHERE
+	//Request email address
+	socket.on('requestEmail', function (crptoken) {
+		var sql="SELECT `id, `email` FROM `users` WHERE `crpToken`="+db.escape(crptoken);                           
 		
 		db.query(sql, function(err, results){ 
 			if (err) throw err;
 			if(results.length == 1) {
 				players[socket.id].email = results[0].email;
-				//send username 
-				socket.emit('emailSent', players[socket.id].email);
+				//send email address 
+				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + " crpToken = " + null + " WHERE id = " + db.escape(results[0].id);
+				db.query(sql, function(err, results){ 
+					if (err) throw err;
+					if(results.length == 1) {
+						console.log("successfully updated socket and crptoken");
+						socket.emit('emailSent', players[socket.id].email);
+					}
+					else {
+						console.log("Error updating socket and crpToken");
+					}
+				});
 			} else {
 				
 			}

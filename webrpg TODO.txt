@@ -19,13 +19,14 @@ TODO:
 [X] get server side login/signup form validation working
 [X] create login/signup fade in and fade out effect when clicking the links 'login' & 'Create account'
 
-[ ] secure all SQL query's with : https://github.com/mysqljs/mysql#escaping-query-values
-[ ] implement express-recaptcha on login, signup, forgot password work flows.
-[ ] remove username from user table and login, signup workflows.
-	[ ] create a character / username feature in the client canvas login.
+[X] secure all SQL query's with : https://github.com/mysqljs/mysql#escaping-query-values
+[X] implement express-recaptcha on login, signup, forgot password work flows.
+[X] remove username from user table and login, signup workflows.
 [X] update create_webrpg_db with correct table creation query
 [X] combine socket.io networking code with using authentication code
 [X] get unique usernames working for socket.io networking code from the login/signup code.
+[ ] create a character / username feature in the client canvas login.
+[ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
 [ ] move all except input to server side
 [ ] create 4 way d-pad input keys
 [ ] create input for start,select,x,y,a,b,left_tab,right_tab

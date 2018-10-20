@@ -47,6 +47,7 @@ function start(name)
 {
 	// TODO: Add more to this functionality
 	window.onbeforeunload = function () {return false;}
+	//TODO: remove this nickname code.
 	if(name == "")
 		nickname = document.getElementById("nickname").value;
 	else
@@ -136,10 +137,12 @@ function create() {
 $(document).ready(function(){
 	//Login failed
 	if(window.location.href.includes("login_error")) {
-		var email = window.location.href.split(/[=,&]+/)[2];
+		var message = window.location.href.split(/[=,&]+/)[2];
+		message = message.replace(/%20/g, " ");
+		var email = window.location.href.split(/[=,&]+/)[4];
 		document.getElementById("login_form_link").click();
 		document.getElementById("login_email").value = email;
-		document.getElementById("login_message").innerHTML = "<span style='color:red;'>incorrect email or password</span>"
+		document.getElementById("login_message").innerHTML = "<span style='color:red;'>" + message + "</span>";
 		window.history.pushState("object or string", "Clear return params", "/#");
 	} else {
 		document.getElementById("login_message").innerHTML = "";
@@ -147,9 +150,9 @@ $(document).ready(function(){
 	//Login succeeded
 	if(window.location.href.includes("login_success")) {
 		//fade out main page elements and start the game 
-		var id = window.location.href.split(/[=,&]+/)[2];
+		var crpToken = window.location.href.split(/[=,&]+/)[2];
 		//window.history.pushState("object or string", "Clear return params", "/#");
-		start(id);
+		start(crpToken);
 	}
 	//Signup failed
 	if(window.location.href.includes("signup_error")) {
@@ -157,7 +160,7 @@ $(document).ready(function(){
 		message = message.replace(/%20/g, " ");
 		message = message.replace(/%27/g, "'");
 		document.getElementById("signup_form_link").click();
-		document.getElementById("signup_message").innerHTML = "<span style='color:red;'>" + message + "</span>"
+		document.getElementById("signup_message").innerHTML = "<span style='color:red;'>" + message + "</span>";
 		window.history.pushState("object or string", "Clear return params", "/#");
 	} else {
 		document.getElementById("signup_message").innerHTML = "";
@@ -218,6 +221,20 @@ $(document).ready(function(){
 		else
 			window.history.pushState("object or string", "Clear return params", "/#");
 		document.getElementById("forgot_new_password_message").innerHTML = "<span style='color:green;'>" + message + "</span>";
+	}
+	//Recaptcha not filled out
+	if(window.location.href.includes("recaptcha_error")) {
+		
+		var message = window.location.href.split(/[=,&]+/)[1];
+		message = message.replace(/%20/g, " ");
+		document.getElementById("recaptcha_error_label").innerHTML = "<span style='color:red;'>" + message + "</span>";
+	}
+	//Recaptcha validation failed
+	if(window.location.href.includes("recaptcha_failed")) {
+		
+		var message = window.location.href.split(/[=,&]+/)[1];
+		message = message.replace(/%20/g, " ");
+		document.getElementById("recaptcha_error_label").innerHTML = "<span style='color:red;'>" + message + "</span>";
 	}
 	//set token which should be the 3rd=2 element split from '/'s 
 	document.getElementById('forgot_password_form').action = "/" + window.location.href.split(/[\/]+/)[2];

@@ -82,7 +82,7 @@ function create() {
 			this.socket.emit('starCollected');
 		}, null, self);
 	});
-	//send ID to the server
+	//send CRP Token to the server
 	this.socket.emit('requestEmail', window.location.href.split(/[=,&]+/)[2]);
 	
 	this.socket.on('emailSent', function (email) {

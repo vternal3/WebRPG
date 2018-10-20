@@ -19,6 +19,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-http-to-https": "^1.1.4",
+    "express-recaptcha": "^4.0.3",
     "express-session": "^1.15.6",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
@@ -28,6 +29,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "req-flash": "0.0.3",
+    "request": "^2.88.0",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
     "xoauth2": "^1.2.0"

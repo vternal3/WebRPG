@@ -5,14 +5,44 @@ const xoauth2 = require('xoauth2');
 const async = require('async-waterfall');
 const dateTime = require('node-datetime');
 require('dotenv').config();
+const request = require('request');
+
+var Recaptcha = require('express-recaptcha').Recaptcha;
+var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
+
 
 var salt_factor = 12;
-//------------------------------------login/signup functionality----------------------------------------------
-exports.index = function(req, res){
+var recaptcha_check = false;
+var recaptcha_failed = false;
+//------------------------------------login/signup/forgot password functionality----------------------------------------------
+exports.index = function(req, res) {
+	//reCaptcha code
+	recaptcha_check = false;
+	recaptcha_failed = false;
+	if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
+		recaptcha_check = true;
+	}
+	const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + process.env.RECAPTCHA_SECRET_KEY + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+	request(verificationURL,function(error,response,body) {
+		body = JSON.parse(body);
+		if(body.success !== undefined && !body.success) {
+			recaptcha_failed = true;
+		}
+	});
+	
 	//User signup response
     if(req.method == "POST" && req.body.signup_email != undefined) {
 		console.log("signup attempt by '" + req.body.signup_email + "'");
-		
+		if(recaptcha_check){
+			recaptcha_check = false;
+			res.redirect("/?recaptcha_error=Please select captcha first");
+			return;
+		}
+		if(recaptcha_failed){
+			recaptcha_failed = false;
+			res.redirect("/?recaptcha_failed=Failed captcha verification");
+			return;
+		}
 		var post		= req.body;
 		var pass 		= post.password;
 		var confirmpass = post.confirm_password;
@@ -29,7 +59,7 @@ exports.index = function(req, res){
 		var query = db.query(sql, function(err, results) {
 			if (err) throw err;
 			//Email is not unique
-			if(results.length) {
+			if(results.length == 1) {
 				console.log("account for '" + email + "' already exists");
 				res.redirect('/?signup_error=' + "account for '" + email + "' already exists");
 				return;
@@ -38,11 +68,14 @@ exports.index = function(req, res){
 				var salt = bcrypt.genSaltSync(salt_factor);
 				pass = bcrypt.hashSync(pass,salt);
 	  
-				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"')";
+				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"','" + null + "')";
 
 				var query = db.query(sql, function(err, results) {
 					if (err) throw err;
 					if(results.affectedRows == 1) {
+						//TODO: send email with a validation link to validate
+						//the account. Display messsage to check email for 
+						//validation email before logging in.
 						console.log("'" + email + "' successfully signup");
 						//TODO: add login and or update index.html to recognize signup_success with crp token here
 						res.redirect('/?signup_success');
@@ -58,25 +91,67 @@ exports.index = function(req, res){
 	//User Login response
 	} else if(req.method == "POST" && req.body.login_email != undefined) {
 		console.log("login attempt by '" + req.body.login_email + "'");
-		
+		if(recaptcha_check){
+			recaptcha_check = false;
+			res.redirect("/?recaptcha_error=Please select captcha first");
+			return;
+		}
+		if(recaptcha_failed){
+			recaptcha_failed = false;
+			res.redirect("/?recaptcha_failed=Failed captcha verification");
+			return;
+		}
 		var post = req.body;
 		var email = post.login_email;
 		var pass = post.password;
-		
-		var sql="SELECT `id`, `email`, `password` FROM `users` WHERE `email`="+db.escape(email);                           
+		//TODO: check if account has been validated else display
+		//error message stating the account still needs to be validate
+		var sql="SELECT `id`, `email`, `password`, `loggedIn` FROM `users` WHERE `email`="+db.escape(email);                           
 		
 		db.query(sql, function(err, results){ 
 			if (err) throw err;
-			if(results.length && bcrypt.compareSync(pass, results[0].password)){
-				req.session.userId = results[0].id;
-				req.session.user = results[0];
-				console.log("'" + results[0].email + "' successfully logged in");
-				res.redirect('/?login_success&id=' + results[0].id);
-				return;
+			if(results.length == 1){
+				if(results[0].loggedIn) {
+					console.log("'" + results[0].email + "' already logged in");
+					res.redirect('/?login_error=Already logged in&email=' + email);
+					return;
+				}
+				if(bcrypt.compareSync(pass, results[0].password)) {
+					req.session.userId = results[0].id;
+					req.session.user = results[0];
+					console.log("'" + results[0].email + "' successfully logged in");
+					var token;
+					async([
+						function(done) {
+							crypto.randomBytes(20, function(err, buf) {
+								token = buf.toString('hex');
+								done(err, token);
+							});
+						},
+						function(token,done) {
+							var sql = "UPDATE users SET loggedIn = 1, crpToken = " + db.escape(token) + " WHERE id = " + db.escape(results[0].id);
+							var query = db.query(sql, function(err, results) {
+								if (err) throw err;
+								if(results.affectedRows == 1) {
+									console.log("Successfully updated MySQL with CRP token");
+									res.redirect('/?login_success&crptoken=' + token);
+									return;
+								}
+								else {
+									console.log("Error updating MySQL with CRP token");
+								}
+							});
+						},
+					]);
+				} else {
+					console.log("'" + results[0].email + "' password incorrect");
+					res.redirect('/?login_error=Email or password mismatched&email=' + email);
+					return;
+				}
 			}
 			else{
 				console.log("'" + email + "' un-successfully login");
-				res.redirect('/?login_error&email=' + email);
+				res.redirect('/?login_error=Account does not exist for ' + email + '&email=' + email);
 				return;
 			}       
         });
@@ -91,7 +166,7 @@ exports.index = function(req, res){
 		var query = db.query(sql, function(err, results) {
 			if (err) throw err;
 			//Email exists
-			if(results.length) {
+			if(results.length == 1) {
 				var token;
 				var date;
 				async([

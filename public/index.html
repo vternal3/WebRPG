@@ -51,8 +51,10 @@
 							<input id="login-password" type="password" name="password" placeholder="Password"  required/>
 							<br/>
 							<button id="btn-login" name="login_button" type="submit">Login</button>
+							<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
+							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
 						</form>
-						<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
+						
 					</div>
 					<div align="center" id="signupform"  style="display:none;">
 						<div align="center"><label id="signup_message"></label></div>
@@ -64,6 +66,7 @@
 							<input type="password" name="confirm_password" placeholder="Confirm Password"  required/>
 							<br/>
 							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
+							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
 						</form>
 					</div>
 					<div align="center" id="forgotform"  style="display:none;">
@@ -84,7 +87,9 @@
 							<button id="btn-forgot-update" name="forgot_button" type="submit">Update Password</button>
 						</form>
 					</div>
+					<div><div align="center"></div></div>
 					<div align="center" id="forgot_succeed"  style="display:none;"><div align="center"><label id="forgot_succeed_label" align="center"></label></div></div>
+					<div align="center"><div><label id="recaptcha_error_label"></label></div></div>
 				</div>
 				<!-- End of Login Form -->
 			</div>
@@ -123,6 +128,9 @@
 		
 		<!-- Socket.io Scripts -->
 		<script src="/socket.io/socket.io.js"></script>
+		
+		<!-- Google reCAPTCHA scritps -->
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 		
 		<!-- Google Analytics Scripts -->
 		<script>
