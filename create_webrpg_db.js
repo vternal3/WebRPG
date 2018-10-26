@@ -41,6 +41,9 @@ var sql = `CREATE TABLE users (
   crpToken varchar(40) DEFAULT NULL,
   loggedIn tinyint(1) DEFAULT NULL,
   socket varchar(20) DEFAULT NULL,
+  emailValidationToken varchar(40) DEFAULT NULL,
+  emailValidationExpires datetime DEFAULT NULL,
+  validated tinyint(1) DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1`;
 
 con.query(sql, function (err, result) {

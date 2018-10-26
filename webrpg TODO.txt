@@ -30,12 +30,19 @@ TODO:
 steps are to run npm update to update all package dependancies
 [X] remove './routes' dependancy from dependancy list in server.js
 [X] remove packages that are not needed anymore inside package.json & inside server.js and user.js
-[ ] create a 'validated' column in table 'users'
-[ ] create email validation workflow similar to forgot password workflow
-[ ] add client and server side response text for unvalidated accounts for login workflow.
-[ ] create ZOHO email addresses
-[ ] change email credentials to ZOHO noreply@webrpg.io for forgot password workflow
-[ ] change email credentials to ZOHO noreply@webrpg.io for email validation workflow
+[X] create a 'validated' column in table 'users'
+[X] create email validation workflow similar to forgot password workflow
+[X] add client and server side response text for unvalidated accounts for login workflow.
+[X] create ZOHO email addresses
+[X] change email credentials to ZOHO noreply@webrpg.io for forgot password workflow
+[X] change email credentials to ZOHO noreply@webrpg.io for email validation workflow
+[X] set maxlengths for all form inputs
+[X] change game.js to client.js
+[X] create a feedback button on the main page for users to send ideas and different feedback. use this https://codepen.io/draw/pen/GWzWgr
+[ ] create a feeback emailing post backend
+[ ] create a feeback@webrpg.io email address on ZOHO
+[ ] Add a reCaptcha on the feedback post submit form.
+[ ] Look into payments for the game https://www.npmjs.com/package/node-payments  https://www.simplify.com/commerce/docs/sdk/nodejs  http://www.catonmat.net/blog/stripe-payments-with-node/
 [ ] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [ ] create a character / username feature in the client canvas login.
 [ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io

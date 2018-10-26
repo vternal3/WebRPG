@@ -37,14 +37,32 @@ $("#login_form").submit(function(e) {
     e.preventDefault(); 
 });
 
+$("#btn-login").submit(function(e) {
+    e.preventDefault(); 
+	document.getElementById('client_script').src = 'js/client.js';
+});
+
 setInterval(function() {
 	update();
 	draw();
 }, 1000/FPS);
 
 var nickname = "";
+
+jQuery.loadScript = function (url, callback) {
+    jQuery.ajax({
+        url: url,
+        dataType: 'script',
+        success: callback,
+        async: true
+    });
+}
+
 function start(name)
 {
+	$.loadScript('js/client.js', function(){
+		//Stuff to do after someScript has loaded
+	});
 	// TODO: Add more to this functionality
 	window.onbeforeunload = function () {return false;}
 	//TODO: remove this nickname code.
@@ -58,6 +76,7 @@ function start(name)
 	document.getElementById("bottom_right_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
+	document.getElementById("popup").classList.add("nodisplay");
 	//document.getElementById("test").innerHTML = nickename;
 	//window.history.pushState("object or string", "Clear return params", "/#");
 	
@@ -168,10 +187,10 @@ $(document).ready(function(){
 	//Signup succeeded
 	if(window.location.href.includes("signup_success")) {
 		//fade out main page elements and start the game 
-		var username = window.location.href.split(/[=,&]+/)[2];
+		var message = window.location.href.split(/[=,&]+/)[1];
+		message = message.replace(/%20/g, " ");
+		document.getElementById("signup_message").innerHTML = "<span style='color:green;'>" + message + "</span>";
 		window.history.pushState("object or string", "Clear return params", "/#");
-		console.log(username);
-		start(username);
 	}
 	//Forgot succeeded
 	if(window.location.href.includes("forgot_success")) {
@@ -238,7 +257,6 @@ $(document).ready(function(){
 	}
 	//set token which should be the 3rd=2 element split from '/'s 
 	document.getElementById('forgot_password_form').action = "/" + window.location.href.split(/[\/]+/)[2];
-	
 	
 });
 

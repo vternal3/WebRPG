@@ -91,14 +91,6 @@ var scores = {
   red: 0
 };
 
-function printObject(o) {
-  var out = '';
-  for (var p in o) {
-    out += p + ': ' + o[p] + '\n';
-  }
-  return out;
-}
-
 io.on('connection', function(socket){
 	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
 		return;

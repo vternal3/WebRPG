@@ -19,6 +19,9 @@
 		
 		<!-- Login Form Stylesheets -->
 		<link rel="stylesheet" href="css/login.css">
+		
+		<!-- Feedback Form Stylesheets-->
+		<link rel="stylesheet" href="css/feedback.css">
 	</head>
 
 	<body>
@@ -27,7 +30,32 @@
 		<![endif]-->
 		
 		<!-- <div id="test">test</div> -->
-		<div id="container">
+		
+		<div id="container">		
+			<div id="feedback-main">
+				<div id="feedback-div">
+					<form action="/" method="post" class="form2" id="feedback-form1" name="form2">
+					  <p class="name">
+						<input name="name" type="name" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" required placeholder="Name" id="feedback-name" />
+					  </p>
+					  <p class="email">
+						<input name="feedback_email" type="email" class="validate[required,custom[email]] feedback-input" id="feedback-email" placeholder="Email" required />
+					  </p>
+					  <p class="text">
+						<textarea name="comment" type="comment" class="validate[required,length[6,300]] feedback-input" id="feedback-comment" required placeholder="Please leave your feedback here."></textarea>
+					  </p>
+					  <div class="feedback-submit">
+						<input type="submit" value="SEND" id="feedback-button-blue" />
+						<div class="feedback-ease"></div>
+					  </div>
+					  <br />
+					  <div><div align="center"><div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div></div></div>
+					</form>
+				</div>
+			</div>
+			<button id="popup" class="feedback-button" onclick="toggle_visibility()">Feedback</button>
+			<script src="js/feedback.js"></script>
+
 			<div id="top_left_overlay"><a href="#top_left">Top Left</a></div>
 			<div id="top_right_overlay"><a href="#top_right">Top Right</a></div>
 			<div id="middle" style="clear: both;">
@@ -35,7 +63,7 @@
 				<div id="login" class="main">
 					<p class="sign" align="center">webrpg.io</p>
 					<form id="login_form" class="form1" onsubmit="return start();">
-						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" />
+						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" maxlength="64"/>
 						<!-- <input class="pass" type="password" align="center" placeholder="Password"> -->
 						<input class="submit" type="submit" value="Play" align="center"/>
 						<!--
@@ -46,9 +74,9 @@
 					<div align="center" id="loginform"  style="display:none;">
 						<div align="center"><label id="login_message"></label></div>
 						<form method="post" action="/" autocomplete="on">
-							<input id="login_email" type="email" name="login_email" value="" placeholder="Email"  required/>
+							<input id="login_email" type="email" name="login_email" value="" placeholder="Email" maxlength="254" required/>
 							<br/>
-							<input id="login-password" type="password" name="password" placeholder="Password"  required/>
+							<input id="login-password" type="password" name="password" placeholder="Password" maxlength="40" required/>
 							<br/>
 							<button id="btn-login" name="login_button" type="submit">Login</button>
 							<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
@@ -59,11 +87,11 @@
 					<div align="center" id="signupform"  style="display:none;">
 						<div align="center"><label id="signup_message"></label></div>
 						<form method="post" action="/" autocomplete="off">
-							<input type="email" name="signup_email" placeholder="Email"  required/>
+							<input type="email" name="signup_email" placeholder="Email" maxlength="254" required/>
 							<br/>
-							<input type="password" name="password" placeholder="Password"  required/>
+							<input type="password" name="password" placeholder="Password" maxlength="40" required/>
 							<br/>
-							<input type="password" name="confirm_password" placeholder="Confirm Password"  required/>
+							<input type="password" name="confirm_password" placeholder="Confirm Password" maxlength="40" required/>
 							<br/>
 							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
 							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
@@ -72,7 +100,7 @@
 					<div align="center" id="forgotform"  style="display:none;">
 						<div align="center"><label id="forgot_message"></label></div>
 						<form method="post" action="/" autocomplete="on">
-							<input id="forgot-email" type="email" name="email" value="" placeholder="Email"  required/>
+							<input id="forgot-email" type="email" name="email" value="" placeholder="Email" maxlength="254" required/>
 							<br/>
 							<button id="btn-forgot" name="forgot_button" type="submit">Submit</button>
 						</form>
@@ -80,9 +108,9 @@
 					<div align="center" id="forgot_new_password"  style="display:none;">
 						<div align="center"><label id="forgot_new_password_message"></label></div>
 						<form id="forgot_password_form" method="post" action="/" autocomplete="off">
-							<input id="new_password" type="password" name="new_password" value="" placeholder="New Password"  required/>
+							<input id="new_password" type="password" name="new_password" value="" placeholder="New Password" maxlength="40" required/>
 							<br/>
-							<input id="confirm_password" type="password" name="confirm_password" value="" placeholder="Confirm Password"  required/>
+							<input id="confirm_password" type="password" name="confirm_password" value="" placeholder="Confirm Password" maxlength="40" required/>
 							<br/>
 							<button id="btn-forgot-update" name="forgot_button" type="submit">Update Password</button>
 						</form>
@@ -107,8 +135,12 @@
 			<li data-action="third">Third thing</li>
 		</ul>
 		
-		<!-- Phaser Scripts -->
-		<script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
+		
+		
+		
+		
+		
+		
 		
 		<!-- jQuery Scripts -->
 		<script src="js/vendor/modernizr-3.6.0.min.js"></script>
@@ -122,15 +154,19 @@
 		<script src="js/plugins.js"></script>
 		<script src="js/main.js"></script>
 		
+		<!-- Phaser Scripts -->
+		<script src="//cdn.jsdelivr.net/npm/phaser@3.0.0/dist/phaser.min.js"></script>
+		
 		<!-- WebRPG Scripts-->
 		<script src="js/webrpg.js"></script>
-        <script src="js/game.js"></script>
+        <script id="client_script" src=""></script>
 		
 		<!-- Socket.io Scripts -->
 		<script src="/socket.io/socket.io.js"></script>
 		
 		<!-- Google reCAPTCHA scritps -->
 		<script src='https://www.google.com/recaptcha/api.js'></script>
+		
 		
 		<!-- Google Analytics Scripts -->
 		<script>

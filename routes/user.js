@@ -66,7 +66,7 @@ exports.index = function(req, res) {
 				var salt = bcrypt.genSaltSync(salt_factor);
 				pass = bcrypt.hashSync(pass,salt);
 	  
-				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`, `socket`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 +"','" + null + "')";
+				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`, `socket`, `emailValidationToken`, `emailValidationExpires`, `validated`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 + "','" + null + "','" + undefined + "','" + undefined + "','" + 0 + "')";
 
 				var query = db.query(sql, function(err, results) {
 					if (err) throw err;
@@ -74,13 +74,61 @@ exports.index = function(req, res) {
 						//TODO: send email with a validation link to validate
 						//the account. Display messsage to check email for 
 						//validation email before logging in.
+						async([
+							function(done) {
+								crypto.randomBytes(20, function(err, buf) {
+									token = buf.toString('hex');
+									done(err, token);
+								});
+							},
+							function(token,done) {
+								date = Date.now() + 86400000; // 24 hours
+						
+								var d = new Date(date);
+								dformat = [d.getFullYear(),
+										   d.getMonth()+1,
+										   d.getDate()].join('-')+' '+
+										  [d.getHours(),
+										   d.getMinutes(),
+										   d.getSeconds()].join(':');
+										   
+								var sql = "UPDATE users SET emailValidationExpires = " + db.escape(dformat) + ", emailValidationToken = " + db.escape(token) + " WHERE email = " + db.escape(email);
+								var query = db.query(sql, function(err, results) {
+									if (err) throw err;
+									if(results.affectedRows == 1) {
+										var smtpTransport = nodemailer.createTransport({
+											host: process.env.EMAIL_HOST,
+											port: process.env.EMAIL_PORT,
+											secure: true, // use SSL
+											auth: {
+												user: process.env.EMAIL_ADDRESS,
+												pass: process.env.EMAIL_PASSWORD
+											}
+										});
+										var mailOptions = {
+											to: email,
+											from: 'noreply@webrpg.io',
+											subject: 'webrpg.io Email Validation',
+											text: 'You are receiving this because you (or someone else) have signed up for an account on webrpg.io.\n\n' +
+											  'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+											  'https://' + req.headers.host + '/email_validation=' + token + '\n\n' +
+											  'If you did not request this, please ignore this email.\n'
+										};
+										smtpTransport.sendMail(mailOptions, function(err, info) {
+											if (err) throw err;
+										});
+									}
+								});
+							}
+						]);
+						
 						console.log("'" + email + "' successfully signup");
-						//TODO: add login and or update index.html to recognize signup_success with crp token here
-						res.redirect('/?signup_success');
+						
+						res.redirect('/?signup_success=Please check your email to activate your account');
 						return;
 					} else {
 						console.log("'" + email + "' un-successfully signup could not insert into database");
-						res.redirect('/?signup_error=Our Error Please Contact vternal3@gmail.com');
+						res.redirect('/?signup_error=Our Error Please Contact support@webrpg.io');
 						return;
 					}
 				});
@@ -104,11 +152,16 @@ exports.index = function(req, res) {
 		var pass = post.password;
 		//TODO: check if account has been validated else display
 		//error message stating the account still needs to be validate
-		var sql="SELECT `id`, `email`, `password`, `loggedIn` FROM `users` WHERE `email`="+db.escape(email);                           
+		var sql="SELECT `id`, `email`, `password`, `loggedIn`, `validated` FROM `users` WHERE `email`="+db.escape(email);                           
 		
 		db.query(sql, function(err, results){ 
 			if (err) throw err;
 			if(results.length == 1){
+				if(!results[0].validated) {
+					console.log("'" + results[0].email + "' account not validated");
+					res.redirect('/?login_error=Please check your email and click the validation link provided&email=' + email);
+					return;
+				}
 				if(results[0].loggedIn) {
 					console.log("'" + results[0].email + "' already logged in");
 					res.redirect('/?login_error=Already logged in&email=' + email);
@@ -305,9 +358,6 @@ exports.index = function(req, res) {
 			return;
 		}
 		//Forgot GET response
-	// } else if(req.method == "GET" && req.params.token == ".well-known"){
-		// console.log("redirecting to .well-known");
-		// res.redirect("public/.well-known");
 	} else if(req.method == "GET" && req.params.token.length == 40){
 		console.log("forgot GET token attempt by " + req.params.token);
 		var token = req.params.token;
@@ -341,11 +391,64 @@ exports.index = function(req, res) {
 			res.redirect("/");
 			return;
 		}
+	} else if(req.method == "GET" && req.params.token.includes("email_validation")){
+		var token = req.params.token.split(/[=,&]+/)[1];
+		console.log("email_validation GET token attempt by " + token);
+		//TODO Select from db and check if the expiration date has passed or not
+		//then update accordingly.
+		var sql = "SELECT * FROM `users` WHERE `emailValidationToken`=" + db.escape(token);
+			
+		var query = db.query(sql, function(err, results) {
+			if (err) throw err;
+			if(results.length == 1 || token.length  != 40) {
+				//check if the time has passed or not
+				var date1 = new Date(results[0].emailValidationExpires);
+				var date2 = Date.now();
+				if(date2 < date1) {
+					//Set validation to 1 to validate the users account
+					var sql = "UPDATE users SET emailValidationExpires = '" + null + "', emailValidationToken = '" + null + "', validated = '" + 1 + "' WHERE emailValidationToken = " + db.escape(token);
+		
+					var query = db.query(sql, function(err, results) {
+						if (err) throw err;
+						if(results.affectedRows == 1) {
+							console.log("Account validation success for: " + token)
+							res.redirect("/?signup_success=Your account is now activated");
+							return;
+						} else {
+							console.log("signup_error could not update emailValidationToken or validated");
+							res.redirect("/?signup_error=Token is invalid or has expired");
+							return;
+						}
+					});
+				} else {
+					//update token and expiration to undefined
+					var sql = "UPDATE users SET emailValidationExpires = '" + null + "', emailValidationToken = '" + null + " WHERE emailValidationToken = " + db.escape(token);
+					query = db.query(sql, function(err, results) {
+						if (err) throw err;
+					});
+					res.redirect("/?signup_error=Token is invalid or has expired");
+					return;
+				}
+			} else {
+				console.log("email validation error: " + token);
+				res.redirect("/?signup_error");
+				return;
+			}
+		});
 	} else {
 		// res.sendFile( __dirname + "/" + req.params.token );  
 		console.log("MAJOR ERROR");
+		
 	}
 };
+
+function printObject(o) {
+  var out = '';
+  for (var p in o) {
+    out += p + ': ' + o[p] + '\n';
+  }
+  return out;
+}
 
 //------------------------------------logout functionality----------------------------------------------
 exports.logout=function(req,res){
