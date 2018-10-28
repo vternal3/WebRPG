@@ -100,35 +100,47 @@ io.on('connection', function(socket){
 	//TODO: Seperate out this call into a 'crpTokenHandshake' call
 	//and only update using crpToken for the WHERE
 	//Request email address
-	socket.on('requestEmail', function (crptoken) {
+	socket.on('crpTokenHandshake', function (crptoken) {
 		if(crptoken == null) {
 			return;
 		}
-		var sql="SELECT `id`, `email` FROM `users` WHERE `crpToken`="+db.escape(crptoken);                           
-		
-		db.query(sql, function(err, results){ 
+		var sql = "SELECT * FROM `users` WHERE `crpToken`=" + db.escape(crptoken);
+		db.query(sql, function(err, results) {
 			if (err) throw err;
 			if(results.length == 1) {
-				players[socket.id].email = results[0].email;
-				//send email address 
-				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", crpToken = '" + null + "' WHERE id = " + db.escape(results[0].id);
+				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", crpToken = '" + null + "' WHERE crpToken = " + db.escape(crptoken);
 				db.query(sql, function(err, results){ 
 					if (err) throw err;
 					if(results.affectedRows == 1) {
-						console.log("requestEmail Successfully updated socket and crptoken");
-						socket.emit('emailSent', players[socket.id].email);
+						console.log("CrpTokenHandshake Successfully updated socket and crptoken");
 					}
 					else {
-						console.log("requestEmail Error updating socket and crpToken");
+						console.log("CrpTokenHandshake Error updating socket and crpToken");
 					}
 				});
 			} else {
-				
+				console.log("CrpTokenHandshake Error crpToken not found");
 			}
 		});
 	});
 	
-	
+	socket.on('requestEmail', function (crptoken) {
+		if(crptoken == null) {
+			return;
+		}
+		var sql = "SELECT `email` FROM `users` WHERE `socket`="+db.escape(socket.id);                           
+		
+		db.query(sql, function(err, results) {
+			if (err) throw err;
+			if(results.length == 1) {
+				players[socket.id].email = results[0].email;
+				socket.emit('emailSent', players[socket.id].email);
+				console.log("succesfully sent email");
+			} else {
+				console.log("error sending email, user doesn't exist");
+			}
+		});
+	});
 	
 	socket.on('disconnect', function(){
 		console.log('user disconnected');

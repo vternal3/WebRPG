@@ -39,11 +39,22 @@ steps are to run npm update to update all package dependancies
 [X] set maxlengths for all form inputs
 [X] change game.js to client.js
 [X] create a feedback button on the main page for users to send ideas and different feedback. use this https://codepen.io/draw/pen/GWzWgr
-[ ] create a feeback emailing post backend
-[ ] create a feeback@webrpg.io email address on ZOHO
-[ ] Add a reCaptcha on the feedback post submit form.
+[X] create a feeback emailing POST backend response
+[X] create a feeback@webrpg.io email address on ZOHO
+[X] Add a reCaptcha on the feedback post submit form.
+[X] finish backend and front end for crpTokenHandshake
+[X] test email validated workflow
+[X] test feedback workflow
+[X] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
+[ ] change forgot password token to forgot_password={token} for email generation, and GET response code
+[X] remove the extra code on top of the webrpg.js file the canvas stuff
+[ ] make login responsive and not static size.
+
+
+
+[ ] Create character creation/selection screen
+	[ ] have a name textbox 
 [ ] Look into payments for the game https://www.npmjs.com/package/node-payments  https://www.simplify.com/commerce/docs/sdk/nodejs  http://www.catonmat.net/blog/stripe-payments-with-node/
-[ ] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [ ] create a character / username feature in the client canvas login.
 [ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
 [ ] move all except input to server side
@@ -85,27 +96,6 @@ steps are to run npm update to update all package dependancies
 
 
 
-
-[ ] create a screenshot page
-[ ] create a features list page
-[ ] create a requirements page
-[ ] create a press kit
-[ ] create a Privacy Policy
-[ ] create a Terms of Service
-[ ] create twitter account webrpg.io
-[ ] create facebook account webrpg.io
-[ ] create reddit account webrpg.io
-[ ] create discord account webrpg.io
-[ ] create background music to main page
-[ ] add button to toggle background music on/off
-[ ] create an itch.io account to post game to https://itch.io/developers
-[ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums
-
-
-
-
-
-
 [ ] Level Up Weapons by equipping them and using them
 [ ] Level up materia by having them equiped and using them
 [ ] Action RPG
@@ -133,3 +123,18 @@ steps are to run npm update to update all package dependancies
 [ ] 	session base means you don't mind losing your character after you stop playing.
 [ ] Have a demo of the game that players can just hop into without creating an account.
 [ ] Get the player right into the action.
+
+[ ] update terms of service page with more terms of service options from https://termsfeed.com/wizard/terms-conditions
+[ ] create a News RSS feed page
+[ ] create a screenshot page
+[ ] create a features list page
+[ ] create a requirements page
+[ ] create a press kit
+[X] create a Privacy Policy
+[X] create a Terms of Service
+[ ] create a share on twitter button
+[ ] create a share on reddit button
+[ ] create background music to main page
+[ ] add button to toggle background music on/off
+[ ] create an itch.io account to post game to https://itch.io/developers
+[ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums

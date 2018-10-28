@@ -208,7 +208,7 @@ exports.index = function(req, res) {
         });
 	//User forgot response
 	} else if(req.method == "POST" && req.body.email != undefined) {
-	   console.log("forgot attempt by '" + req.body.email + "'");
+	    console.log("forgot attempt by '" + req.body.email + "'");
 	   
 		var email = req.body.email;
 		
@@ -254,7 +254,7 @@ exports.index = function(req, res) {
 								});
 								var mailOptions = {
 									to: email,
-									from: 'noreply@webrpg.io',
+									from: process.env.EMAIL_ADDRESS,
 									subject: 'webrpg.io Password Reset',
 									text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
 									  'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -435,6 +435,40 @@ exports.index = function(req, res) {
 				return;
 			}
 		});
+	} else if(req.method == "POST" && req.body.feedback_email != undefined) {
+		if(recaptcha_check){
+			recaptcha_check = false;
+			res.redirect("/?recaptcha_error=Please select captcha first");
+			return;
+		}
+		if(recaptcha_failed){
+			recaptcha_failed = false;
+			res.redirect("/?recaptcha_failed=Failed captcha verification");
+			return;
+		}
+		var name = req.body.name;
+		var email = req.body.feedback_email;
+		var message = req.body.comment;
+		var smtpTransport = nodemailer.createTransport({
+			host: process.env.EMAIL_HOST,
+			port: process.env.EMAIL_PORT,
+			secure: true, // use SSL
+			auth: {
+				user: process.env.FEEDBACK_EMAIL_ADDRESS,
+				pass: process.env.EMAIL_PASSWORD
+			}
+		});
+		var mailOptions = {
+			to: process.env.FEEDBACK_EMAIL_ADDRESS,
+			from: process.env.FEEDBACK_EMAIL_ADDRESS,
+			subject: 'Feedback from ' + name,
+			text: email + '\n\n' + message
+		};
+		smtpTransport.sendMail(mailOptions, function(err, info) {
+			if (err) throw err;
+		});
+		console.log("'" + email + "' successfully sent feedback");
+		res.redirect('/?feedback_success');
 	} else {
 		// res.sendFile( __dirname + "/" + req.params.token );  
 		console.log("MAJOR ERROR");

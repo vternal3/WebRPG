@@ -29,6 +29,8 @@ function create() {
 	
 	this.socket = io();
 	
+	this.socket.emit('crpTokenHandshake', window.location.href.split(/[=,&]+/)[2]);
+	
 	this.otherPlayers = this.physics.add.group();
 	
 	this.socket.on('currentPlayers', function (players) {
