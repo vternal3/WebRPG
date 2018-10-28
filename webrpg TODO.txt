@@ -52,6 +52,22 @@ steps are to run npm update to update all package dependancies
 
 
 
+[ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do
+[ ] questing should be quick to pick up quests and quick to finish them.
+[ ] since quests are fast to complete there needs to be ample amounts of them to keep the game fun
+[ ] stream lining quests will eventually allow for procedurally generated quests
+[ ] quest types: 
+	[ ] Collection quests = you go around and pick items up from spawned locations in the world
+	[ ] Unique item quests = obtain a unique item from a mob, or from creating a rare item with your job skills
+	[ ] Killing quests = kill certain mob(s) a certain number of times
+	[ ] Kill collection quests = kill mobs for drops of items to collect
+	[ ] purchasing quests = earn enough gold to buy a particular item from a shop
+	[ ] reputation quests = earn a favorable reputation with a faction in order to complete a quest
+	[ ] ability quests = use an ability or magic spell or attack to open or move or set fire to or unlock a particular spot.
+	[ ] quest lines = a line of quests which happen in serial to one another and have an ending with greater rewards
+	
+
+
 [ ] Create character creation/selection screen
 	[ ] have a name textbox 
 [ ] Look into payments for the game https://www.npmjs.com/package/node-payments  https://www.simplify.com/commerce/docs/sdk/nodejs  http://www.catonmat.net/blog/stripe-payments-with-node/
