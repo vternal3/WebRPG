@@ -46,10 +46,23 @@ steps are to run npm update to update all package dependancies
 [X] test email validated workflow
 [X] test feedback workflow
 [X] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
-[ ] change forgot password token to forgot_password={token} for email generation, and GET response code
+[X] get Tiled json files loaded and displaying maps in client.js
 [X] remove the extra code on top of the webrpg.js file the canvas stuff
+[ ] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
+[ ] set "Please select captcha first" message invisible when clicking login, signup etc.
+[ ] change forgot password token to forgot_password={token} for email generation, and GET response code
 [ ] make login responsive and not static size.
+[ ] write out workflow for pixel art creation
+[ ] write out workflow for Tiled json file import into webrpg.io based on client.js code
 
+[ ] ***Finish Game Design Document Template
+[ ] ***Finish evaluating Phaser Editor
+[ ] ***Gut client.js code and put in new Tiled Workflow code.
+[ ] ***Look into javascript obvuscator git hook library
+[ ] ***Create the 1)loading, 2)menu, 3)settings, 4)character creation scenes
+[ ] ***get piskel website locally setup evaluate it.
+[ ] ***try piskel desktop app evaluate it.
+[ ] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
 
 
 [ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do

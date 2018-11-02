@@ -7,9 +7,13 @@ var config = {
     default: 'arcade',
     arcade: {
       debug: false,
+	  // tileBias: 4,
       gravity: { y: 0 }
     }
   },
+  // backgroundColor: '#1b2632',
+  zoom: 5,
+  pixelArt: true,
   scene: {
     preload: preload,
     create: create,
@@ -22,7 +26,18 @@ function preload() {
 	this.load.image('ship', 'assets/spaceShips_001.png');
 	this.load.image('otherPlayer', 'assets/enemyBlack5.png');
 	this.load.image('star', 'assets/star_gold.png');
+	
+	//this.load.image('gameTiles', 'spritesheets/45a71fb70eda0e7a608f09bf4a13fd6a.png');
+	//this.load.tilemapTiledJSON('level1', 'spritesheets/untitled.json');
+	//this.load.spritesheet('trees', 'spritesheets/45a71fb70eda0e7a608f09bf4a13fd6a.png', { frameWidth: 32, frameHeight: 32});
+	this.load.image("mario-tiles", "spritesheets/1 qmckz-4ppRl9i8-tEmGmHw.png");
+	
+	this.load.image("tiles", "spritesheets/45a71fb70eda0e7a608f09bf4a13fd6a.png");
+	this.load.tilemapCSV("map", "spritesheets/untitled2_Tile Layer 1.csv");
+	this.load.tilemapTiledJSON("map2", "spritesheets/untitled2.json");
+	//this.add.image(0,0,)
 }
+
 
 function create() {
 	var self = this;
@@ -32,6 +47,51 @@ function create() {
 	this.socket.emit('crpTokenHandshake', window.location.href.split(/[=,&]+/)[2]);
 	
 	this.otherPlayers = this.physics.add.group();
+	
+	// this.map = this.add.tilemap('level1');
+	// var tileset = this.map.addTilesetImage('tiles_spritesheet','gameTiles');
+	// this.backgroundLayer = this.map.createLayer('backgroundLayer', tileset);
+	
+	
+	// Load a map from a 2D array of tile indices
+  const level = [
+    [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 ],
+    [  0,   1,   2,   3,   0,   0,   0,   1,   2,   3,   0 ],
+    [  0,   5,   6,   7,   0,   0,   0,   5,   6,   7,   0 ],
+    [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 ],
+    [  0,   0,   0,  14,  13,  14,   0,   0,   0,   0,   0 ],
+    [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 ],
+    [  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 ],
+    [  0,   0,  14,  14,  14,  14,  14,   0,   0,   0,  15 ],
+    [  0,   0,   0,   0,   0,   0,   0,   0,   0,  15,  15 ],
+    [ 35,  36,  37,   0,   0,   0,   0,   0,  15,  15,  15 ],
+    [ 39,  39,  39,  39,  39,  39,  39,  39,  39,  39,  39 ]
+  ];
+
+  //this.cameras.main.zoom = 2;
+  
+  // When loading from an array, make sure to specify the tileWidth and tileHeight
+  const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+  const tiles = map.addTilesetImage("mario-tiles");
+const layer = map.createStaticLayer(0, tiles, 0, 0);
+
+// When loading a CSV map, make sure to specify the tileWidth and tileHeight!
+  const map2 = this.make.tilemap({ key: "map", tileWidth: 32, tileHeight: 32 });
+  const tileset = map2.addTilesetImage("tiles");
+//const layer2 = map2.createStaticLayer(0, tileset, 0, 0).setOrigin(0); // layer index, tileset, x, y
+	
+	const map3 = this.make.tilemap({key: "map2"});
+	// Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
+	// Phaser's cache (i.e. the name you used in preload)
+	const tileset2 = map3.addTilesetImage("trees1", "tiles");
+	
+	// Parameters: layer name (or index) from Tiled, tileset, x, y
+  const belowLayer = map3.createStaticLayer("below", tileset2, 0, 0);
+  const belowbelowLayer = map3.createStaticLayer("belowbelow", tileset2, 0, 0);
+  belowLayer.setDepth(10);
+  const worldLayer = map3.createStaticLayer("above", tileset2, 0, 0);
+// const aboveLayer = map3.createStaticLayer("Above Player", tileset2, 0, 0);
+	
 	
 	this.socket.on('currentPlayers', function (players) {
 		Object.keys(players).forEach(function (id) {
@@ -51,6 +111,9 @@ function create() {
 		self.otherPlayers.getChildren().forEach(function (otherPlayer) {
 			if (playerId === otherPlayer.playerId) {
 				otherPlayer.destroy();
+			}
+			if(playerId === self.socket.id) {
+				location.reload();
 			}
 		});
 	});
@@ -101,7 +164,15 @@ function create() {
 }
 var agvel = 0;
 var once = 1;
+var tick = 0;
 function update() {
+	tick++;
+	if(tick > 300){
+		console.log("emitting stayalive");
+		this.socket.emit('stayalive');
+		tick = 0;
+	}
+	
 	if (this.ship) {
 		if (this.cursors.left.isDown) {
 				agvel = -250;

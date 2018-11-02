@@ -24,8 +24,8 @@ var server = require('https').createServer(options, app);
 server.listen(port, function(){
 	console.log("listening on *:" + port);
 });
-
-var io = require('socket.io')(server);
+//TODO put the pingInterval and pingTimeout values inside .env file
+var io = require('socket.io')(server, {'pingInterval': 10000, 'pingTimeout': 60000});
 var mysql      = require('mysql');
 var bodyParser=require("body-parser");
 var connection = mysql.createConnection({
@@ -91,11 +91,11 @@ var scores = {
   red: 0
 };
 
+
 io.on('connection', function(socket){
 	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
 		return;
 	console.log('ADDRESS: '+ socket.handshake.address + ' TIME: ' + socket.handshake.time);
-	
 	
 	//TODO: Seperate out this call into a 'crpTokenHandshake' call
 	//and only update using crpToken for the WHERE
@@ -124,6 +124,9 @@ io.on('connection', function(socket){
 		});
 	});
 	
+	// socket.on('stayalive', function (crptoken) {
+		// console.log("Socket ID: " + socket.id + "is alive");
+	// });
 	socket.on('requestEmail', function (crptoken) {
 		if(crptoken == null) {
 			return;
