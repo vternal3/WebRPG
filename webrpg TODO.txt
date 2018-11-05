@@ -48,20 +48,54 @@ steps are to run npm update to update all package dependancies
 [X] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [X] get Tiled json files loaded and displaying maps in client.js
 [X] remove the extra code on top of the webrpg.js file the canvas stuff
+[ ] inside 'public'
+	[ ] edit the fav.io images with webrpg branding
+	[ ] edit the human.txt file with correct information
+	[ ] edit the robot.txt 
+	[ ] create a 404.html page with webrpg.io branding
+	[ ] edit the icon.png with webrpg.io branding
+	[ ] edit license with MIT license and any additional license used from other assets
+	[ ] remove README.md
+	[ ] edit the site.webmanifest file with correct information
+	[ ] edit tile.png with webrpg.io branding
+	[ ] edit tile-wide.png with webrpg.io branding
+	[ ] edit or remove .htaccess if node.js needs it or not.
+[ ] inside 'webrpg_Dev'
+	[ ] update the README.md with game information, specs, controls, server configs etc
+	[ ] edit .editorconfig with correct information
+	[ ] make sure .env-example is up-to-date with .env
+	[ ] edit .gitattributes with correct information
+	[ ] edit gitignore with correct file and directories to ignore.
+	[ ] update HTML5 video game tutorial with latest additions.
+	[ ] figure out why webrpg_wrapper isn't working.
+[ ] Add a background image to index.html with game assets
 [ ] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
 [ ] set "Please select captcha first" message invisible when clicking login, signup etc.
 [ ] change forgot password token to forgot_password={token} for email generation, and GET response code
 [ ] make login responsive and not static size.
 [ ] write out workflow for pixel art creation
 [ ] write out workflow for Tiled json file import into webrpg.io based on client.js code
+[ ] create loading screen 
+[ ] create scene transitions from loading screen to main menu to settings to character creation screen
+[ ] create mini map code.
+[X] add AddThis buttons to main page.
+[X] add chimp mail email list to front page.
+[ ] make mailing list page look better by centering and adding a colorful background image.
+[ ] compile all marketing notes from evernote AND USE THEM.
+[X] Call ZOHO customer service about email accounts not showing up on Mail Accounts. Newsletter and Admin
+[ ] purchase privacy policy and terms of service and add them to webrpg.io site before going live with the game.
+[ ] Make sure that all Audio is served both as .mp3 and .ogg
+[ ] In Settings have the option to set pause on blur or not 
+[ ] settings also will have master volume, SFX volume, Music volume
+
 
 [ ] ***Finish Game Design Document Template
-[ ] ***Finish evaluating Phaser Editor
+[X] ***Finish evaluating Phaser Editor
 [ ] ***Gut client.js code and put in new Tiled Workflow code.
-[ ] ***Look into javascript obvuscator git hook library
+[X] ***Look into javascript obvuscator git hook library
 [ ] ***Create the 1)loading, 2)menu, 3)settings, 4)character creation scenes
-[ ] ***get piskel website locally setup evaluate it.
-[ ] ***try piskel desktop app evaluate it.
+[X] ***get piskel website locally setup evaluate it.
+[X] ***try piskel desktop app evaluate it.
 [ ] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
 
 
@@ -69,6 +103,32 @@ steps are to run npm update to update all package dependancies
 [ ] questing should be quick to pick up quests and quick to finish them.
 [ ] since quests are fast to complete there needs to be ample amounts of them to keep the game fun
 [ ] stream lining quests will eventually allow for procedurally generated quests
+[ ] essents are what all the elements are called
+[ ] you can augment essent casts with a damage over time effect. damage over time has a time limit dependant on its level. three ticks for level 0 over a course of 9 seconds. intervals can shrink and time limit can increase as it is leveled
+[ ] essents can be augmented with a stun effect. stun effect lasts 0.5 seconds for level 0 and can happen 2% of the time at level 0. both the duration and probability of a stun effect can increase as stun is leveled up stuns interupt any cast time spells
+[ ] essents can be augmented with different area of effect shapes, 
+	[ ] circle area, 
+	[ ] cone area, 
+	[ ] donut area, 
+	[ ] line area
+[ ] essents can be augmented with projectial shapes, 
+	[ ] single projectile,
+	[ ] double straight 
+	[ ] double front and back, 
+	[ ] triple straight 
+	[ ] trible even around, 
+	[ ] double V 
+	[ ] double left and right, 
+	[ ] triple W, 
+	[ ] quadrupal straight, 
+	[ ] quadrupal cross, 
+[ ] essents can be augmented with a spread effect. near by enemies get hit with a diminishing returns essents hit
+[ ] you can have essents orbs that circle you, up to 3 different orbs
+[ ] orbs can be defensive or offensive
+[ ] orbs can spin around player or be set to stay in a static position around the player
+[ ] orbs can cast specific essents spells if augmented with an essents
+[ ] orbs can damage enemies on contact if augmented to be hit with contact.. NOTE if essents are augmented to cast spells they don't damage on touch.
+
 [ ] quest types: 
 	[ ] Collection quests = you go around and pick items up from spawned locations in the world
 	[ ] Unique item quests = obtain a unique item from a mob, or from creating a rare item with your job skills
@@ -161,9 +221,9 @@ steps are to run npm update to update all package dependancies
 [ ] create a press kit
 [X] create a Privacy Policy
 [X] create a Terms of Service
-[ ] create a share on twitter button
-[ ] create a share on reddit button
+[X] create a share on twitter button
+[X] create a share on reddit button
 [ ] create background music to main page
 [ ] add button to toggle background music on/off
-[ ] create an itch.io account to post game to https://itch.io/developers
+[X] create an itch.io account to post game to https://itch.io/developers
 [ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums

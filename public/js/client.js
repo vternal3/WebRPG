@@ -12,13 +12,19 @@ var config = {
     }
   },
   // backgroundColor: '#1b2632',
-  zoom: 5,
-  pixelArt: true,
+  // zoom: 5,
+  render:{
+	  pixelArt: true,
+  },
+  // pixelArt: true,
   scene: {
     preload: preload,
     create: create,
     update: update
-  } 
+  },
+  audio: {
+	disableWebAudio: true
+  }
 };
  
 var game = new Phaser.Game(config);
@@ -33,9 +39,31 @@ function preload() {
 	this.load.image("mario-tiles", "spritesheets/1 qmckz-4ppRl9i8-tEmGmHw.png");
 	
 	this.load.image("tiles", "spritesheets/45a71fb70eda0e7a608f09bf4a13fd6a.png");
+	this.load.image("tiles2", "spritesheets/45a71fb70eda0e7a608f09bf4a13fd6a.png");
+	this.load.image("grass2", "spritesheets/grass-tile-3.png");
+	this.load.spritesheet("walk_template", "spritesheets/walk_template.png", { frameWidth: 60, frameHeight: 110});
+	
 	this.load.tilemapCSV("map", "spritesheets/untitled2_Tile Layer 1.csv");
 	this.load.tilemapTiledJSON("map2", "spritesheets/untitled2.json");
+	this.load.tilemapTiledJSON("map3", "spritesheets/untitled3.json");
+	
 	//this.add.image(0,0,)
+	this.load.audio('theme_music', 'music/Soliloquy.mp3');
+	
+	let loadingBar = this.add.graphics({
+		fillStyle: {
+			color: 0xffffff //white
+		}
+	});
+	
+	this.load.on("progress", (percent)=>{
+		loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50);
+		console.log(percent);
+	});
+	this.load.on("complete", ()=> {
+		// this.scene.start("menu", "optional data" /*Optional data object to pass to Scene.Settings and Scene.init.*/);
+		console.log("done");
+	});
 }
 
 
@@ -52,6 +80,99 @@ function create() {
 	// var tileset = this.map.addTilesetImage('tiles_spritesheet','gameTiles');
 	// this.backgroundLayer = this.map.createLayer('backgroundLayer', tileset);
 	
+	var music = this.sound.add('theme_music');
+	music.play({loop:true});
+	this.sound.play('theme_music',{loop:true});
+	this.sound.pauseOnBlur = false;
+	
+	player = this.physics.add.sprite(400, 300, 'walk_template');
+	//player.setScale(0.8);
+	player.setDepth(11);
+	player.setBounce(0.2);
+	player.setCollideWorldBounds(true);
+	player.body.setGravityY(0);
+	
+	this.anims.create({
+            key: 'downLeft',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 0,
+                end: 7
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'down',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 8,
+                end: 15
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'idle',
+            frames: [ { key: 'walk_template', frame: 8 } ],
+            frameRate: 20
+        });
+	this.anims.create({
+            key: 'downRight',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 16,
+                end: 23
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 24,
+                end: 31
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 32,
+                end: 39
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'upLeft',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 40,
+                end: 47
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'up',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 48,
+                end: 55
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	this.anims.create({
+            key: 'upRight',
+            frames: this.anims.generateFrameNumbers('walk_template', {
+                start: 56,
+                end: 63
+            }),
+            repeat: -1,
+            frameRate: 15
+        });
+	
+		
+		
+	//this.sound.loop = true;
 	
 	// Load a map from a 2D array of tile indices
   const level = [
@@ -71,25 +192,30 @@ function create() {
   //this.cameras.main.zoom = 2;
   
   // When loading from an array, make sure to specify the tileWidth and tileHeight
-  const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
-  const tiles = map.addTilesetImage("mario-tiles");
-const layer = map.createStaticLayer(0, tiles, 0, 0);
+  // const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+  // const tiles = map.addTilesetImage("mario-tiles");
+// const layer = map.createStaticLayer(0, tiles, 0, 0);
 
-// When loading a CSV map, make sure to specify the tileWidth and tileHeight!
-  const map2 = this.make.tilemap({ key: "map", tileWidth: 32, tileHeight: 32 });
-  const tileset = map2.addTilesetImage("tiles");
+// // When loading a CSV map, make sure to specify the tileWidth and tileHeight!
+  // const map2 = this.make.tilemap({ key: "map", tileWidth: 32, tileHeight: 32 });
+  // const tileset = map2.addTilesetImage("tiles");
 //const layer2 = map2.createStaticLayer(0, tileset, 0, 0).setOrigin(0); // layer index, tileset, x, y
 	
-	const map3 = this.make.tilemap({key: "map2"});
+	const map3 = this.make.tilemap({key: "map3"});
 	// Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
 	// Phaser's cache (i.e. the name you used in preload)
-	const tileset2 = map3.addTilesetImage("trees1", "tiles");
+	const tileset2 = map3.addTilesetImage("trees2", "tiles2");
+	const tileset3 = map3.addTilesetImage("grass", "grass2");
 	
 	// Parameters: layer name (or index) from Tiled, tileset, x, y
-  const belowLayer = map3.createStaticLayer("below", tileset2, 0, 0);
-  const belowbelowLayer = map3.createStaticLayer("belowbelow", tileset2, 0, 0);
-  belowLayer.setDepth(10);
-  const worldLayer = map3.createStaticLayer("above", tileset2, 0, 0);
+	const middle = map3.createStaticLayer("middle", tileset2, 0, 0);
+	middle.setDepth(10);
+	const bottom = map3.createStaticLayer("bottom", tileset3, 0, 0);
+	
+  // const belowLayer = map3.createStaticLayer("below", tileset2, 0, 0);
+  // const belowbelowLayer = map3.createStaticLayer("belowbelow", tileset2, 0, 0);
+  // belowLayer.setDepth(10);
+  // const worldLayer = map3.createStaticLayer("above", tileset2, 0, 0);
 // const aboveLayer = map3.createStaticLayer("Above Player", tileset2, 0, 0);
 	
 	
@@ -112,6 +238,8 @@ const layer = map.createStaticLayer(0, tiles, 0, 0);
 			if (playerId === otherPlayer.playerId) {
 				otherPlayer.destroy();
 			}
+			//TODO: test if this code actually will ever run. If ever you will receive a diconnect message from timeouts.
+			//else if you don't ever execute this code delete it and this comment with in.
 			if(playerId === self.socket.id) {
 				location.reload();
 			}
@@ -152,8 +280,9 @@ const layer = map.createStaticLayer(0, tiles, 0, 0);
 	
 	this.socket.on('emailSent', function (email) {
 		self.nameText.setText(email);
+		window.history.pushState("object or string", "Clear return params", "/#");
+		document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
 	});
-	window.history.pushState("object or string", "Clear return params", "/#");
 	//TODO: Send a one time token to request updates, then on server side 
 	//set the socket id that is associated with the one time token as set
 	//for heart beat refresh id... any other id that tries will be blocked
@@ -164,25 +293,57 @@ const layer = map.createStaticLayer(0, tiles, 0, 0);
 }
 var agvel = 0;
 var once = 1;
-var tick = 0;
+// var tick = 0;
 function update() {
-	tick++;
-	if(tick > 300){
-		console.log("emitting stayalive");
-		this.socket.emit('stayalive');
-		tick = 0;
-	}
+	// tick++;
+	// if(tick > 300){
+		// console.log("emitting stayalive");
+		// this.socket.emit('stayalive');
+		// tick = 0;
+	// }
 	
 	if (this.ship) {
-		if (this.cursors.left.isDown) {
-				agvel = -250;
-		}
+		
+		if (this.cursors.left.isDown && this.cursors.up.isDown) {
+			player.anims.play('upLeft', true);
+		} else 
+		if (this.cursors.right.isDown && this.cursors.up.isDown) {
+			player.anims.play('upRight', true);
+		} else 
+		if (this.cursors.left.isDown && this.cursors.down.isDown) {
+			player.anims.play('downLeft', true);
+		} else 
+		if (this.cursors.right.isDown && this.cursors.down.isDown) {
+			player.anims.play('downRight', true);
+		} else 
 		if (this.cursors.right.isDown) {
 			agvel = 250;
+			if(this.sound.volume > 0.01)
+				this.sound.volume -= 0.01;
+			player.anims.play('right', true);
+		} else
+		if (this.cursors.up.isDown) {
+			player.anims.play('up', true);
+		} else
+		if (this.cursors.down.isDown) {
+			player.anims.play('down', true);
+		} else
+		if (this.cursors.left.isDown) {
+			agvel = -250;
+			if(this.sound.volume < 1)
+				this.sound.volume += 0.01;
+			player.anims.play('left', true);
 		}
+		
 		if ((!this.cursors.right.isDown && !this.cursors.left.isDown) ||
 		this.cursors.right.isDown && this.cursors.left.isDown) {
 			agvel = 0;
+		}
+		
+		
+		
+		if(!this.cursors.down.isDown && !this.cursors.up.isDown && !this.cursors.right.isDown && !this.cursors.left.isDown) {
+			player.anims.play('idle');
 		}
 		
 		this.ship.setAngularVelocity(agvel);

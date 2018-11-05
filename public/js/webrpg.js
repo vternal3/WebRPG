@@ -15,10 +15,6 @@ jQuery.loadScript = function (url, callback) {
 
 function start(name)
 {
-	//Loads the client game script dynamically
-	$.loadScript('js/client.js', function(){
-	});
-	
 	// TODO: Add more to this functionality like a message about saving progress
 	window.onbeforeunload = function () {return false;}
 	
@@ -28,6 +24,9 @@ function start(name)
 	document.getElementById("bottom_right_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_left_overlay").classList.add("nodisplay");
 	document.getElementById("bottom_middle_overlay").classList.add("nodisplay");
+	if(document.getElementsByClassName("addthis-smartlayers-desktop")[0]) {
+		document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
+	}
 	document.getElementById("popup").classList.add("nodisplay");
 	
 	//Sleep for a second to let the main page fade out.
@@ -35,6 +34,9 @@ function start(name)
 	setTimeout(function() {
 		document.getElementById("phaser-example").style.display = "initial";
 	}, 600);
+	//Loads the client game script dynamically
+	$.loadScript('js/client.js', function(){
+	});
 }
 
 function login_form_update()
