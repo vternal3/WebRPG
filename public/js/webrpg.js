@@ -1,3 +1,10 @@
+//Prevent the enter key from being pressed.
+$(document).keypress(
+  function(event){
+    if (event.which == '13') {
+      event.preventDefault();
+    }
+});
 
 //prevents form submit from refreshing page.
 $("#login_form").submit(function(e) {
@@ -35,6 +42,16 @@ function start(name)
 		document.getElementById("phaser-example").style.display = "initial";
 	}, 600);
 	//Loads the client game script dynamically
+	$.loadScript('js/character_scene.js', function(){
+	});
+	$.loadScript('js/settings_scene.js', function(){
+	});
+	$.loadScript('js/game_scene.js', function(){
+	});
+	$.loadScript('js/title_scene.js', function(){
+	});
+	$.loadScript('js/loading_scene.js', function(){
+	});
 	$.loadScript('js/client.js', function(){
 	});
 }

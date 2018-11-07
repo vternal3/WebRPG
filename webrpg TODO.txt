@@ -68,6 +68,7 @@ steps are to run npm update to update all package dependancies
 	[ ] edit gitignore with correct file and directories to ignore.
 	[ ] update HTML5 video game tutorial with latest additions.
 	[ ] figure out why webrpg_wrapper isn't working.
+[ ] need to create a CRON job which tries to ping a client and if no responce sets crpToken to null and loggedIn to 0
 [ ] Add a background image to index.html with game assets
 [ ] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
 [ ] set "Please select captcha first" message invisible when clicking login, signup etc.
@@ -87,16 +88,22 @@ steps are to run npm update to update all package dependancies
 [ ] Make sure that all Audio is served both as .mp3 and .ogg
 [ ] In Settings have the option to set pause on blur or not 
 [ ] settings also will have master volume, SFX volume, Music volume
-
+[ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
+[ ] limit one connection per IP address
 
 [ ] ***Finish Game Design Document Template
 [X] ***Finish evaluating Phaser Editor
 [ ] ***Gut client.js code and put in new Tiled Workflow code.
 [X] ***Look into javascript obvuscator git hook library
-[ ] ***Create the 1)loading, 2)menu, 3)settings, 4)character creation scenes
+[ ] ***Create the 
+	[X] 1)loading, 
+	[ ] 2)menu, 
+	[ ] 3)settings, 
+	[ ] 4)character creation scenes
+	[X] 5)game scene
 [X] ***get piskel website locally setup evaluate it.
 [X] ***try piskel desktop app evaluate it.
-[ ] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
+[X] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
 
 
 [ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do

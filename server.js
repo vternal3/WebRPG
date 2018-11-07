@@ -108,7 +108,7 @@ io.on('connection', function(socket){
 		db.query(sql, function(err, results) {
 			if (err) throw err;
 			if(results.length == 1) {
-				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", crpToken = '" + null + "' WHERE crpToken = " + db.escape(crptoken);
+				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", loggedIn = '" + 1 + "' WHERE crpToken = " + db.escape(crptoken);
 				db.query(sql, function(err, results){ 
 					if (err) throw err;
 					if(results.affectedRows == 1) {
