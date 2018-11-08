@@ -26,6 +26,8 @@ class loading_scene extends Phaser.Scene {
 		this.load.image("settings", "spritesheets/settings.png");
 		this.load.image("settings_hover", "spritesheets/settings_hover.png");
 		
+		this.load.image("ui_upscaled", "spritesheets/ui_upscaled.png");
+		
 		
 		
 		this.load.tilemapCSV("map", "spritesheets/untitled2_Tile Layer 1.csv");

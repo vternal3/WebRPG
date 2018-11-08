@@ -5,11 +5,14 @@ class title_scene extends Phaser.Scene {
     }
 
 	preload() {
-		
+		console.log("Title");
+		//hides the AddThis strip
+		if(document.getElementsByClassName("addthis-smartlayers-desktop")[0]) {
+			document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
+		}
 	}
 	
     create () {
-		console.log("Title");
 		
 		this.add.image(0,0,'title_bg').setOrigin(0).setScale(4);
 		let startButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "start");
@@ -41,7 +44,7 @@ class title_scene extends Phaser.Scene {
 		});
 		startButton.on("pointerup", ()=> {
 			this.sound.pauseAll();
-			console.log("starting game scene");
+			console.log("starting character scene");
 			this.scene.start('character_scene');
 			this.scene.stop('title_scene');
 			console.log("stopped title scene");

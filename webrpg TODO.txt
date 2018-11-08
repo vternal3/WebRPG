@@ -48,6 +48,14 @@ steps are to run npm update to update all package dependancies
 [X] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [X] get Tiled json files loaded and displaying maps in client.js
 [X] remove the extra code on top of the webrpg.js file the canvas stuff
+
+[ ] Regularly update checks:
+	[ ] update the README.md with game information, specs, controls, server configs etc
+	[ ] edit license with MIT license and any additional license used from other assets
+	[ ] update privacy policy and terms of service
+	[ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
+	[ ] Make sure that all Audio is served both as .mp3 and .ogg
+	
 [ ] inside 'public'
 	[ ] edit the fav.io images with webrpg branding
 	[ ] edit the human.txt file with correct information
@@ -55,7 +63,7 @@ steps are to run npm update to update all package dependancies
 	[ ] create a 404.html page with webrpg.io branding
 	[ ] edit the icon.png with webrpg.io branding
 	[ ] edit license with MIT license and any additional license used from other assets
-	[ ] remove README.md
+	[X] remove README.md
 	[ ] edit the site.webmanifest file with correct information
 	[ ] edit tile.png with webrpg.io branding
 	[ ] edit tile-wide.png with webrpg.io branding
@@ -68,6 +76,7 @@ steps are to run npm update to update all package dependancies
 	[ ] edit gitignore with correct file and directories to ignore.
 	[ ] update HTML5 video game tutorial with latest additions.
 	[ ] figure out why webrpg_wrapper isn't working.
+	
 [ ] need to create a CRON job which tries to ping a client and if no responce sets crpToken to null and loggedIn to 0
 [ ] Add a background image to index.html with game assets
 [ ] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
@@ -76,13 +85,19 @@ steps are to run npm update to update all package dependancies
 [ ] make login responsive and not static size.
 [ ] write out workflow for pixel art creation
 [ ] write out workflow for Tiled json file import into webrpg.io based on client.js code
-[ ] create loading screen 
-[ ] create scene transitions from loading screen to main menu to settings to character creation screen
+[X] create loading screen 
+[ ] add percentage text to loading screen
+[ ] add randomly selected concept art as loading screen background
+[X] create scene transitions from loading screen to title scene
+[X] create scene transitions from title scene to settings scene
+[X] create scene transitions from title scene to character scene
+[X] create scene transitions from character scene to game scene
+[X] create scene transition from game scene to title scene
 [ ] create mini map code.
 [X] add AddThis buttons to main page.
 [X] add chimp mail email list to front page.
 [ ] make mailing list page look better by centering and adding a colorful background image.
-[ ] compile all marketing notes from evernote AND USE THEM.
+[X] compile all marketing notes from evernote AND USE THEM.
 [X] Call ZOHO customer service about email accounts not showing up on Mail Accounts. Newsletter and Admin
 [ ] purchase privacy policy and terms of service and add them to webrpg.io site before going live with the game.
 [ ] Make sure that all Audio is served both as .mp3 and .ogg
@@ -97,7 +112,7 @@ steps are to run npm update to update all package dependancies
 [X] ***Look into javascript obvuscator git hook library
 [ ] ***Create the 
 	[X] 1)loading, 
-	[ ] 2)menu, 
+	[X] 2)Title, 
 	[ ] 3)settings, 
 	[ ] 4)character creation scenes
 	[X] 5)game scene
