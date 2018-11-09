@@ -231,8 +231,6 @@ class game_scene extends Phaser.Scene {
 			this.socket.disconnect()
 			window.location.href = "https://webrpg.io";
 		}, this);
-		
-		
     }
 	
 	update() {
