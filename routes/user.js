@@ -180,7 +180,7 @@ exports.index = function(req, res) {
 							});
 						},
 						function(token,done) {
-							var sql = "UPDATE users SET loggedIn = 1, crpToken = " + db.escape(token) + " WHERE id = " + db.escape(results[0].id);
+							var sql = "UPDATE users SET crpToken = " + db.escape(token) + " WHERE id = " + db.escape(results[0].id);
 							var query = db.query(sql, function(err, results) {
 								if (err) throw err;
 								if(results.affectedRows == 1) {

@@ -16,15 +16,12 @@ jQuery.loadScript = function (url, callback) {
         url: url,
         dataType: 'script',
         success: callback,
-        async: true
+        async: false
     });
 }
 
 function start(name)
 {
-	// TODO: Add more to this functionality like a message about saving progress
-	window.onbeforeunload = function () {return false;}
-	
 	document.getElementById("login").classList.add("nodisplay");
 	document.getElementById("top_left_overlay").classList.add("nodisplay");
 	document.getElementById("top_right_overlay").classList.add("nodisplay");
@@ -121,9 +118,7 @@ $(document).ready(function(){
 	}
 	//Login succeeded
 	if(window.location.href.includes("login_success")) {
-		//fade out main page elements and start the game 
 		var crpToken = window.location.href.split(/[=,&]+/)[2];
-		//window.history.pushState("object or string", "Clear return params", "/#");
 		start(crpToken);
 	}
 	//Signup failed
@@ -139,7 +134,6 @@ $(document).ready(function(){
 	}
 	//Signup succeeded
 	if(window.location.href.includes("signup_success")) {
-		//fade out main page elements and start the game 
 		var message = window.location.href.split(/[=,&]+/)[1];
 		message = message.replace(/%20/g, " ");
 		document.getElementById("signup_message").innerHTML = "<span style='color:green;'>" + message + "</span>";

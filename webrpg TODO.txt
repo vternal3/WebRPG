@@ -120,7 +120,14 @@ steps are to run npm update to update all package dependancies
 [X] ***try piskel desktop app evaluate it.
 [X] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
 
-
+[ ] Terrain effects
+	[ ] Slow down in water
+	[ ] Slow down in sand
+	[ ] Speed up on conveyer belt
+	[ ] Damage on spikes
+	[ ] Look for more terrain types and effects
+	
+[ ] Use the mini map example you found on forums
 [ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do
 [ ] questing should be quick to pick up quests and quick to finish them.
 [ ] since quests are fast to complete there needs to be ample amounts of them to keep the game fun
@@ -160,7 +167,7 @@ steps are to run npm update to update all package dependancies
 	[ ] reputation quests = earn a favorable reputation with a faction in order to complete a quest
 	[ ] ability quests = use an ability or magic spell or attack to open or move or set fire to or unlock a particular spot.
 	[ ] quest lines = a line of quests which happen in serial to one another and have an ending with greater rewards
-	
+	[ ] Have quest nodes which have colored ! Marks that signify which type of quest it is... Good Collection quest, Red killing mob quest, Blue creating item, etc
 
 
 [ ] Create character creation/selection screen

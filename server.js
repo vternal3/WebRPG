@@ -108,18 +108,27 @@ io.on('connection', function(socket){
 		db.query(sql, function(err, results) {
 			if (err) throw err;
 			if(results.length == 1) {
-				var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", loggedIn = '" + 1 + "' WHERE crpToken = " + db.escape(crptoken);
-				db.query(sql, function(err, results){ 
-					if (err) throw err;
-					if(results.affectedRows == 1) {
-						console.log("CrpTokenHandshake Successfully updated socket and crptoken");
-					}
-					else {
-						console.log("CrpTokenHandshake Error updating socket and crpToken");
-					}
-				});
+				if(results[0].loggedIn == 1){
+					console.log("returning from crpTokenHandshake");
+					socket.emit('alreadyLoggedIn', 'https://webrpg.io/?login_error=Already logged in&email= ');
+					return;
+				} else {
+					var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", loggedIn = '" + 1 + "' WHERE crpToken = " + db.escape(crptoken);
+					db.query(sql, function(err, results){ 
+						if (err) throw err;
+						if(results.affectedRows == 1) {
+							console.log("CrpTokenHandshake Successfully updated socket and crptoken");
+						}
+						else {
+							console.log("CrpTokenHandshake Error updating socket and crpToken");
+						}
+					});
+					socket.emit('notLoggedIn', null);
+				}
 			} else {
 				console.log("CrpTokenHandshake Error crpToken not found");
+				socket.emit('alreadyLoggedIn', 'https://webrpg.io/?login_error=Invalid token. Please re-login&email= ');
+				return;
 			}
 		});
 	});
@@ -149,7 +158,7 @@ io.on('connection', function(socket){
 		console.log('user disconnected');
 		//log the player who disconnected out by changing its 
 		//loggedIn column to 0 and set socket to null.
-		var sql = "UPDATE users SET socket = '" + null + "', loggedIn = '" + 0 + "' WHERE socket = " + db.escape(socket.id);
+		var sql = "UPDATE users SET socket = '" + null + "', loggedIn = '" + 0 + "', crpToken = '" + null + "' WHERE socket = " + db.escape(socket.id);
 		db.query(sql, function(err, results){ 
 			if (err) throw err;
 			if(results.affectedRows == 1) {
@@ -173,7 +182,7 @@ io.on('connection', function(socket){
 		x: Math.floor(Math.random() * 700) + 50,
 		y: Math.floor(Math.random() * 500) + 50,
 		playerId: socket.id,
-		name: players[socket.id].email
+		name: ""
 		//team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
 	};
 	

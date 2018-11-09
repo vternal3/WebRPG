@@ -14,6 +14,27 @@ class game_scene extends Phaser.Scene {
 		
 		this.socket.emit('crpTokenHandshake', window.location.href.split(/[=,&]+/)[2]);
 		
+		this.socket.on('alreadyLoggedIn', function (message) {
+			window.location.href = message;
+			return;
+		});
+		this.socket.on('notLoggedIn', function (message) {
+			// TODO: Add more to this functionality like a message about saving progress
+			window.onbeforeunload = function () {return false;}
+		});
+		
+		//send CRP Token to the server
+		this.socket.emit('requestEmail', window.location.href.split(/[=,&]+/)[2]);
+		
+		this.socket.on('emailSent', function (email) {
+			self.nameText.setText(email);
+			self.player.name = email;
+			//Removes the crp token params after the domain name.
+			//window.history.pushState("object or string", "Clear return params", "/#");
+			//Fades out the AddThis buttons
+			//document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
+		});
+		
 		this.otherPlayers = this.physics.add.group();
 		this.otherPlayersName = {};
 		
@@ -189,7 +210,7 @@ class game_scene extends Phaser.Scene {
 		this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
 		
 		this.nameText = this.add.text(292, 16, '', { fontSize: '12px', fill: '#00FF00' });
-		  
+		  this.nameText.setDepth(11);
 		this.socket.on('scoreUpdate', function (scores) {
 			self.blueScoreText.setText('Blue: ' + scores.blue);
 			self.redScoreText.setText('Red: ' + scores.red);
@@ -202,24 +223,16 @@ class game_scene extends Phaser.Scene {
 				this.socket.emit('starCollected');
 			}, null, self);
 		});
-		//send CRP Token to the server
-		this.socket.emit('requestEmail', window.location.href.split(/[=,&]+/)[2]);
 		
-		this.socket.on('emailSent', function (email) {
-			self.nameText.setText(email);
-			self.player.name = email;
-			//Removes the crp token params after the domain name.
-			//window.history.pushState("object or string", "Clear return params", "/#");
-			//Fades out the AddThis buttons
-			//document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
-		});
 		//Go back to the Title scene and disconnects it socket
 		this.input.keyboard.on('keydown_ESC', function(){
 			this.sound.pauseAll();
 			this.scene.stop('game_scene');
 			this.socket.disconnect()
-			this.scene.start('title_scene');
+			window.location.href = "https://webrpg.io";
 		}, this);
+		
+		
     }
 	
 	update() {
@@ -388,7 +401,7 @@ var agvel = 0;
 var direction = 0; //0:up, 1:upRight, 2:right, 3:downRight, 4:down, 5:downLeft, 6:left, 7:upLeft
 var velocity_x = 0;
 var velocity_y = 0;
-var velocity_speed = 140;
+var velocity_speed = 160;
 function addPlayer(self, playerInfo) {
 	//self.player1 = self.physics.add.image(playerInfo.x, playerInfo.y, 'walk_template');
 }
@@ -398,5 +411,11 @@ function addOtherPlayers(self, playerInfo) {
 	otherPlayer.setDepth(11);
 	otherPlayer.playerId = playerInfo.playerId;
 	self.otherPlayers.add(otherPlayer);
-	self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x, playerInfo.y, playerInfo.name, { fontSize: '12px', fill: '#00FF00' });;
+	if(playerInfo.name.length) {
+		self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x - (8 * playerInfo.name.length / 2), playerInfo.y - 55 - 12, playerInfo.name, { fontSize: '12px', fill: '#00FF00' });
+	}
+	else {
+		self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x, playerInfo.y - 55 - 12, playerInfo.name, { fontSize: '12px', fill: '#00FF00' });
+	}
+	self.otherPlayersName[playerInfo.playerId].setDepth(11);
 }
