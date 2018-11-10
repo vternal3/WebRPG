@@ -2,7 +2,6 @@
 <html class="no-js" lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<title>webrpg.io</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +28,6 @@
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
 		<![endif]-->
 		
-		<!-- <div id="test">test</div> -->
 		<div id="container">		
 			<div id="feedback-main">
 				<div id="feedback-div">
@@ -43,12 +41,11 @@
 					  <p class="text">
 						<textarea name="comment" type="comment" class="validate[required,length[6,300]] feedback-input" id="feedback-comment" required placeholder="Please leave your feedback here."></textarea>
 					  </p>
+					  <div><div align="center"><div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div></div></div>
 					  <div class="feedback-submit">
 						<input type="submit" value="SEND" id="feedback-button-blue" />
 						<div class="feedback-ease"></div>
 					  </div>
-					  <br />
-					  <div><div align="center"><div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div></div></div>
 					</form>
 				</div>
 			</div>
@@ -57,17 +54,13 @@
 
 			<div id="top_left_overlay"><a href="#top_left"> &nbsp;&nbsp;&nbsp;&nbsp;Top Left</a></div>
 			<div id="top_right_overlay"><a href="press_kit.html">Press Kit &nbsp;&nbsp;&nbsp;&nbsp;</a></div>
-			<div id="middle" style="clear: both;">
+			<div id="middle" style="clear:both">
 				<!-- Login Form -->
 				<div id="login" class="main">
 					<p class="sign" align="center">webrpg.io</p>
 					<form id="login_form" class="form1" onsubmit="return start();">
 						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" maxlength="64"/>
-						<!-- <input class="pass" type="password" align="center" placeholder="Password"> -->
 						<input class="submit" type="submit" value="Play" align="center"/>
-						<!--
-						<p class="forgot" align="center"><a href="#create">Create An Account</a>
-						&nbsp;&nbsp;&nbsp;&nbsp;<a href="#login">Login</a></p> -->
 					</form>	
 					<div align="center"><a href="javascript:;" id="signup_form_link" onclick="signup_form();">signup</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="login_form_link" onclick="login_form_update();">login</a></div>
 					<div align="center" id="loginform"  style="display:none;">
@@ -114,7 +107,6 @@
 							<button id="btn-forgot-update" name="forgot_button" type="submit">Update Password</button>
 						</form>
 					</div>
-					<div><div align="center"></div></div>
 					<div align="center" id="forgot_succeed"  style="display:none;"><div align="center"><label id="forgot_succeed_label" align="center"></label></div></div>
 					<div align="center" id="feedback_succeed"  style="display:none;"><div align="center"><label id="feedback_succeed_label" align="center"></label></div></div>
 					<div align="center"><div><label id="recaptcha_error_label"></label></div></div>

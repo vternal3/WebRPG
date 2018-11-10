@@ -7,16 +7,12 @@ var config = {
     default: 'arcade',
     arcade: {
       debug: false,
-	  // tileBias: 4,
       gravity: { y: 0 }
     }
   },
-  // backgroundColor: '#1b2632',
-  // zoom: 5,
   render:{
 	  pixelArt: true,
   },
-  // pixelArt: true,
   scene: [loading_scene, game_scene, title_scene, settings_scene, character_scene],
   audio: {
 	disableWebAudio: true

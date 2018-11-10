@@ -38,7 +38,7 @@ connection.connect();
 global.db = connection;
 //Code to keep the connection to MySQL so that
 //connection doesn't time out.
- setInterval(function () {
+setInterval(function () {
 	console.log("Keep MySQL Alive");
     global.db.query('SELECT 1');
 }, 3600000); //Once every hour do a query to keep connection alive
@@ -75,7 +75,6 @@ app.use(function(req, res, next) {
 // creates our routes
 app.post('/', user.index);
 app.post('/:token', user.index);
-app.get('/logout', user.logout);//call for logout
 app.get('/:token', user.index);
 
 // server socket.io code
@@ -133,13 +132,7 @@ io.on('connection', function(socket){
 		});
 	});
 	
-	// socket.on('stayalive', function (crptoken) {
-		// console.log("Socket ID: " + socket.id + "is alive");
-	// });
-	socket.on('requestEmail', function (crptoken) {
-		if(crptoken == null) {
-			return;
-		}
+	socket.on('requestEmail', function () {
 		var sql = "SELECT `email` FROM `users` WHERE `socket`="+db.escape(socket.id);                           
 		
 		db.query(sql, function(err, results) {
@@ -147,7 +140,7 @@ io.on('connection', function(socket){
 			if(results.length == 1) {
 				players[socket.id].email = results[0].email;
 				socket.emit('emailSent', players[socket.id].email);
-				console.log("succesfully sent email");
+				console.log("succesfully sent email: " + results[0].email);
 			} else {
 				console.log("error sending email, user doesn't exist");
 			}
@@ -174,30 +167,30 @@ io.on('connection', function(socket){
 		// emit a message to all players to remove this player
 		io.emit('disconnect', socket.id);
 	});
-	
-	//Randomly set the players location inside the 800x600
-	//canvas. And set which team the player is on
-	players[socket.id] = {
-		direction: 8,
-		x: Math.floor(Math.random() * 700) + 50,
-		y: Math.floor(Math.random() * 500) + 50,
-		playerId: socket.id,
-		name: ""
-		//team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
-	};
-	
-	// send the players object to the new player
-	socket.emit('currentPlayers', players);
-	
-	// send the star object to the new player
-	socket.emit('starLocation', star);
-	
-	// send the current scores
-	socket.emit('scoreUpdate', scores);
-	
-	// update all other players of the new player
-	socket.broadcast.emit('newPlayer', players[socket.id]);
-	
+
+	socket.on('game_start', function(){
+		//TODO: wrap all the emits inside of a .on("game_start"){} call and when the
+		//game_scene starts call socket.emit("game_start") and then run these emits.
+		players[socket.id] = {
+			direction: 8,
+			x: Math.floor(Math.random() * 700) + 50,
+			y: Math.floor(Math.random() * 500) + 50,
+			playerId: socket.id,
+			name: ""
+		};
+		
+		// send the players object to the new player
+		socket.emit('currentPlayers', players);
+		
+		// send the star object to the new player
+		socket.emit('starLocation', star);
+		
+		// send the current scores
+		socket.emit('scoreUpdate', scores);
+		
+		// update all other players of the new player
+		socket.broadcast.emit('newPlayer', players[socket.id]);
+	});
 	// when a player moves, update the player data
 	socket.on('playerMovement', function (movementData) {
 		players[socket.id].x = movementData.x;

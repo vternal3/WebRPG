@@ -79,7 +79,7 @@ steps are to run npm update to update all package dependancies
 	
 [ ] need to create a CRON job which tries to ping a client and if no responce sets crpToken to null and loggedIn to 0
 [ ] Add a background image to index.html with game assets
-[ ] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
+[X] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
 [ ] set "Please select captcha first" message invisible when clicking login, signup etc.
 [ ] change forgot password token to forgot_password={token} for email generation, and GET response code
 [ ] make login responsive and not static size.
@@ -176,7 +176,7 @@ steps are to run npm update to update all package dependancies
 [ ] create a character / username feature in the client canvas login.
 [ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
 [ ] move all except input to server side
-[ ] create 4 way d-pad input keys
+[X] create 4 way d-pad input keys
 [ ] create input for start,select,x,y,a,b,left_tab,right_tab
 [ ] setup sprite sheet animation for 4 way movement
 [ ] create a simple Stats character sheet including:

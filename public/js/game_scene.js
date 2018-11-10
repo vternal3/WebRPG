@@ -2,37 +2,23 @@ class game_scene extends Phaser.Scene {
     constructor () {
         super({key:'game_scene'});
     }
-
+	init(data) {
+		this.socket = data.socket;
+	}
 	preload() {
 		console.log("Game");
 	}
 	
     create () {
 		var self = this;
-	
-		this.socket = io();
 		
-		this.socket.emit('crpTokenHandshake', window.location.href.split(/[=,&]+/)[2]);
+		this.socket.emit('game_start');
 		
-		this.socket.on('alreadyLoggedIn', function (message) {
-			window.location.href = message;
-			return;
-		});
-		this.socket.on('notLoggedIn', function (message) {
-			// TODO: Add more to this functionality like a message about saving progress
-			window.onbeforeunload = function () {return false;}
-		});
-		
-		//send CRP Token to the server
-		this.socket.emit('requestEmail', window.location.href.split(/[=,&]+/)[2]);
+		this.socket.emit('requestEmail');
 		
 		this.socket.on('emailSent', function (email) {
 			self.nameText.setText(email);
 			self.player.name = email;
-			//Removes the crp token params after the domain name.
-			//window.history.pushState("object or string", "Clear return params", "/#");
-			//Fades out the AddThis buttons
-			//document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
 		});
 		
 		this.otherPlayers = this.physics.add.group();
@@ -43,9 +29,7 @@ class game_scene extends Phaser.Scene {
 		this.sound.pauseOnBlur = false;
 		
 		this.player = this.physics.add.sprite(400, 300, 'walk_template');
-		// //player.setScale(0.8);
 		this.player.setDepth(11);
-		// this.player.setCollideWorldBounds(true);
 		
 		this.anims.create({
 				key: 'idle',
@@ -163,10 +147,9 @@ class game_scene extends Phaser.Scene {
 		this.socket.on('playerMoved', function (playerInfo) {
 			self.otherPlayers.getChildren().forEach(function (otherPlayer) {
 				if (playerInfo.playerId === otherPlayer.playerId) {
-					// otherPlayer.setRotation(playerInfo.rotation);
 					otherPlayer.direction = playerInfo.direction;
 					otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-					
+					//set player email above player's head.
 					self.otherPlayersName[playerInfo.playerId].setText(playerInfo.name);
 					self.otherPlayersName[playerInfo.playerId].x = otherPlayer.x - self.otherPlayersName[playerInfo.playerId].width / 2;
 					self.otherPlayersName[playerInfo.playerId].y = otherPlayer.y - 55 - 12;
@@ -355,7 +338,7 @@ class game_scene extends Phaser.Scene {
 			// emit player movement
 			var x = this.player.x;
 			var y = this.player.y;
-			var d = direction;
+			var d = this.player.direction;
 			if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y || d !== this.player.oldPosition.direction)) {
 				this.socket.emit('playerMovement', { x: this.player.x, y: this.player.y, direction: this.player.direction, name: this.player.name });
 			}
@@ -367,30 +350,6 @@ class game_scene extends Phaser.Scene {
 				direction: this.player.direction,
 				name: name
 			};
-			
-			
-			// this.ship.setAngularVelocity(agvel);
-		  
-			// if (this.cursors.up.isDown) {
-				// this.physics.velocityFromRotation(this.ship.rotation + 1.5, 2000, this.ship.body.acceleration);
-			// } else {
-				// this.ship.setAcceleration(0);
-			// }
-			
-			// // emit player movement
-			// var x = this.ship.x;
-			// var y = this.ship.y;
-			// var r = this.ship.rotation;
-			// if (this.ship.oldPosition && (x !== this.ship.oldPosition.x || y !== this.ship.oldPosition.y || r !== this.ship.oldPosition.rotation)) {
-				// this.socket.emit('playerMovement', { x: this.ship.x, y: this.ship.y, rotation: this.ship.rotation });
-			// }
-			 
-			// // save old position data
-			// this.ship.oldPosition = {
-				// x: this.ship.x,
-				// y: this.ship.y,
-				// rotation: this.ship.rotation
-			// };
 		}
 	}
 }
@@ -401,7 +360,6 @@ var velocity_x = 0;
 var velocity_y = 0;
 var velocity_speed = 160;
 function addPlayer(self, playerInfo) {
-	//self.player1 = self.physics.add.image(playerInfo.x, playerInfo.y, 'walk_template');
 }
 
 function addOtherPlayers(self, playerInfo) {

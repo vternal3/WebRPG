@@ -136,6 +136,7 @@ $(document).ready(function(){
 	if(window.location.href.includes("signup_success")) {
 		var message = window.location.href.split(/[=,&]+/)[1];
 		message = message.replace(/%20/g, " ");
+		document.getElementById("signup_form_link").click();
 		document.getElementById("signup_message").innerHTML = "<span style='color:green;'>" + message + "</span>";
 		window.history.pushState("object or string", "Clear return params", "/#");
 	}

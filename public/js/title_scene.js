@@ -3,6 +3,10 @@ class title_scene extends Phaser.Scene {
     constructor () {
         super({key:'title_scene'});
     }
+	
+	init(data) {
+		this.socket = data.socket;
+	}
 
 	preload() {
 		console.log("Title");
@@ -13,7 +17,6 @@ class title_scene extends Phaser.Scene {
 	}
 	
     create () {
-		
 		this.add.image(0,0,'title_bg').setOrigin(0).setScale(4);
 		let startButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "start");
 		let settingsButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "settings");
@@ -45,11 +48,10 @@ class title_scene extends Phaser.Scene {
 		startButton.on("pointerup", ()=> {
 			this.sound.pauseAll();
 			console.log("starting character scene");
-			this.scene.start('character_scene');
+			this.scene.start('character_scene', {socket:this.socket});
 			this.scene.stop('title_scene');
 			console.log("stopped title scene");
 		});
-		
 		
 		settingsButton.setInteractive();
 		settingsButton.on("pointerover", ()=> {
@@ -64,15 +66,9 @@ class title_scene extends Phaser.Scene {
 		settingsButton.on("pointerup", ()=> {
 			this.sound.pauseAll();
 			console.log("starting settings scene");
-			this.scene.start('settings_scene');
+			this.scene.start('settings_scene', {socket:this.socket});
 			this.scene.stop('title_scene');
 			console.log("stopped title scene");
 		});
-		
-		
-    }
-
-    update () {
-        
     }
 }

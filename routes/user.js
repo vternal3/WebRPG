@@ -65,7 +65,7 @@ exports.index = function(req, res) {
 				//If email is unique then enter in the new account
 				var salt = bcrypt.genSaltSync(salt_factor);
 				pass = bcrypt.hashSync(pass,salt);
-	  
+				
 				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`, `socket`, `emailValidationToken`, `emailValidationExpires`, `validated`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 + "','" + null + "','" + undefined + "','" + undefined + "','" + 0 + "')";
 
 				var query = db.query(sql, function(err, results) {
@@ -336,7 +336,6 @@ exports.index = function(req, res) {
 						//TODO: log the user in and send them to the main page with a logout link instead of the login link
 						res.redirect("/?forgot_post_success");
 						return;
-						return;
 					} else {
 						//update token and expiration to undefined
 						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
@@ -470,24 +469,7 @@ exports.index = function(req, res) {
 		console.log("'" + email + "' successfully sent feedback");
 		res.redirect('/?feedback_success');
 	} else {
-		// res.sendFile( __dirname + "/" + req.params.token );  
+		//do a dump of these: req, res
 		console.log("MAJOR ERROR");
-		
 	}
-};
-
-function printObject(o) {
-  var out = '';
-  for (var p in o) {
-    out += p + ': ' + o[p] + '\n';
-  }
-  return out;
-}
-
-//------------------------------------logout functionality----------------------------------------------
-exports.logout=function(req,res){
-	req.session.destroy(function(err) {
-		res.redirect("/?logout");
-		return;
-	})
 };

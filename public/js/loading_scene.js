@@ -3,8 +3,22 @@ class loading_scene extends Phaser.Scene {
     constructor () {
         super({key:'loading_scene'});
     }
-
+	
 	preload() {
+		this.socket = io();
+		
+		this.socket.emit('crpTokenHandshake', window.location.href.split(/[=,&]+/)[2]);
+		
+		this.socket.on('alreadyLoggedIn', function (message) {
+			window.location.href = message;
+			return;
+		});
+		
+		this.socket.on('notLoggedIn', function (message) {
+			window.history.pushState("object or string", "Clear return params", "/#");
+			// TODO: Add more to this functionality like a message about saving progress
+			window.onbeforeunload = function () {return false;}
+		});
 		
 		this.load.image('star', 'assets/star_gold.png');
 		
@@ -37,22 +51,15 @@ class loading_scene extends Phaser.Scene {
 			console.log(percent);
 		});
 		this.load.on("complete", ()=> {
-			// this.scene.start("menu", "optional data" /*Optional data object to pass to Scene.Settings and Scene.init.*/);
 			console.log("done");
 		});
 	}
 	
     create () {
-		
-		
 		console.log("Loading");
-		this.scene.start('title_scene');
+		console.log("starting title scene");
+		this.scene.start('title_scene', {socket:this.socket});
 		this.scene.stop('loading_scene');
 		console.log("stopped loading scene");
     }
-
-    update () {
-        
-    }
-
 }
