@@ -1,0 +1,7 @@
+Credits
+===================================
+Jeb Bradwell 	- 'the dude' big lebowski
+Adam Zech 		- guy who looked at code for code review
+Jason Harris 	- guy who ran around naked for 10 mins
+Micah Zech 		- another guy who ran around naked
+Jason Kessler 	- project manager
