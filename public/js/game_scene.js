@@ -214,12 +214,47 @@ class game_scene extends Phaser.Scene {
 			this.socket.disconnect()
 			window.location.href = "https://webrpg.io";
 		}, this);
+		
+		var combo = this.input.keyboard.createCombo('asd', { maxKeyDelay: 1000, resetOnMatch: true });
+
+		this.input.keyboard.on('keycombomatch', function (event) {
+
+			console.log('You typed phaser quickly!');
+
+		});
     }
 	
 	update() {
 		if (this.player) {
 			velocity_x = 0;
 			velocity_y = 0;
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown){
+				console.log("select");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown){
+				console.log("start");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown){
+				console.log("A");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown){
+				console.log("B");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown){
+				console.log("X");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown){
+				console.log("Y");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown){
+				console.log("left_tab");
+			}
+			if(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown){
+				console.log("right_tab");
+			}
+			
+			
+			
 			
 			if (this.cursors.up.isDown) {
 				direction = 0; //up
