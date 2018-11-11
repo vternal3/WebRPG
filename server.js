@@ -193,6 +193,15 @@ io.on('connection', function(socket){
 	});
 	// when a player moves, update the player data
 	socket.on('playerMovement', function (movementData) {
+		if(players[socket.id] == null) {
+			players[socket.id] = {
+				direction: 8,
+				x: Math.floor(Math.random() * 700) + 50,
+				y: Math.floor(Math.random() * 500) + 50,
+				playerId: socket.id,
+				name: ""
+			};
+		}
 		players[socket.id].x = movementData.x;
 		players[socket.id].y = movementData.y;
 		players[socket.id].direction = movementData.direction;
