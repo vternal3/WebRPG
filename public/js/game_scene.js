@@ -38,9 +38,9 @@ class game_scene extends Phaser.Scene {
 		this.anims.create({
 			key: 'idle',
 			frames: [{
-					key: 'walk_template',
-					frame: 8
-				}
+				key: 'walk_template',
+				frame: 8
+			}
 			],
 			frameRate: 20
 		});
@@ -122,8 +122,8 @@ class game_scene extends Phaser.Scene {
 		//this.cameras.main.zoom = 2;
 
 		const map3 = this.make.tilemap({
-				key: "map3"
-			});
+			key: "map3"
+		});
 		const tileset2 = map3.addTilesetImage("trees2", "tiles2");
 		const tileset3 = map3.addTilesetImage("grass", "grass2");
 
@@ -164,33 +164,33 @@ class game_scene extends Phaser.Scene {
 					self.otherPlayersName[playerInfo.playerId].x = otherPlayer.x - self.otherPlayersName[playerInfo.playerId].width / 2;
 					self.otherPlayersName[playerInfo.playerId].y = otherPlayer.y - 55 - 12;
 					switch (otherPlayer.direction) {
-					case 0:
-						otherPlayer.anims.play('up', true);
-						break;
-					case 1:
-						otherPlayer.anims.play('upRight', true);
-						break;
-					case 2:
-						otherPlayer.anims.play('right', true);
-						break;
-					case 3:
-						otherPlayer.anims.play('downRight', true);
-						break;
-					case 4:
-						otherPlayer.anims.play('down', true);
-						break;
-					case 5:
-						otherPlayer.anims.play('downLeft', true);
-						break;
-					case 6:
-						otherPlayer.anims.play('left', true);
-						break;
-					case 7:
-						otherPlayer.anims.play('upLeft', true);
-						break;
-					case 8:
-						otherPlayer.anims.play('idle');
-						break;
+						case 0:
+							otherPlayer.anims.play('up', true);
+							break;
+						case 1:
+							otherPlayer.anims.play('upRight', true);
+							break;
+						case 2:
+							otherPlayer.anims.play('right', true);
+							break;
+						case 3:
+							otherPlayer.anims.play('downRight', true);
+							break;
+						case 4:
+							otherPlayer.anims.play('down', true);
+							break;
+						case 5:
+							otherPlayer.anims.play('downLeft', true);
+							break;
+						case 6:
+							otherPlayer.anims.play('left', true);
+							break;
+						case 7:
+							otherPlayer.anims.play('upLeft', true);
+							break;
+						case 8:
+							otherPlayer.anims.play('idle');
+							break;
 					}
 				}
 			});
@@ -199,9 +199,9 @@ class game_scene extends Phaser.Scene {
 		this.cursors = this.input.keyboard.createCursorKeys();
 
 		this.nameText = this.add.text(292, 16, '', {
-				fontSize: '12px',
-				fill: '#00FF00'
-			});
+			fontSize: '12px',
+			fill: '#00FF00'
+		});
 		this.nameText.setDepth(11);
 
 		//Go back to the Title scene and disconnects it socket
@@ -213,15 +213,27 @@ class game_scene extends Phaser.Scene {
 		}, this);
 
 		var combo = this.input.keyboard.createCombo('asd', {
-				maxKeyDelay: 1000,
-				resetOnMatch: true
-			});
+			maxKeyDelay: 1000,
+			resetOnMatch: true
+		});
 
 		this.input.keyboard.on('keycombomatch', function (event) {
 
 			console.log('You typed phaser quickly!');
 
 		});
+
+		this.toggles =
+		{
+			'g': true,
+			'h': true,
+			'a': true,
+			's': true,
+			'w': true,
+			'd': true,
+			'q': true,
+			'e': true
+		}
 	}
 
 	update() {
@@ -229,37 +241,93 @@ class game_scene extends Phaser.Scene {
 			velocity_x = 0;
 			velocity_y = 0;
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
-				console.log("select");
-				this.socket.emit('select');
+				if (this.toggles['g']) {
+					console.log("select");
+					this.socket.emit('select');
+					this.toggles['g'] = false;							
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
+				this.toggles['g'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
-				console.log("start");
-				this.socket.emit('start');
+				if (this.toggles['h']) {
+					console.log("start");
+					this.socket.emit('start');
+					this.toggles['h'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
+				this.toggles['h'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-				console.log("A");
-				this.socket.emit('A');
+				if (this.toggles['a']) {
+					console.log("A");
+					this.socket.emit('A');
+					this.toggles['a'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
+				this.toggles['a'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
-				console.log("B");
-				this.socket.emit('B');
+				if (this.toggles['s']) {
+					console.log("B");
+					this.socket.emit('B');
+					this.toggles['s'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
+				this.toggles['s'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-				console.log("X");
-				this.socket.emit('X');
+				if (this.toggles['w']) {
+					console.log("X");
+					this.socket.emit('X');
+					this.toggles['w'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
+				this.toggles['w'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
-				console.log("Y");
-				this.socket.emit('Y');
+				if (this.toggles['d']) {
+					console.log("Y");
+					this.socket.emit('Y');
+					this.toggles['d'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
+				this.toggles['d'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
-				console.log("left_tab");
-				this.socket.emit('left_tab');
+				if (this.toggles['q']) {
+					console.log("left_tab");
+					this.socket.emit('left_tab');
+					this.toggles['q'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
+				this.toggles['q'] = true;
+			}
+
 			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
-				console.log("right_tab");
-				this.socket.emit('right_tab');
+				if (this.toggles['e']) {
+					console.log("right_tab");
+					this.socket.emit('right_tab');
+					this.toggles['e'] = false;
+				}
 			}
+			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
+				this.toggles['e'] = true;
+			}
+
 
 			if (this.cursors.up.isDown) {
 				direction = 0; //up
@@ -282,7 +350,7 @@ class game_scene extends Phaser.Scene {
 				direction = 7; //up left
 				var speed = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
 				velocity_x = speed
-					velocity_y = speed;
+				velocity_y = speed;
 			}
 			if (this.cursors.up.isDown && this.cursors.right.isDown) {
 				direction = 1; //up right
@@ -298,7 +366,7 @@ class game_scene extends Phaser.Scene {
 				direction = 3; //down right
 				var speed = Math.round((Math.sqrt(2) / 2) * velocity_speed);
 				velocity_x = speed
-					velocity_y = speed;
+				velocity_y = speed;
 			}
 
 			if (this.cursors.down.isDown && this.cursors.up.isDown) {
@@ -345,51 +413,51 @@ class game_scene extends Phaser.Scene {
 			this.player.direction = direction;
 
 			switch (direction) {
-			case 0:
-				this.player.anims.play('up', true);
-				console.log("up");
-				this.socket.emit('up');
-				break;
-			case 1:
-				this.player.anims.play('upRight', true);
-				console.log("upRight");
-				this.socket.emit('upRight');
-				break;
-			case 2:
-				this.player.anims.play('right', true);
-				console.log("right");
-				this.socket.emit('right');
-				break;
-			case 3:
-				this.player.anims.play('downRight', true);
-				console.log("downRight");
-				this.socket.emit('downRight');
-				break;
-			case 4:
-				this.player.anims.play('down', true);
-				console.log("down");
-				this.socket.emit('down');
-				break;
-			case 5:
-				this.player.anims.play('downLeft', true);
-				console.log("downLeft");
-				this.socket.emit('downLeft');
-				break;
-			case 6:
-				this.player.anims.play('left', true);
-				console.log("left");
-				this.socket.emit('left');
-				break;
-			case 7:
-				this.player.anims.play('upLeft', true);
-				console.log("upLeft");
-				this.socket.emit('upLeft');
-				break;
-			case 8:
-				this.player.anims.play('idle');
-				//console.log("idle");
-				//this.socket.emit('idle');
-				break;
+				case 0:
+					this.player.anims.play('up', true);
+					console.log("up");
+					this.socket.emit('up');
+					break;
+				case 1:
+					this.player.anims.play('upRight', true);
+					console.log("upRight");
+					this.socket.emit('upRight');
+					break;
+				case 2:
+					this.player.anims.play('right', true);
+					console.log("right");
+					this.socket.emit('right');
+					break;
+				case 3:
+					this.player.anims.play('downRight', true);
+					console.log("downRight");
+					this.socket.emit('downRight');
+					break;
+				case 4:
+					this.player.anims.play('down', true);
+					console.log("down");
+					this.socket.emit('down');
+					break;
+				case 5:
+					this.player.anims.play('downLeft', true);
+					console.log("downLeft");
+					this.socket.emit('downLeft');
+					break;
+				case 6:
+					this.player.anims.play('left', true);
+					console.log("left");
+					this.socket.emit('left');
+					break;
+				case 7:
+					this.player.anims.play('upLeft', true);
+					console.log("upLeft");
+					this.socket.emit('upLeft');
+					break;
+				case 8:
+					this.player.anims.play('idle');
+					//console.log("idle");
+					//this.socket.emit('idle');
+					break;
 			}
 			this.nameText.x = this.player.x - this.nameText.width / 2;
 			this.nameText.y = this.player.y - 55 - 12;
@@ -422,7 +490,7 @@ var direction = 0; //0:up, 1:upRight, 2:right, 3:downRight, 4:down, 5:downLeft, 
 var velocity_x = 0;
 var velocity_y = 0;
 var velocity_speed = 160;
-function addPlayer(self, playerInfo) {}
+function addPlayer(self, playerInfo) { }
 
 function addOtherPlayers(self, playerInfo) {
 	const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'walk_template');
@@ -431,14 +499,14 @@ function addOtherPlayers(self, playerInfo) {
 	self.otherPlayers.add(otherPlayer);
 	if (playerInfo.name.length) {
 		self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x - (8 * playerInfo.name.length / 2), playerInfo.y - 55 - 12, playerInfo.name, {
-				fontSize: '12px',
-				fill: '#00FF00'
-			});
+			fontSize: '12px',
+			fill: '#00FF00'
+		});
 	} else {
 		self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x, playerInfo.y - 55 - 12, playerInfo.name, {
-				fontSize: '12px',
-				fill: '#00FF00'
-			});
+			fontSize: '12px',
+			fill: '#00FF00'
+		});
 	}
 	self.otherPlayersName[playerInfo.playerId].setDepth(11);
 }
