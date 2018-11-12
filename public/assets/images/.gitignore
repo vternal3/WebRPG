@@ -1,0 +1,4 @@
+#Ignore SSL files
+*.png
+*.gif
+*.jpg
