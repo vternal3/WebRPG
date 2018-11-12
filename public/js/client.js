@@ -1,8 +1,8 @@
 var config = {
   type: Phaser.AUTO,
-  parent: 'phaser-example',
-  width: window.innerWidth * window.devicePixelRatio,
-  height: window.innerHeight * window.devicePixelRatio,
+  parent: 'game_canvas',
+  width: 800, //window.innerWidth * window.devicePixelRatio,
+  height: 600, //window.innerHeight * window.devicePixelRatio,
   physics: {
     default: 'arcade',
     arcade: {
@@ -13,7 +13,7 @@ var config = {
   render:{
 	  pixelArt: true,
   },
-  scene: [loading_scene, game_scene, title_scene, settings_scene, character_scene],
+  scene: [loading_scene, character_scene, settings_scene, game_scene],
   audio: {
 	disableWebAudio: true
   }
@@ -22,5 +22,5 @@ var config = {
 var game = new Phaser.Game(config);
 
 window.addEventListener('resize', function (event) {
-	game.resize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
+	//game.resize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
 }, false);

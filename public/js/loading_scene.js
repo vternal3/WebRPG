@@ -31,8 +31,12 @@ class loading_scene extends Phaser.Scene {
 		this.load.image("title_bg", "assets/spritesheets/parallax-mountain-bg.png");
 		this.load.image("start", "assets/spritesheets/start.png");
 		this.load.image("start_hover", "assets/spritesheets/start_hover.png");
-		this.load.image("settings", "assets/spritesheets/settings.png");
-		this.load.image("settings_hover", "assets/spritesheets/settings_hover.png");
+		this.load.image("settings", "assets/images/gear_image2.png");
+		this.load.image("settings_hover", "assets/images/gear_image2_hover.png");
+		this.load.image("character_name_textbox", "assets/images/character_name_textbox.png");
+		this.load.image("character_name_textbox_focus", "assets/images/character_name_textbox_focus.png");
+		this.load.image("character_boarder", "assets/images/character_boarder.png");
+		this.load.image("character_boarder_hover", "assets/images/character_boarder_hover.png");
 		
 		this.load.image("ui_upscaled", "assets/spritesheets/ui_upscaled.png");
 		
@@ -57,8 +61,8 @@ class loading_scene extends Phaser.Scene {
 	
     create () {
 		console.log("Loading");
-		console.log("starting title scene");
-		this.scene.start('title_scene', {socket:this.socket});
+		console.log("starting character scene");
+		this.scene.start('character_scene', {socket:this.socket});
 		this.scene.stop('loading_scene');
 		console.log("stopped loading scene");
     }

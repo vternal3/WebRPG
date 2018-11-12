@@ -271,7 +271,7 @@ exports.index = function(req, res) {
 								return;
 							} else {
 								console.log("'" + email + "' un-successfully forgot could not insert into database");
-								res.redirect('/?forgot_error');
+								res.redirect('/?forgot_error=Could not find account for email: ' + email);
 								return;
 							}
 						});
@@ -330,6 +330,7 @@ exports.index = function(req, res) {
 							};
 							smtpTransport.sendMail(mailOptions, function(err) {
 								if (err) throw err;
+								console.log("successfully sent email to: " + email);
 							});	
 						});
 						console.log("forgot POST attempt success");
@@ -341,6 +342,7 @@ exports.index = function(req, res) {
 						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
+							console.log("successfully updated resetPasswordToken and resetPasswordExpires to null");
 						});
 						console.log("forgot POST attempt error");
 						res.redirect("/?forgot_post_error=Token Timed Out");
@@ -353,6 +355,7 @@ exports.index = function(req, res) {
 				}
 			});
 		} else {
+			console.log("token length is incorrect");
 			res.redirect("/");
 			return;
 		}
@@ -377,16 +380,20 @@ exports.index = function(req, res) {
 						var sql = "UPDATE users SET resetPasswordToken = '" + undefined + "', resetPasswordExpires = '" + undefined + "' WHERE id = " + db.escape(results[0].id);
 						query = db.query(sql, function(err, results) {
 							if (err) throw err;
+							console.log("successfully updated resetPasswordToken and resetPasswordExpires to null");
 						});
+						console.log("date has expired");
 						res.redirect("/?forgot_get_error");
 						return;
 					}
 				} else {
+					console.log("could not find record in database");
 					res.redirect("/?forgot_get_error");
 					return;
 				}
 			});
 		} else {
+			console.log("Token not the right length");
 			res.redirect("/");
 			return;
 		}
@@ -424,13 +431,14 @@ exports.index = function(req, res) {
 					var sql = "UPDATE users SET emailValidationExpires = '" + null + "', emailValidationToken = '" + null + " WHERE emailValidationToken = " + db.escape(token);
 					query = db.query(sql, function(err, results) {
 						if (err) throw err;
+						console.log("updated emailValidationExpires and emailValidationToken");
 					});
 					res.redirect("/?signup_error=Token is invalid or has expired");
 					return;
 				}
 			} else {
 				console.log("email validation error: " + token);
-				res.redirect("/?signup_error");
+				res.redirect("/?signup_error=validation error please contact support@webrpg");
 				return;
 			}
 		});
@@ -470,6 +478,7 @@ exports.index = function(req, res) {
 		res.redirect('/?feedback_success');
 	} else {
 		//do a dump of these: req, res
-		console.log("MAJOR ERROR");
+		console.log("404 ERROR");
+		res.redirect('/404.html');
 	}
 };

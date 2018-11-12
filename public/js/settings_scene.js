@@ -14,8 +14,8 @@ class settings_scene extends Phaser.Scene {
 	
     create () {
 		console.log("Settings");
-		console.log("starting title scene");
-		this.scene.start('title_scene', {socket:this.socket});
+		console.log("starting character scene");
+		this.scene.start('character_scene', {socket:this.socket});
 		this.scene.stop('settings_scene');
 		console.log("stopped settings scene");
     }

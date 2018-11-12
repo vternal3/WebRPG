@@ -31,12 +31,12 @@ function start(name)
 	if(document.getElementsByClassName("addthis-smartlayers-desktop")[0]) {
 		document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
 	}
-	document.getElementById("popup").classList.add("nodisplay");
+	document.getElementById("feedback_button").classList.add("nodisplay");
 	
 	//Sleep for a second to let the main page fade out.
 	//TODO: make this div fade in eventually
 	setTimeout(function() {
-		document.getElementById("phaser-example").style.display = "initial";
+		document.getElementById("game_canvas").style.display = "initial";
 	}, 600);
 	//Loads the client game script dynamically
 	$.loadScript('js/character_scene.js', function(){
@@ -65,6 +65,7 @@ function login_form_update()
 	document.getElementById("forgot_succeed").style.display = "none";
 	document.getElementById("feedback_succeed").style.display = "none";
 	document.getElementById("login_message").innerHTML = "";
+	document.getElementById("recaptcha_error_label").style.display = "none";
 }
 
 function signup_form()
@@ -76,6 +77,7 @@ function signup_form()
 	document.getElementById("forgot_succeed").style.display = "none";
 	document.getElementById("feedback_succeed").style.display = "none";
 	document.getElementById("signup_message").innerHTML = "";
+	document.getElementById("recaptcha_error_label").style.display = "none";
 }
 
 function forgot_form()
@@ -90,6 +92,7 @@ function forgot_form()
 	document.getElementById("forgot_succeed").style.display = "none";
 	document.getElementById("feedback_succeed").style.display = "none";
 	document.getElementById("forgot_message").innerHTML = "";
+	document.getElementById("recaptcha_error_label").style.display = "none";
 }
 
 function forgot_new_password()
@@ -101,6 +104,7 @@ function forgot_new_password()
 	document.getElementById("forgot_succeed").style.display = "none";
 	document.getElementById("feedback_succeed").style.display = "none";
 	document.getElementById("forgot_new_password_message").innerHTML = "";
+	document.getElementById("recaptcha_error_label").style.display = "none";
 }
 
 $(document).ready(function(){

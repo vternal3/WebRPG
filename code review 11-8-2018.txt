@@ -1,52 +1,49 @@
 Code Review 11-8-2018
 =========================================================================================
-[ ] index.html
-	[ ] add content description in description meta tag
-	[ ] https://www.npmjs.com/package/hsts add to server.js
-	[ ] TODO: add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
-	[ ] add captcha error message to feedback form and do a client side captcha check without submitting.
-	[ ] change phaser-example to game_canvas
-[ ] webrpg.js
-	[ ] rename popup to feedback line 36
-	[ ] think about replacing document.getElementById() with jquery instead.
-	[ ] line 109.. consider jquery parameter reading instead of split
-	[ ] consider using html decode for lines which are replacing %20
-[ ] server.js
-	[ ] if (err) throw err; consider putting a wrap code for reconnecting if the connection has been lost.
-	[ ] consider doing polling with socket.io on line 202.
-	[ ] get ride of star and team code.
-	[ ] line 135 remove the crptoken code.
-[ ] user.js
-	[ ] research correct way to parameterize mysql variables other than db.escape look for a library which handles escapeing character.
-	[ ] line 69 check escaping pass to make sure that it doesn't mess up the password by stripping out characters.
-	[ ] pulse the client side with a ping pong to keep clients alive.. then disconnect if not alive for 30 second.
-	[ ] line 274 add error message to the redirect code.
-	[ ] line 295 possible use client side validation on new password and confirm password.
-	[ ] line 332 add console.log() message
-	[ ] line 343 add console.log() message
-	[ ] line 356 add console.log() message
-	[ ] line 381 add console.log() message
-	[ ] line 385 add console.log() message
-	[ ] line 390 add console.log() message
-	[ ] line 426 add console.log() message
-	[ ] line 433 add error message.
-	[ ] line 472 make a dump.
-[ ] client.js
-	[ ] line 3 change phaser-example to game_canvas
-[ ] loading_scene.js
-	[ ] line 30 look into changing ffffff to white no magic numbers.
-[ ] title_scene.js
-	[ ] line 10 consider using jquery instead of document.etc
-[ ] settings_scene.js
-	[ ] 
-[ ] character_scene.js
-	[ ] 
-[ ] game_scene.js
-	[ ] TODO: Add more to this functionality like a message about saving progress
-	[ ] line 28 remove the href.split parameter.
-	[ ] put line 34 into line 23
-	[ ] line 49 - 124 don't use magic numbers use named constants
-	[ ] remove score update code.
-	[ ] remove star and star location code.
-	[ ] line 377 remove the function and remove it above too.
-	[ ] line 382& 386 & 389 & 391 use magic numbers, use constanst instead.
+[X] index.html
+	[X] TODO: add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
+	[X] add captcha error message to feedback form and do a client side captcha check without submitting.
+	[X] change phaser-example to game_canvas
+[X] webrpg.js
+	[X] rename popup to feedback line 36
+	[X] think about replacing document.getElementById() with jquery instead.
+	[X] line 109.. consider jquery parameter reading instead of split
+	[X] consider using html decode for lines which are replacing %20
+[X] server.js
+	[X] if (err) throw err; consider putting a wrap code for reconnecting if the connection has been lost.
+	[X] consider doing polling with socket.io on line 202.
+	[X] get ride of star and team code.
+	[X] line 135 remove the crptoken code.
+[X] user.js
+	[X] research correct way to parameterize mysql variables other than db.escape look for a library which handles escapeing character.
+	[X] line 69 check escaping pass to make sure that it doesn't mess up the password by stripping out characters.
+	[X] line 274 add error message to the redirect code.
+	[X] line 295 possible use client side validation on new password and confirm password.
+	[X] line 332 add console.log() message
+	[X] line 343 add console.log() message
+	[X] line 356 add console.log() message
+	[X] line 381 add console.log() message
+	[X] line 385 add console.log() message
+	[X] line 390 add console.log() message
+	[X] line 426 add console.log() message
+	[X] line 433 add error message.
+	[X] line 472 make a dump.
+[X] client.js
+	[X] line 3 change phaser-example to game_canvas
+[X] loading_scene.js
+	[X] line 30 look into changing ffffff to white no magic numbers.
+[X] title_scene.js
+	[X] line 10 consider using jquery instead of document.etc
+[X] settings_scene.js
+	[X] 
+[X] character_scene.js
+	[X] 
+[X] game_scene.js
+	[ ] TODO: Add more to this functionality like a message about saving progress for the unload page alert when exiting a tab.
+	[X] line 28 remove the href.split parameter.
+	[X] put line 34 into line 23
+	[X] line 49 - 124 don't use magic numbers use named constants
+	[X] remove score update code.
+	[X] remove star and star location code.
+	[X] line 377 remove the function and remove it above too.
+	[X] line 382& 386 & 389 & 391 use magic numbers, use constanst instead.

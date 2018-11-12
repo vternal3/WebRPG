@@ -10,16 +10,12 @@ class title_scene extends Phaser.Scene {
 
 	preload() {
 		console.log("Title");
-		//hides the AddThis strip
-		if(document.getElementsByClassName("addthis-smartlayers-desktop")[0]) {
-			document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
-		}
 	}
 	
     create () {
-		this.add.image(0,0,'title_bg').setOrigin(0).setScale(4);
-		let startButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "start");
-		let settingsButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "settings");
+		this.add.image(this.game.renderer.width / 2 - 544, 0,'title_bg').setOrigin(0).setScale(4);
+		let startButton = this.add.image(this.game.renderer.width / 2, 500, "start");
+		let settingsButton = this.add.image(this.game.renderer.width / 2, 500 + 100, "settings");
 		
 		let hoverSprite = this.add.sprite(100, 100, "title_crystal");
 		hoverSprite.setVisible(false);

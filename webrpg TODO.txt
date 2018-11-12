@@ -105,10 +105,13 @@ steps are to run npm update to update all package dependancies
 [ ] settings also will have master volume, SFX volume, Music volume
 [ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
 [ ] limit one connection per IP address
+[ ] 
 
-[ ] ***Finish Game Design Document Template
+	[ ] 
+	[ ] 
+[X] ***Finish Game Design Document Template
 [X] ***Finish evaluating Phaser Editor
-[ ] ***Gut client.js code and put in new Tiled Workflow code.
+[X] ***Gut client.js code and put in new Tiled Workflow code.
 [X] ***Look into javascript obvuscator git hook library
 [ ] ***Create the 
 	[X] 1)loading, 
