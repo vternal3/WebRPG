@@ -422,28 +422,6 @@ class character_scene extends Phaser.Scene {
       if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z).isDown) {
         this.toggle['z'] = true;
       }
-
-
     }
-
-
-    // // This maps all the alphebet keys
-    // foreach(let key in Phaser.Input.Keyboard.KeyCodes)
-
-    // {
-    // 	if (key >= 65 && key <= 90) {
-
-    // 		if (this.input.keyboard.addKey(key).isDown) {
-    // 			if (focus_textbox && this.toggle[String.fromCharCode(key).toLowerCase()]) {
-    // 				this.character_name_text.text += String.fromCharCode(key).toLowerCase();
-    // 				this.toggle[String.fromCharCode(key).toLowerCase()] = false;
-    // 			}
-    // 		}
-    // 		if (!this.input.keyboard.addKey(key).isDown) {
-    // 			this.toggle[String.fromCharCode(key).toLowerCase()] = true;
-    // 		}
-    // 	}
-    // }
   }
-
 }

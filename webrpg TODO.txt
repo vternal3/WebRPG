@@ -105,14 +105,11 @@ steps are to run npm update to update all package dependancies
 [ ] settings also will have master volume, SFX volume, Music volume
 [ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
 [ ] limit one connection per IP address
-[ ] 
 
-	[ ] 
-	[ ] 
 [X] ***Finish Game Design Document Template
 [X] ***Finish evaluating Phaser Editor
 [X] ***Gut client.js code and put in new Tiled Workflow code.
-[X] ***Look into javascript obvuscator git hook library
+[ ] ***Look into javascript obvuscator git hook library
 [ ] ***Create the 
 	[X] 1)loading, 
 	[X] 2)Title, 
@@ -129,6 +126,9 @@ steps are to run npm update to update all package dependancies
 	[ ] Speed up on conveyer belt
 	[ ] Damage on spikes
 	[ ] Look for more terrain types and effects
+	[ ] 24 different essent effects on terrians either boost or reduce essents effectiveness.
+	[ ] terrain that flashes/rotates through status effects from normal tiles to boost or reduced essences effects.
+	
 	
 [ ] Use the mini map example you found on forums
 [ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do
@@ -155,7 +155,7 @@ steps are to run npm update to update all package dependancies
 	[ ] quadrupal straight, 
 	[ ] quadrupal cross, 
 [ ] essents can be augmented with a spread effect. near by enemies get hit with a diminishing returns essents hit
-[ ] you can have essents orbs that circle you, up to 3 different orbs
+[ ] you can have essents orbs that circle you, up to 6 different orbs
 [ ] orbs can be defensive or offensive
 [ ] orbs can spin around player or be set to stay in a static position around the player
 [ ] orbs can cast specific essents spells if augmented with an essents
@@ -170,7 +170,7 @@ steps are to run npm update to update all package dependancies
 	[ ] reputation quests = earn a favorable reputation with a faction in order to complete a quest
 	[ ] ability quests = use an ability or magic spell or attack to open or move or set fire to or unlock a particular spot.
 	[ ] quest lines = a line of quests which happen in serial to one another and have an ending with greater rewards
-	[ ] Have quest nodes which have colored ! Marks that signify which type of quest it is... Good Collection quest, Red killing mob quest, Blue creating item, etc
+	[ ] Have quest nodes which have colored ! Marks that signify which type of quest it is... Gold Collection quest, Red killing mob quest, Blue creating item, etc
 
 
 [ ] Create character creation/selection screen
@@ -200,7 +200,23 @@ steps are to run npm update to update all package dependancies
 [ ] create a bestiary of all enemies
 	[ ] elemental affinities and status immunities are discovered after using a spell / ability on the enemy
 [ ] status effects list:
-	[ ]
+	[ ] poison
+	[ ] dazed
+	[ ] stunned
+	[ ] feared
+	[ ] berserked
+	[ ] zombied
+	[ ] slowed
+	[ ] silenced
+	[ ] smalled
+	[ ] enlarged
+	[ ] "sheeped" or random small animal
+	[ ] stoned
+	[ ] frozen
+	[ ] burning
+	[ ] confused
+	[ ] disarmed
+	[ ] 
 [ ] have auto populated menu which brings the top items that can cure your current effect to the top of the menu automaticaly when you are affected by the status effect, along side other main actions such as attack defend etc.
 [ ] in general make making choices quick in the game by automating dynamicaly to each enemy encounter
 [ ] main choices: attack (either phyical or magical), defend (either phsyical or magical), remedy (either item or spell)
@@ -233,6 +249,12 @@ steps are to run npm update to update all package dependancies
 	[ ] Quests from builition boards
 [ ] Weapons with elemental defenses
 [ ] Each monster is particuarly weak against a players elements, but no two players elements are the same weakness.
+[ ] Player's will be able to create auto load outs which automatically equip essesnes in choosen slots which are strongest against mobs.
+[ ] players learn which essense are strongest against mobs by fighting mobs and looking at historical attack damage done by each type of essense and or skill used against a mob. 
+[ ] there will be an achievment for finding out all information of different sets of mobs in the game... i.e. for all mobs in a given region you have discovered all weaknesses and status information about those mobs by fighting them enough times to map out all essense effects as well as learn any new skills the mob uses while attacking you.
+[ ] there will also be different loot rewards for killing a mob fast. Each mob will be killable in 5 seconds or less with the correct load out and correct combination of attack and defend rotation. The quicker the mob is killed the more likely you will get better loot.
+[ ] there will also be an achievement for killing mobs as fast as possible. Like in Final Fantasy 13.
+[ ] monsters have an attack rotation like in Blade and soul, Players can memorize the attack rotation and use counter attacks or spells or defends against the monster. So a monster may attack high then low then middle, and a player may block the high attack or attack low then block the low attack and attack high then block the middle and then counter attack middle or something like this. Think in terms of Fighting games like "soul calibur" where certain attacks counter other attacks.
 [ ] MMO
 [ ] Global Score for things like killing monsters, earning levels, crafting weapons etc.
 [ ] No level cap, infinite levels, but an ever increasing gap between exp earned to level up.

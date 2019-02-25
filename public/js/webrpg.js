@@ -19,8 +19,7 @@ jQuery.loadScript = function (url, callback) {
         async: false
     });
 }
-
-function start(name)
+function start()
 {
 	document.getElementById("login").classList.add("nodisplay");
 	document.getElementById("top_left_overlay").classList.add("nodisplay");
@@ -32,7 +31,9 @@ function start(name)
 		document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
 	}
 	document.getElementById("feedback_button").classList.add("nodisplay");
-	
+	if(document.getElementById('nickname').value) {
+		console.log("name : " + document.getElementById('nickname').value);		
+	}
 	//Sleep for a second to let the main page fade out.
 	//TODO: make this div fade in eventually
 	setTimeout(function() {
@@ -122,8 +123,7 @@ $(document).ready(function(){
 	}
 	//Login succeeded
 	if(window.location.href.includes("login_success")) {
-		var crpToken = window.location.href.split(/[=,&]+/)[2];
-		start(crpToken);
+		start();
 	}
 	//Signup failed
 	if(window.location.href.includes("signup_error")) {

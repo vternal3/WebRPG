@@ -1,8 +1,8 @@
 var config = {
   type: Phaser.AUTO,
   parent: 'game_canvas',
-  width: 800, //window.innerWidth * window.devicePixelRatio,
-  height: 600, //window.innerHeight * window.devicePixelRatio,
+  width: window.innerWidth * window.devicePixelRatio,
+  height: window.innerHeight * window.devicePixelRatio,
   physics: {
     default: 'arcade',
     arcade: {
@@ -22,5 +22,5 @@ var config = {
 var game = new Phaser.Game(config);
 
 window.addEventListener('resize', function (event) {
-	//game.resize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
+	game.resize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
 }, false);

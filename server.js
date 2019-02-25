@@ -203,4 +203,75 @@ io.on('connection', function(socket){
 		// emit a message to all players about the player that moved
 		socket.broadcast.emit('playerMoved', players[socket.id]);
 	});
+	// this.velocity_speed = 160;
+	// this.toggles = {
+		// up:false,
+		// down:false,
+		// left:false,
+		// right:false,
+	// };
+	// socket.on('up_down', function(){
+		// this.toggles.up = true;
+		// switch(this.countToggles()){
+			// case 1:
+				// socket.emit('y_velocity', -velocity_speed);
+				// break;
+			// case 2:
+				// if(this.toggles.down) {
+					// socket.emit('x_velocity', 0);
+					// socket.emit('y_velocity', 0);
+				// }
+				// if(this.toggles.left)
+					// socket.emit('x_velocity', Math.round((Math.sqrt(2) / 2) * -velocity_speed);
+				// if(this.toggles.right)
+					// socket.emit('x_velocity', Math.round((Math.sqrt(2) / 2) * velocity_speed);
+				// socket.emit('y_velocity', Math.round((Math.sqrt(2) / 2) * -velocity_speed);
+				// break;
+			// case 3:
+				// if(this.toggles.down && this.toggles.left) {
+					// socket.emit('x_velocity', -velocity_speed);
+					// socket.emit('y_velocity', 0);
+				// }
+				// if(this.toggles.left && this.toggles.right) {
+					// socket.emit('y_velocity', -velocity_speed);
+					// socket.emit('x_velocity', 0);
+				// }
+				// if(this.toggles.right && this.toggles.down) {
+					// socket.emit('x_velocity', velocity_speed);
+					// socket.emit('y_velocity', 0);
+				// }
+				// break;
+			// case 4:
+				// socket.emit('x_velocity', 0);
+				// socket.emit('y_velocity', 0);
+				// break;
+		// }
+	// });
+	
+	// socket.on('up_up', function(){
+		// this.toggles.up = false;
+	// });
+	// socket.on('down_up', function(){
+		// this.toggles.down = false;
+	// });
+	// socket.on('left_up', function(){
+		// this.toggles.left = false;
+	// });
+	// socket.on('right_up', function(){
+		// this.toggles.right = false;
+	// });
+	
+	
+	// function countToggles(){
+		// var count = 0;
+		// if(this.toggles.up)
+			// count++;
+		// if(this.toggles.down)
+			// count++;
+		// if(this.toggles.left)
+			// count++;
+		// if(this.toggles.right)
+			// count++;
+		// return count;
+	// }
 });
