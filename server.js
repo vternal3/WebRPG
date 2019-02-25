@@ -85,12 +85,6 @@ var star = {
   y: Math.floor(Math.random() * 500) + 50
 };
 
-var scores = {
-  blue: 0,
-  red: 0
-};
-
-
 io.on('connection', function(socket){
 	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
 		return;

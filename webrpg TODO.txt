@@ -160,6 +160,21 @@ steps are to run npm update to update all package dependancies
 [ ] orbs can spin around player or be set to stay in a static position around the player
 [ ] orbs can cast specific essents spells if augmented with an essents
 [ ] orbs can damage enemies on contact if augmented to be hit with contact.. NOTE if essents are augmented to cast spells they don't damage on touch.
+[ ] Systems
+	[ ] equipment system
+	[ ] materia system
+	[ ] magic combo system
+	[ ] attack combo system
+	[ ] equipment upgrade system
+	[ ] magic upgrade system
+	[ ] enchantment system for all equipment
+	[ ] equipment familiarity leveling system
+	[ ] magic familiarity leveling system
+	[ ] planet orbiting buff system
+	[ ] temporary enhancement items
+	[ ] astrology soul shield system
+	[ ] mob ability/essense effectiveness learning system
+	[ ] orbital essense around player system
 
 [ ] quest types: 
 	[ ] Collection quests = you go around and pick items up from spawned locations in the world
