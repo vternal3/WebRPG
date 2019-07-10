@@ -212,15 +212,26 @@ class game_scene extends Phaser.Scene {
 			window.location.href = "https://webrpg.io";
 		}, this);
 
-		var combo = this.input.keyboard.createCombo('asd', {
+		var combo = this.input.keyboard.createCombo([Phaser.Input.Keyboard.KeyCodes.A, Phaser.Input.Keyboard.KeyCodes.S, Phaser.Input.Keyboard.KeyCodes.D], {
 			maxKeyDelay: 1000,
 			resetOnMatch: true
 		});
+		var combo2 = this.input.keyboard.createCombo('ee', {
+			maxKeyDelay: 1000,
+			resetOnMatch: true
+		});
+		
 
 		this.input.keyboard.on('keycombomatch', function (event) {
 
+			console.log(event);
+			if(event["keyCodes"][0] == Phaser.Input.Keyboard.KeyCodes.A && 
+				event["keyCodes"][1] == Phaser.Input.Keyboard.KeyCodes.S &&
+				event["keyCodes"][2] == Phaser.Input.Keyboard.KeyCodes.D)
+				{
+					console.log("Success");
+				}
 			console.log('You typed phaser quickly!');
-
 		});
 
 		this.toggles =
@@ -240,169 +251,119 @@ class game_scene extends Phaser.Scene {
 		if (this.player) {
 			velocity_x = 0;
 			velocity_y = 0;
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
-				if (this.toggles['g']) {
-					console.log("select");
-					this.socket.emit('select');
-					this.toggles['g'] = false;							
+			for( var key in current_inputs){
+				if (this.input.keyboard.addKey(current_inputs[key]["keycode"]).isDown) {
+					if (current_inputs[key]["toggle"]) {
+						console.log("key down: " + String.fromCharCode(current_inputs[key]["keycode"]));
+						this.socket.emit(key + '_down');
+						current_inputs[key]["toggle"] = false;
+						current_inputs[key]["downCallback"]();
+					}
+				}
+				if (this.input.keyboard.addKey(current_inputs[key]["keycode"]).isUp) {
+					if (!current_inputs[key]["toggle"]) {
+						console.log("key up: " + String.fromCharCode(current_inputs[key]["keycode"]));
+						this.socket.emit(key + '_up');
+						current_inputs[key]["toggle"] = true;
+						current_inputs[key]["upCallback"]();							
+					}
 				}
 			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
-				this.toggles['g'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
-				if (this.toggles['h']) {
-					console.log("start");
-					this.socket.emit('start');
-					this.toggles['h'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
-				this.toggles['h'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-				if (this.toggles['a']) {
-					console.log("A");
-					this.socket.emit('A');
-					this.toggles['a'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-				this.toggles['a'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
-				if (this.toggles['s']) {
-					console.log("B");
-					this.socket.emit('B');
-					this.toggles['s'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
-				this.toggles['s'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-				if (this.toggles['w']) {
-					console.log("X");
-					this.socket.emit('X');
-					this.toggles['w'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-				this.toggles['w'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
-				if (this.toggles['d']) {
-					console.log("Y");
-					this.socket.emit('Y');
-					this.toggles['d'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
-				this.toggles['d'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
-				if (this.toggles['q']) {
-					console.log("left_tab");
-					this.socket.emit('left_tab');
-					this.toggles['q'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
-				this.toggles['q'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
-				if (this.toggles['e']) {
-					console.log("right_tab");
-					this.socket.emit('right_tab');
-					this.toggles['e'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
-				this.toggles['e'] = true;
-			}
-
-
-			if (this.cursors.up.isDown) {
+			
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 0; //up
-				velocity_y -= velocity_speed;
+				velocity_y = -velocity_speed;
 			}
-			if (this.cursors.down.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown) {
 				direction = 4; //down
-				velocity_y += velocity_speed;
+				velocity_y = velocity_speed;
 			}
-			if (this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 6; //left
-				velocity_x -= velocity_speed;
+				velocity_x = -velocity_speed;
 			}
-			if (this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 2; //right
-				velocity_x += velocity_speed;
+				velocity_x = velocity_speed;
 			}
 
-			if (this.cursors.up.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 7; //up left
 				var speed = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
 				velocity_x = speed
 				velocity_y = speed;
 			}
-			if (this.cursors.up.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 1; //up right
 				velocity_x = Math.round((Math.sqrt(2) / 2) * velocity_speed);
 				velocity_y = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
 			}
-			if (this.cursors.down.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 5; //down left
 				velocity_x = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
 				velocity_y = Math.round((Math.sqrt(2) / 2) * velocity_speed);
 			}
-			if (this.cursors.down.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 3; //down right
 				var speed = Math.round((Math.sqrt(2) / 2) * velocity_speed);
 				velocity_x = speed
 				velocity_y = speed;
 			}
 
-			if (this.cursors.down.isDown && this.cursors.up.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 8; //idle
 				velocity_x = 0;
 				velocity_y = 0;
 			}
-			if (this.cursors.left.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 8; //idle
 				velocity_x = 0;
 				velocity_y = 0;
 			}
 
-			if (this.cursors.up.isDown && this.cursors.right.isDown && this.cursors.down.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown) {
 				direction = 2; //right
 				velocity_x = velocity_speed;
 				velocity_y = 0;
 			}
-			if (this.cursors.right.isDown && this.cursors.down.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 4; //down
 				velocity_x = 0;
 				velocity_y = velocity_speed;
 			}
-			if (this.cursors.down.isDown && this.cursors.left.isDown && this.cursors.up.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 6; //left
 				velocity_x = -velocity_speed;
 				velocity_y = 0;
 			}
-			if (this.cursors.left.isDown && this.cursors.up.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 0; //up
 				velocity_x = 0;
 				velocity_y = -velocity_speed;
 			}
 
-			if (!this.cursors.down.isDown && !this.cursors.up.isDown && !this.cursors.right.isDown && !this.cursors.left.isDown ||
-				this.cursors.down.isDown && this.cursors.up.isDown && this.cursors.right.isDown && this.cursors.left.isDown) {
+			if (!this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown ||
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 8;
 				velocity_x = 0;
 				velocity_y = 0;

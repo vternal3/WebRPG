@@ -91,7 +91,7 @@ class character_scene extends Phaser.Scene {
       console.log("starting game scene");
       this.scene.start('game_scene', { socket: this.socket });
       this.scene.stop('character_scene');
-      console.log("stopped title scene");
+      console.log("stopped character scene");
     });
 
     settingsButton.setInteractive();

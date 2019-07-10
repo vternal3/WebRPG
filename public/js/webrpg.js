@@ -40,6 +40,8 @@ function start()
 		document.getElementById("game_canvas").style.display = "initial";
 	}, 600);
 	//Loads the client game script dynamically
+	$.loadScript('js/globals.js', function(){
+	});
 	$.loadScript('js/character_scene.js', function(){
 	});
 	$.loadScript('js/settings_scene.js', function(){

@@ -77,6 +77,7 @@ steps are to run npm update to update all package dependancies
 	[ ] update HTML5 video game tutorial with latest additions.
 	[ ] figure out why webrpg_wrapper isn't working.
 	
+[ ] Experience function per level (1/2 (1+4*x - sqrt(1+8*x)))+5.6*sin(x/3.14159)
 [ ] need to create a CRON job which tries to ping a client and if no responce sets crpToken to null and loggedIn to 0
 [ ] Add a background image to index.html with game assets
 [X] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
@@ -148,7 +149,7 @@ steps are to run npm update to update all package dependancies
 	[ ] double straight 
 	[ ] double front and back, 
 	[ ] triple straight 
-	[ ] trible even around, 
+	[ ] triple even around, 
 	[ ] double V 
 	[ ] double left and right, 
 	[ ] triple W, 

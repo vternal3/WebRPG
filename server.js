@@ -167,8 +167,8 @@ io.on('connection', function(socket){
 		//game_scene starts call socket.emit("game_start") and then run these emits.
 		players[socket.id] = {
 			direction: 8,
-			x: Math.floor(Math.random() * 700) + 50,
-			y: Math.floor(Math.random() * 500) + 50,
+			x: 400,
+			y: 300,
 			playerId: socket.id,
 			name: ""
 		};
@@ -184,8 +184,8 @@ io.on('connection', function(socket){
 		if(players[socket.id] == null) {
 			players[socket.id] = {
 				direction: 8,
-				x: Math.floor(Math.random() * 700) + 50,
-				y: Math.floor(Math.random() * 500) + 50,
+				x: 400,
+				y: 300,
 				playerId: socket.id,
 				name: ""
 			};
@@ -197,6 +197,9 @@ io.on('connection', function(socket){
 		// emit a message to all players about the player that moved
 		socket.broadcast.emit('playerMoved', players[socket.id]);
 	});
+	// socket.on('upLeft', function(){
+	// 	players[socket.id].x += 500;
+	// });
 	// this.velocity_speed = 160;
 	// this.toggles = {
 		// up:false,
