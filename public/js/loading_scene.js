@@ -41,8 +41,22 @@ class loading_scene extends Phaser.Scene {
 		this.load.image("ui_upscaled", "assets/spritesheets/ui_upscaled.png");
 		
 		this.load.tilemapTiledJSON("map3", "assets/spritesheets/untitled3.json");
+
+		
+		this.load.image("grass1", "assets/spritesheets/grassTiles.png");
+		this.load.tilemapTiledJSON("mapInfinite", "assets/spritesheets/new.json");
 		
 		this.load.audio('theme_music', 'assets/audio/music/Soliloquy.mp3');
+
+		this.load.image('checked_checkbox', "assets/images/Checked_checkbox.png");
+		this.load.image('unchecked_checkbox', "assets/images/Unchecked_checkbox.png");
+		this.load.image('hover_checkbox', "assets/images/hover_checkbox.png");
+		this.load.image('track', "assets/images/track.png");
+		this.load.image('bar', "assets/images/bar.png");
+		this.load.image('bar_hover', "assets/images/bar_hover.png");
+
+		this.load.image('save_settings', "assets/images/save_settings.png");
+		this.load.image('save_settings_hover', "assets/images/save_settings_hover.png");
 		
 		let loadingBar = this.add.graphics({
 			fillStyle: {
@@ -62,7 +76,12 @@ class loading_scene extends Phaser.Scene {
     create () {
 		console.log("Loading");
 		console.log("starting character scene");
-		this.scene.start('character_scene', {socket:this.socket});
+		var name = document.getElementById("nickname").value;
+		if(name) {
+			this.scene.start('game_scene', {socket:this.socket, character_name: name});
+		} else {
+			this.scene.start('character_scene', {socket:this.socket});
+		}
 		this.scene.stop('loading_scene');
 		console.log("stopped loading scene");
     }

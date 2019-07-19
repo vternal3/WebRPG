@@ -58,9 +58,9 @@
 				<!-- Login Form -->
 				<div id="login" class="main">
 					<p class="sign" align="center">webrpg.io</p>
-					<div align="center"><h2><span style="color:blue"><i>Definitive Essence</i></span></h2></div>
+					<div align="center"><h2><span style="color:blue"><i><!--Definitive Essence--></i></span></h2></div>
 					<form id="login_form" class="form1" onsubmit="return start();">
-						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" maxlength="64"  required/>
+						<input id="nickname" class="un" autocomplete="off" type="text" align="center" placeholder="Nickname" maxlength="12"  required/>
 						<input class="submit" type="submit" value="Play" align="center"/>
 					</form>	
 					<div align="center"><a href="javascript:;" id="signup_form_link" onclick="signup_form();">signup</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" id="login_form_link" onclick="login_form_update();">login</a></div>
@@ -71,11 +71,10 @@
 							<br/>
 							<input id="login-password" type="password" name="password" placeholder="Password" maxlength="40" required/>
 							<br/>
+							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
 							<button id="btn-login" name="login_button" type="submit">Login</button>
 							<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
-							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
 						</form>
-						
 					</div>
 					<div align="center" id="signupform"  style="display:none;">
 						<div align="center"><label id="signup_message"></label></div>
@@ -86,8 +85,8 @@
 							<br/>
 							<input type="password" name="confirm_password" placeholder="Confirm Password" maxlength="40" required/>
 							<br/>
-							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
 							<div class="g-recaptcha" data-sitekey="6LdjsXUUAAAAAJ7b9kSAh4qO8DwIYIP4omMqBTcm"></div>
+							<button id="btn-signup" name="signup_button" type="submit">Sign Up</button>
 						</form>
 					</div>
 					<div align="center" id="forgotform"  style="display:none;">
@@ -119,7 +118,10 @@
 			<div id="bottom_middle_overlay"><a href="privacy_policy.html">Privacy Policy</a> <span style="color:white;"> | </span> <a href="terms_of_service.html">Terms of Service</a></div>
 			
 		</div>
+		
 		<div id="game_canvas" style="display:none;"></div>
+
+		<input type="text" id="myText"/>
 		
 		<!-- Custom Right Click Context Menu -->
 		<ul class='custom-menu'>
@@ -141,7 +143,9 @@
 		<script src="js/main.js"></script>
 		
 		<!-- Phaser Scripts -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.15.1/phaser.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.15.1/phaser.js"></script> -->
+		<script src="js/phaser.js"></script>
+		<script src="js/rexuiplugin.min.js"></script>
 		
 		<!-- WebRPG Scripts-->
 		<script src="js/webrpg.js"></script>

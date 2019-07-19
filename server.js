@@ -8,6 +8,7 @@ var express = require('express')
 require('dotenv').config();
 var session = require('express-session');
 var app = express();
+var sizeof = require('object-sizeof')
 //Redirect 'http' requests to secure 'https'
 http.createServer(function (req, res) {
 	//TODO: add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
@@ -79,11 +80,8 @@ app.get('/:token', user.index);
 
 // server socket.io code
 var players = {};
-
-var star = {
-  x: Math.floor(Math.random() * 700) + 50,
-  y: Math.floor(Math.random() * 500) + 50
-};
+var movementTime = {};
+var velocity_speed = 0.2;
 
 io.on('connection', function(socket){
 	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
@@ -103,7 +101,7 @@ io.on('connection', function(socket){
 			if(results.length == 1) {
 				if(results[0].loggedIn == 1){
 					console.log("returning from crpTokenHandshake");
-					socket.emit('alreadyLoggedIn', 'https://webrpg.io/?login_error=Already logged in&email= ');
+					socket.emit('alreadyLoggedIn', 'https://webrpg.io/?login_error=Already logged in&email=' + results[0].email);
 					return;
 				} else {
 					var sql = "UPDATE users SET socket = " + db.escape(socket.id) + ", loggedIn = '" + 1 + "' WHERE crpToken = " + db.escape(crptoken);
@@ -126,21 +124,6 @@ io.on('connection', function(socket){
 		});
 	});
 	
-	socket.on('requestEmail', function () {
-		var sql = "SELECT `email` FROM `users` WHERE `socket`="+db.escape(socket.id);                           
-		
-		db.query(sql, function(err, results) {
-			if (err) throw err;
-			if(results.length == 1) {
-				players[socket.id].email = results[0].email;
-				socket.emit('emailSent', players[socket.id].email);
-				console.log("succesfully sent email: " + results[0].email);
-			} else {
-				console.log("error sending email, user doesn't exist");
-			}
-		});
-	});
-	
 	socket.on('disconnect', function(){
 		console.log('user disconnected');
 		//log the player who disconnected out by changing its 
@@ -150,125 +133,276 @@ io.on('connection', function(socket){
 			if (err) throw err;
 			if(results.affectedRows == 1) {
 				console.log("DISCONNECTING Successfully updated socket and loggedIn");
-			}
-			else {
+			} else {
 				console.log("DISCONNECTING Error updating socket and loggedIn");
 			}
 		});
-		
+
+		if(players[socket.id]) {
+			sql = "UPDATE player_stats SET x = '" + players[socket.id].x + "', y = '" +  players[socket.id].y + "' WHERE name = '" + players[socket.id].name + "'";
+			db.query(sql, function(err, results){ 
+				if (err) throw err;
+				if(results.affectedRows == 1) {
+					console.log("Updated player's X and Y successfully");
+				} else {
+					console.log("Error updating player's X and Y");
+				}
+			});
+		}
+
 		// remove this player from our players object
 		delete players[socket.id];
+		console.log("Size of players: " + sizeof(players) + " bytes");
+		console.log("player counter: " + Object.keys(players).length);
 		// emit a message to all players to remove this player
 		io.emit('disconnect', socket.id);
 	});
 
-	socket.on('game_start', function(){
-		//TODO: wrap all the emits inside of a .on("game_start"){} call and when the
-		//game_scene starts call socket.emit("game_start") and then run these emits.
+	socket.on("requestCharacters", function(){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, results) {
+		    if (err) throw err;
+		    if(results.length == 1) {
+				console.log("got user");
+				sql = "SELECT * FROM `player_stats` WHERE `user_id`=" + db.escape(results[0].id);
+				db.query(sql, function(err, results) {
+					if (err) throw err;
+					if(results.length) {
+						socket.emit('characters', results);
+						console.log("sent characters");
+					} else {
+						console.log("no characters");
+					}
+				});
+		    } else {
+				console.log("user doesn't exist");
+			}
+		});
+	});
+
+	socket.on("requestSettings", function(){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, results) {
+		    if (err) throw err;
+		    if(results.length == 1) {
+				console.log("got user");
+				sql = "SELECT * FROM `user_settings` WHERE `user_id`=" + db.escape(results[0].id);
+				db.query(sql, function(err, results) {
+					if (err) throw err;
+					if(results.length) {
+						socket.emit('settings', results[0]);
+						console.log("sent settings");
+					} else {
+						console.log("no settings");
+					}
+				});
+		    } else {
+				console.log("user doesn't exist");
+			}
+		});
+	});
+
+	socket.on("requestGameSettings", function(){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, results) {
+		    if (err) throw err;
+		    if(results.length == 1) {
+				console.log("got user");
+				sql = "SELECT * FROM `user_settings` WHERE `user_id`=" + db.escape(results[0].id);
+				db.query(sql, function(err, results) {
+					if (err) throw err;
+					if(results.length) {
+						socket.emit('gameSettings', results[0]);
+						console.log("sent game settings");
+					} else {
+						console.log("no game settings");
+					}
+				});
+		    } else {
+				console.log("user doesn't exist");
+			}
+		});
+	});
+
+	socket.on("saveSettings", function(settings){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, results) {
+		    if (err) throw err;
+		    if(results.length == 1) {
+				console.log("got user");
+				sql = "UPDATE `user_settings` SET fullscreen = '" + settings["fullscreen"] + 
+				"', music_volume = '" + settings["music_volume"] + 
+				"', pause_on_blur = '" + settings["pause_on_blur"] +
+				"', show_fps = '" + settings["show_fps"] +
+				"', show_ping = '" + settings["show_ping"] +
+				"', show_player_count = '" + settings["show_player_count"] +
+				"', sound_volume = '" + settings["sound_volume"] + "' WHERE `user_id`=" + db.escape(results[0].id);
+				db.query(sql, function(err, results) {
+					if (err) throw err;
+					if(results.affectedRows == 1) {
+						console.log("Updated settings");
+					} else {
+						console.log("Error updating settings");
+					}
+				});
+			} else {
+				console.log("user doesn't exist");
+			}
+		});
+	});
+
+	socket.on("create_player", function(name){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, results) {
+		    if (err) throw err;
+		    if(results.length == 1) {
+				var id = results[0].id;
+				sql = "INSERT INTO player_stats (user_id, name, x, y) VALUES (" + results[0].id + ", '" + name + "', " + 0 + ", " + 0 + ")";
+				console.log(sql);
+				db.query(sql, function(err, results){ 
+					console.log("ERRROR:  " + err);
+					if (err && err.code == "ER_DUP_ENTRY"){
+						socket.emit("name_unavailable");
+						console.log("Error character name already exists");
+						return;
+					} else if (err) throw err;
+					if(results.affectedRows == 1) {
+						console.log("Added new character");
+						sql = "SELECT * FROM `player_stats` WHERE `user_id`=" + db.escape(id);
+						db.query(sql, function(err, results) {
+							if (err) throw err;
+							if(results.length) {
+								socket.emit('characters', results);
+								console.log("sent characters");
+							} else {
+								console.log("no characters");
+							}
+						});
+					} else {
+						console.log("something went wrong when trying to INSERT")
+					}
+				});
+			} else {
+
+			}
+		});
+	});
+
+	socket.on('game_start', function(characterName){
 		players[socket.id] = {
 			direction: 8,
-			x: 400,
-			y: 300,
+			x: 0,
+			y: 0,
 			playerId: socket.id,
-			name: ""
+			name: ""//characterName ? characterName : "tester-" + socket.id.substring(0, 4)
 		};
 		
-		// send the players object to the new player
-		socket.emit('currentPlayers', players);
+		console.log("Size of players: " + sizeof(players) + " bytes");
+		console.log("character name : " + characterName);
+		//TODO: Run a sql query to check if this socket is actually logged in
+		//if it is not logged in then do not load the player stats info, but instead
+		//append a random sequence of 5 characters to the end of the name i.e.
+		//'test-oidna' if user entered in nickname 'test'
+		//TODO: change this to select a player name from character scene selection
+		var sql = "SELECT name, x, y FROM player_stats WHERE name = " + "'" + characterName + "'";                           
 		
-		// update all other players of the new player
-		socket.broadcast.emit('newPlayer', players[socket.id]);
+		db.query(sql, function(err, results) {
+			if (err) throw err;
+			if(results.length == 1) {
+				players[socket.id].name = results[0].name;
+				players[socket.id].x = results[0].x;
+				players[socket.id].y = results[0].y;
+				console.log("succesfully set name, x and y");
+				
+				// send the players object to the new player
+				socket.emit('currentPlayers', players);
+				
+				// update all other players of the new player
+				socket.broadcast.emit('newPlayer', players[socket.id]);
+			} else {
+				//console.log("error setting  name, x and y, character doesn't exist");
+				console.log("created a test account");
+				players[socket.id].name = characterName;
+				// send the players object to the new player
+				socket.emit('currentPlayers', players);
+				
+				// update all other players of the new player
+				socket.broadcast.emit('newPlayer', players[socket.id]);
+			}
+		});
+		console.log("player counter: " + Object.keys(players).length);
 	});
-	// when a player moves, update the player data
-	socket.on('playerMovement', function (movementData) {
-		if(players[socket.id] == null) {
-			players[socket.id] = {
-				direction: 8,
-				x: 400,
-				y: 300,
-				playerId: socket.id,
-				name: ""
-			};
+
+	socket.on('playerMoved', function (direction) {
+		//TODO: Think about storing a list of player inputs inside a queue
+		//and then resolving the inputs in another setInterval function
+		if(players[socket.id]) {
+			players[socket.id].direction = direction;
 		}
-		players[socket.id].x = movementData.x;
-		players[socket.id].y = movementData.y;
-		players[socket.id].direction = movementData.direction;
-		players[socket.id].name = movementData.name;
-		// emit a message to all players about the player that moved
-		socket.broadcast.emit('playerMoved', players[socket.id]);
+		movementTime[socket.id] = Date.now();
 	});
-	// socket.on('upLeft', function(){
-	// 	players[socket.id].x += 500;
-	// });
-	// this.velocity_speed = 160;
-	// this.toggles = {
-		// up:false,
-		// down:false,
-		// left:false,
-		// right:false,
-	// };
-	// socket.on('up_down', function(){
-		// this.toggles.up = true;
-		// switch(this.countToggles()){
-			// case 1:
-				// socket.emit('y_velocity', -velocity_speed);
-				// break;
-			// case 2:
-				// if(this.toggles.down) {
-					// socket.emit('x_velocity', 0);
-					// socket.emit('y_velocity', 0);
-				// }
-				// if(this.toggles.left)
-					// socket.emit('x_velocity', Math.round((Math.sqrt(2) / 2) * -velocity_speed);
-				// if(this.toggles.right)
-					// socket.emit('x_velocity', Math.round((Math.sqrt(2) / 2) * velocity_speed);
-				// socket.emit('y_velocity', Math.round((Math.sqrt(2) / 2) * -velocity_speed);
-				// break;
-			// case 3:
-				// if(this.toggles.down && this.toggles.left) {
-					// socket.emit('x_velocity', -velocity_speed);
-					// socket.emit('y_velocity', 0);
-				// }
-				// if(this.toggles.left && this.toggles.right) {
-					// socket.emit('y_velocity', -velocity_speed);
-					// socket.emit('x_velocity', 0);
-				// }
-				// if(this.toggles.right && this.toggles.down) {
-					// socket.emit('x_velocity', velocity_speed);
-					// socket.emit('y_velocity', 0);
-				// }
-				// break;
-			// case 4:
-				// socket.emit('x_velocity', 0);
-				// socket.emit('y_velocity', 0);
-				// break;
-		// }
-	// });
-	
-	// socket.on('up_up', function(){
-		// this.toggles.up = false;
-	// });
-	// socket.on('down_up', function(){
-		// this.toggles.down = false;
-	// });
-	// socket.on('left_up', function(){
-		// this.toggles.left = false;
-	// });
-	// socket.on('right_up', function(){
-		// this.toggles.right = false;
-	// });
-	
-	
-	// function countToggles(){
-		// var count = 0;
-		// if(this.toggles.up)
-			// count++;
-		// if(this.toggles.down)
-			// count++;
-		// if(this.toggles.left)
-			// count++;
-		// if(this.toggles.right)
-			// count++;
-		// return count;
-	// }
+
+	socket.on('latency_ping', function() {
+		socket.emit('latency_pong');
+	});
 });
+
+//Calculate player movement and colision detection
+setInterval(() => {
+	//check the list of player flags to see if any player is moving
+	for(var player in players) {
+		//not idle
+		if(players[player].direction != 8)
+		{
+			var start_time = Date.now();
+			var delta = start_time - movementTime[players[player].playerId];
+			movementTime[players[player].playerId] = start_time;
+			var velocity_x = 0;
+			var velocity_y = 0;
+			//set velocity_x and velocity_y according to direction
+			switch(players[player].direction) {
+				case 0:
+					velocity_y = -velocity_speed;
+					break;
+				case 1:
+					velocity_x = (Math.sqrt(2) / 2) * velocity_speed;
+					velocity_y = (Math.sqrt(2) / 2) * -velocity_speed;
+					break;
+				case 2:
+					velocity_x = velocity_speed;
+					break;
+				case 3:
+					var speed = (Math.sqrt(2) / 2) * velocity_speed;
+					velocity_x = speed
+					velocity_y = speed;
+					break;
+				case 4:
+					velocity_y = velocity_speed;
+					break;
+				case 5:
+					velocity_x = (Math.sqrt(2) / 2) * -velocity_speed;
+					velocity_y = (Math.sqrt(2) / 2) * velocity_speed;
+					break;
+				case 6:
+					velocity_x = -velocity_speed;
+					break;
+				case 7:
+					var speed = (Math.sqrt(2) / 2) * -velocity_speed;
+					velocity_x = speed
+					velocity_y = speed;
+					break;
+			}
+			players[player].x += Math.round(delta * velocity_x);
+			players[player].y += Math.round(delta * velocity_y);
+		}
+	}
+}, 1000/60);
+
+//broadcast all player's positions
+setInterval(() => {
+	io.emit('status_update', players);
+}, 1000/20);
+
+// setInterval(() => {
+// 	console.log("player counter: " + Object.keys(players).length);
+// }, 30000);

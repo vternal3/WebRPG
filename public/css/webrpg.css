@@ -9,7 +9,7 @@ html, body {
 }
 
 canvas {
-	position: absolute; 
+	position: fixed; 
 	left: 0px; 
 	top: 0px;
 	/* border: 12px solid black; */

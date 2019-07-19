@@ -37,7 +37,8 @@ function start()
 	//Sleep for a second to let the main page fade out.
 	//TODO: make this div fade in eventually
 	setTimeout(function() {
-		document.getElementById("game_canvas").style.display = "initial";
+		document.getElementById("game_canvas").style.display = "block";
+		document.getElementById("game_canvas").height = "100vh";
 	}, 600);
 	//Loads the client game script dynamically
 	$.loadScript('js/globals.js', function(){

@@ -49,6 +49,20 @@ steps are to run npm update to update all package dependancies
 [X] get Tiled json files loaded and displaying maps in client.js
 [X] remove the extra code on top of the webrpg.js file the canvas stuff
 
+[ ] Change email validation link to show login form instead of signup form
+[ ] Post about playing my game on "subreddit called “playmygame.”"
+[ ] figure out how to load animations automatically from a json file
+[ ] List of settings here
+	[ ] this.sound.pauseOnBlur
+	[ ] screen resolution selection
+	[ ] Fullscreen option document.documentElement.requestFullscreen();
+	[ ] sound effect volume
+	[ ] music volume
+	[ ] show ping / latency
+	[ ] show FPS
+	[ ] show player count
+[ ] create a player count stat on the front page of webrpg.io per realm
+
 [ ] Regularly update checks:
 	[ ] update the README.md with game information, specs, controls, server configs etc
 	[ ] edit license with MIT license and any additional license used from other assets
