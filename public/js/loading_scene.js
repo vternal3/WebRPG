@@ -57,6 +57,8 @@ class loading_scene extends Phaser.Scene {
 
 		this.load.image('save_settings', "assets/images/save_settings.png");
 		this.load.image('save_settings_hover', "assets/images/save_settings_hover.png");
+
+		this.load.image('x_button', "assets/images/X_button.png");
 		
 		let loadingBar = this.add.graphics({
 			fillStyle: {
@@ -76,6 +78,7 @@ class loading_scene extends Phaser.Scene {
     create () {
 		console.log("Loading");
 		console.log("starting character scene");
+		//TODO: get rid of this option and remove nickname submittions on the front page.
 		var name = document.getElementById("nickname").value;
 		if(name) {
 			this.scene.start('game_scene', {socket:this.socket, character_name: name});

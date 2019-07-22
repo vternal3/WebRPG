@@ -100,6 +100,7 @@ class settings_scene extends Phaser.Scene {
 		});
 		settingsButton.on("pointerup", () => {
 			console.log("starting character scene");
+			document.getElementById('myText').style.display = "initial";
 			this.scene.start('character_scene', { socket: this.socket });
 		});
 

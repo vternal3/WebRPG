@@ -180,6 +180,38 @@ io.on('connection', function(socket){
 		});
 	});
 
+	socket.on("deleteCharacter", function(name){
+		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
+		db.query(sql, function(err, resultsUsers) {
+		    if (err) throw err;
+		    if(resultsUsers.length == 1) {
+				console.log("got user");
+				sql = "DELETE FROM player_stats WHERE name = " + db.escape(name);
+				console.log(sql);
+				db.query(sql, function(err, results) {
+					if (err) throw err;
+					if(results.affectedRows == 1) {
+						console.log("deleted character: " + name);
+						sql = "SELECT * FROM `player_stats` WHERE `user_id`=" + db.escape(resultsUsers[0].id);
+						db.query(sql, function(err, results) {
+							if (err) throw err;
+							if(results.length) {
+								socket.emit('characters', results);
+								console.log("sent characters");
+							} else {
+								console.log("no characters");
+							}
+						});
+					} else {
+						console.log("no characters");
+					}
+				});
+		    } else {
+				console.log("user doesn't exist");
+			}
+		});
+	});
+
 	socket.on("requestSettings", function(){
 		var sql = "SELECT * FROM `users` WHERE `socket`=" + db.escape(socket.id);
 		db.query(sql, function(err, results) {
@@ -258,16 +290,16 @@ io.on('connection', function(socket){
 		    if(results.length == 1) {
 				var id = results[0].id;
 				sql = "INSERT INTO player_stats (user_id, name, x, y) VALUES (" + results[0].id + ", '" + name + "', " + 0 + ", " + 0 + ")";
-				console.log(sql);
+				//console.log(sql);
 				db.query(sql, function(err, results){ 
-					console.log("ERRROR:  " + err);
+					//console.log("ERRROR:  " + err);
 					if (err && err.code == "ER_DUP_ENTRY"){
 						socket.emit("name_unavailable");
 						console.log("Error character name already exists");
 						return;
 					} else if (err) throw err;
 					if(results.affectedRows == 1) {
-						console.log("Added new character");
+						console.log("Added new character: " + name);
 						sql = "SELECT * FROM `player_stats` WHERE `user_id`=" + db.escape(id);
 						db.query(sql, function(err, results) {
 							if (err) throw err;
@@ -403,6 +435,6 @@ setInterval(() => {
 	io.emit('status_update', players);
 }, 1000/20);
 
-// setInterval(() => {
-// 	console.log("player counter: " + Object.keys(players).length);
-// }, 30000);
+setInterval(() => {
+	io.emit('player_count', Object.keys(players).length);
+}, 5000);

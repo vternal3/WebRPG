@@ -45,13 +45,12 @@ class game_scene extends Phaser.Scene {
 				console.log("ping: " + latency + " ms");
 			}
 		});
-		this.socket.emit('requestGameSettings');
-		
-		this.music = this.sound.add('theme_music');
-		this.music.play({
-			loop: true
+		this.socket.on('player_count', function(count) {
+			if(self.showPlayerCount){
+				console.log("player Count: " + count);
+			}
 		});
-		// this.sound.pauseOnBlur = true;
+		this.socket.emit('requestGameSettings');
 		this.socket.on('gameSettings', function (settings) {
 			self.sound.pauseOnBlur = settings["pause_on_blur"] ? true : false;
 			self.music.volume = settings["music_volume"];
@@ -60,21 +59,37 @@ class game_scene extends Phaser.Scene {
 			self.showFPS = settings["show_fps"] ? true : false;
 			self.showPing = settings["show_ping"] ? true : false;
 			self.showPlayerCount = settings["show_player_count"] ? true : false;
+			if(self.fullscreen) {
+				self.scale.startFullscreen();
+			}
 			console.log("got settings: " + settings);
 		});
 		this.socket.emit('game_start', this.character_name);
 
+		
+		//Music Code
+		this.music = this.sound.add('theme_music');
+		this.music.play({
+			loop: true
+		});
+		this.music.volume = 0.1;
+		this.sound.pauseOnBlur = true;
+
+		//Player Code
 		this.screen_center_x = Math.round(window.innerWidth / 2);
 		this.screen_center_y = Math.round(window.innerHeight / 2);
 		this.player = this.physics.add.sprite(this.screen_center_x, this.screen_center_y, 'walk_template');
 		this.player.setDepth(11);
 
+		//Other Players Code
 		this.otherPlayers = this.physics.add.group();
 		this.otherPlayersPositions = {};
 		this.otherPlayersName = {};
 		this.optimizedOP = {};
 
-
+		//Directional Animation Code
+		//TODO: make a load from JSON function for all animations in the area
+		//the player is located at.
 		this.anims.create({
 			key: 'idle',
 			frames: [{
@@ -157,7 +172,7 @@ class game_scene extends Phaser.Scene {
 			frameRate: 15
 		});
 
-		let ui_upscaled = this.add.sprite(0, 0, "ui_upscaled").setOrigin(0).setDepth(11);
+		//let ui_upscaled = this.add.sprite(0, 0, "ui_upscaled").setOrigin(0).setDepth(11);
 
 		this.mapInfinite = this.make.tilemap({
 			key: "mapInfinite"
@@ -176,7 +191,7 @@ class game_scene extends Phaser.Scene {
 			fill: '#00FF00'
 		});
 		this.nameText.setDepth(11);
-
+		
 		this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
 				if (players[id].playerId === self.socket.id) {
@@ -292,6 +307,10 @@ class game_scene extends Phaser.Scene {
 			"idle"		: true,
 		}
 		this.time_interval_counter = 0;
+
+		// this.musicVolume_slider = new slider(500,340,400,4,0,"h", this);
+		// this.musicVolume_slider.trackImage.setDepth(5);
+		// this.musicVolume_slider.barImage.setDepth(5);
 	}
 
 	//sets all direction toggles to true except the direction passed in.
