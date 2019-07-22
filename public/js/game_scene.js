@@ -6,35 +6,90 @@ class game_scene extends Phaser.Scene {
 	}
 	init(data) {
 		this.socket = data.socket;
+		this.character_name = data.character_name;
 	}
 	preload() {
 		console.log("Game");
 	}
 
+	resize() {
+		this.screen_center_x = Math.round(window.innerWidth / 2);
+		this.screen_center_y = Math.round(window.innerHeight / 2);
+		this.map_center_x = Math.round(this.cameras.main.centerX - (this.mapInfinite.widthInPixels / 2));
+		this.map_center_y =  Math.round(this.cameras.main.centerY - (this.mapInfinite.heightInPixels / 2));
+		this.player.x = this.screen_center_x;
+		this.player.y = this.screen_center_y;
+	}
+
 	create() {
 		var self = this;
 
-		this.socket.emit('game_start');
+		
+		this.fullscreen = false;
+		this.showFPS = false;
+		this.showPing = false;
+		this.showPlayerCount = false;
 
-		this.socket.emit('requestEmail');
+		window.addEventListener("resize", this.resize.bind(this), false);
+		
+		this.startTime;
 
-		this.socket.on('emailSent', function (email) {
-			self.nameText.setText(email);
-			self.player.name = email;
+		setInterval(function() {
+			self.startTime = Date.now();
+			self.socket.emit('latency_ping');
+		}, 3000);
+
+		this.socket.on('latency_pong', function() {
+			var latency = Date.now() - self.startTime;
+			if(self.showPing) {
+				console.log("ping: " + latency + " ms");
+			}
 		});
+		this.socket.on('player_count', function(count) {
+			if(self.showPlayerCount){
+				console.log("player Count: " + count);
+			}
+		});
+		this.socket.emit('requestGameSettings');
+		this.socket.on('gameSettings', function (settings) {
+			self.sound.pauseOnBlur = settings["pause_on_blur"] ? true : false;
+			self.music.volume = settings["music_volume"];
+			self.sound.volume = settings["sound_volume"];
+			self.fullscreen = settings["fullscreen"] ? true : false;
+			self.showFPS = settings["show_fps"] ? true : false;
+			self.showPing = settings["show_ping"] ? true : false;
+			self.showPlayerCount = settings["show_player_count"] ? true : false;
+			if(self.fullscreen) {
+				self.scale.startFullscreen();
+			}
+			console.log("got settings: " + settings);
+		});
+		this.socket.emit('game_start', this.character_name);
 
-		this.otherPlayers = this.physics.add.group();
-		this.otherPlayersName = {};
-
-		var music = this.sound.add('theme_music');
-		music.play({
+		
+		//Music Code
+		this.music = this.sound.add('theme_music');
+		this.music.play({
 			loop: true
 		});
-		this.sound.pauseOnBlur = false;
+		this.music.volume = 0.1;
+		this.sound.pauseOnBlur = true;
 
-		this.player = this.physics.add.sprite(400, 300, 'walk_template');
+		//Player Code
+		this.screen_center_x = Math.round(window.innerWidth / 2);
+		this.screen_center_y = Math.round(window.innerHeight / 2);
+		this.player = this.physics.add.sprite(this.screen_center_x, this.screen_center_y, 'walk_template');
 		this.player.setDepth(11);
 
+		//Other Players Code
+		this.otherPlayers = this.physics.add.group();
+		this.otherPlayersPositions = {};
+		this.otherPlayersName = {};
+		this.optimizedOP = {};
+
+		//Directional Animation Code
+		//TODO: make a load from JSON function for all animations in the area
+		//the player is located at.
 		this.anims.create({
 			key: 'idle',
 			frames: [{
@@ -117,24 +172,33 @@ class game_scene extends Phaser.Scene {
 			frameRate: 15
 		});
 
-		let ui_upscaled = this.add.sprite(0, 0, "ui_upscaled").setOrigin(0).setDepth(11);
+		//let ui_upscaled = this.add.sprite(0, 0, "ui_upscaled").setOrigin(0).setDepth(11);
 
-		//this.cameras.main.zoom = 2;
-
-		const map3 = this.make.tilemap({
-			key: "map3"
+		this.mapInfinite = this.make.tilemap({
+			key: "mapInfinite"
 		});
-		const tileset2 = map3.addTilesetImage("trees2", "tiles2");
-		const tileset3 = map3.addTilesetImage("grass", "grass2");
+		const tileset1 = this.mapInfinite.addTilesetImage("grassTiles", "grass1");
 
-		const middle = map3.createStaticLayer("middle", tileset2, 0, 0);
-		middle.setDepth(10);
-		const bottom = map3.createStaticLayer("bottom", tileset3, 0, 0);
+		//console.log(map3);
+		this.map_center_x = Math.round(this.cameras.main.centerX - (this.mapInfinite.widthInPixels / 2));
+		this.map_center_y = Math.round(this.cameras.main.centerY - (this.mapInfinite.heightInPixels / 2));
 
+		this.mapInfiniteLayer1 = this.mapInfinite.createStaticLayer("layer_1", tileset1, this.map_center_x, this.map_center_x);
+		this.mapInfiniteLayer1.setDepth(5);
+
+		this.nameText = this.add.text(292, 16, '', {
+			fontSize: '12px',
+			fill: '#00FF00'
+		});
+		this.nameText.setDepth(11);
+		
 		this.socket.on('currentPlayers', function (players) {
 			Object.keys(players).forEach(function (id) {
 				if (players[id].playerId === self.socket.id) {
 					addPlayer(self, players[id]);
+					self.mapInfiniteLayer1.x = -players[id].x + self.map_center_x;
+					self.mapInfiniteLayer1.y = -players[id].y + self.map_center_y;
+					self.nameText.text = players[id].name;
 				} else {
 					addOtherPlayers(self, players[id]);
 				}
@@ -154,349 +218,354 @@ class game_scene extends Phaser.Scene {
 			});
 		});
 
-		this.socket.on('playerMoved', function (playerInfo) {
-			self.otherPlayers.getChildren().forEach(function (otherPlayer) {
-				if (playerInfo.playerId === otherPlayer.playerId) {
-					otherPlayer.direction = playerInfo.direction;
-					otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-					//set player email above player's head.
-					self.otherPlayersName[playerInfo.playerId].setText(playerInfo.name);
-					self.otherPlayersName[playerInfo.playerId].x = otherPlayer.x - self.otherPlayersName[playerInfo.playerId].width / 2;
-					self.otherPlayersName[playerInfo.playerId].y = otherPlayer.y - 55 - 12;
-					switch (otherPlayer.direction) {
+		this.socket.on('status_update', function(players){
+			for(var playerInfo in players) {
+				var id = players[playerInfo].playerId;
+				if (id != self.socket.id && self.optimizedOP[id]) {
+					self.optimizedOP[id].direction = players[playerInfo].direction;
+					self.otherPlayersPositions[self.optimizedOP[id].playerId]= {x:self.screen_center_x + players[playerInfo].x,y:self.screen_center_y + players[playerInfo].y};
+					
+					//set other player's name above player's head.
+					self.otherPlayersName[id].x = self.optimizedOP[id].x - self.otherPlayersName[id].width / 2;
+					self.otherPlayersName[id].y = self.optimizedOP[id].y - 55 - 12;
+					switch (self.optimizedOP[id].direction) {
 						case 0:
-							otherPlayer.anims.play('up', true);
+							self.optimizedOP[id].anims.play('up', true);
 							break;
 						case 1:
-							otherPlayer.anims.play('upRight', true);
+							self.optimizedOP[id].anims.play('upRight', true);
 							break;
 						case 2:
-							otherPlayer.anims.play('right', true);
+							self.optimizedOP[id].anims.play('right', true);
 							break;
 						case 3:
-							otherPlayer.anims.play('downRight', true);
+							self.optimizedOP[id].anims.play('downRight', true);
 							break;
 						case 4:
-							otherPlayer.anims.play('down', true);
+							self.optimizedOP[id].anims.play('down', true);
 							break;
 						case 5:
-							otherPlayer.anims.play('downLeft', true);
+							self.optimizedOP[id].anims.play('downLeft', true);
 							break;
 						case 6:
-							otherPlayer.anims.play('left', true);
+							self.optimizedOP[id].anims.play('left', true);
 							break;
 						case 7:
-							otherPlayer.anims.play('upLeft', true);
+							self.optimizedOP[id].anims.play('upLeft', true);
 							break;
 						case 8:
-							otherPlayer.anims.play('idle');
+							self.optimizedOP[id].anims.play('idle');
 							break;
 					}
 				}
-			});
+				if(id === self.socket.id) {
+					self.mapInfiniteLayer1.x = -players[playerInfo].x + self.map_center_x;
+					self.mapInfiniteLayer1.y = -players[playerInfo].y + self.map_center_y;
+				}
+			}
 		});
-
-		this.cursors = this.input.keyboard.createCursorKeys();
-
-		this.nameText = this.add.text(292, 16, '', {
-			fontSize: '12px',
-			fill: '#00FF00'
-		});
-		this.nameText.setDepth(11);
 
 		//Go back to the Title scene and disconnects it socket
 		this.input.keyboard.on('keydown_ESC', function () {
-			this.sound.pauseAll();
-			this.scene.stop('game_scene');
-			this.socket.disconnect()
+			//TODO: Open up a settings tab menu in the center of the screen
+			//with all the settings in their approriate tabs.
 			window.location.href = "https://webrpg.io";
 		}, this);
 
-		var combo = this.input.keyboard.createCombo('asd', {
+		var combo = this.input.keyboard.createCombo([Phaser.Input.Keyboard.KeyCodes.A, Phaser.Input.Keyboard.KeyCodes.S, Phaser.Input.Keyboard.KeyCodes.D], {
 			maxKeyDelay: 1000,
 			resetOnMatch: true
 		});
+		var combo2 = this.input.keyboard.createCombo('ee', {
+			maxKeyDelay: 1000,
+			resetOnMatch: true
+		});
+		
 
 		this.input.keyboard.on('keycombomatch', function (event) {
-
-			console.log('You typed phaser quickly!');
-
+			if (event["keyCodes"][0] == Phaser.Input.Keyboard.KeyCodes.A &&
+				event["keyCodes"][1] == Phaser.Input.Keyboard.KeyCodes.S &&
+				event["keyCodes"][2] == Phaser.Input.Keyboard.KeyCodes.D) {
+				console.log("ASD Success");
+			}
+			if (event["keyCodes"][0] == Phaser.Input.Keyboard.KeyCodes.E &&
+				event["keyCodes"][1] == Phaser.Input.Keyboard.KeyCodes.E) {
+				console.log("EE success");
+			}
 		});
 
-		this.toggles =
+		this.direction_toggles = 
 		{
-			'g': true,
-			'h': true,
-			'a': true,
-			's': true,
-			'w': true,
-			'd': true,
-			'q': true,
-			'e': true
+			"up"		: true,
+			"upRight"	: true,
+			"right"		: true,
+			"downRight"	: true,
+			"down"		: true,
+			"downLeft"	: true,
+			"left"		: true,
+			"upLeft"	: true,
+			"idle"		: true,
 		}
+		this.time_interval_counter = 0;
+
+		// this.musicVolume_slider = new slider(500,340,400,4,0,"h", this);
+		// this.musicVolume_slider.trackImage.setDepth(5);
+		// this.musicVolume_slider.barImage.setDepth(5);
 	}
 
+	//sets all direction toggles to true except the direction passed in.
+	update_direction_toggles(direction) {
+		for(var direction_toggle in this.direction_toggles) {
+			if(direction_toggle != direction){
+				this.direction_toggles[direction_toggle] = true;
+			}
+		}
+	}
+	
 	update() {
+		//calculate delta time
+		start_time = Date.now();
+		delta_time = start_time - end_time;
+		end_time = start_time;
+		this.time_interval_counter += delta_time;
+		if(this.time_interval_counter > 3000){
+			if(this.showFPS) {
+				console.log("FPS: " + game.loop.actualFps);
+			}
+			this.time_interval_counter = 0;
+		}
+
+		//reset velocities to zero to remove previous calculations
+		velocity_x = 0;
+		velocity_y = 0;
+
 		if (this.player) {
-			velocity_x = 0;
-			velocity_y = 0;
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
-				if (this.toggles['g']) {
-					console.log("select");
-					this.socket.emit('select');
-					this.toggles['g'] = false;							
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G).isDown) {
-				this.toggles['g'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
-				if (this.toggles['h']) {
-					console.log("start");
-					this.socket.emit('start');
-					this.toggles['h'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H).isDown) {
-				this.toggles['h'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-				if (this.toggles['a']) {
-					console.log("A");
-					this.socket.emit('A');
-					this.toggles['a'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A).isDown) {
-				this.toggles['a'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
-				if (this.toggles['s']) {
-					console.log("B");
-					this.socket.emit('B');
-					this.toggles['s'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S).isDown) {
-				this.toggles['s'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-				if (this.toggles['w']) {
-					console.log("X");
-					this.socket.emit('X');
-					this.toggles['w'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W).isDown) {
-				this.toggles['w'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
-				if (this.toggles['d']) {
-					console.log("Y");
-					this.socket.emit('Y');
-					this.toggles['d'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D).isDown) {
-				this.toggles['d'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
-				if (this.toggles['q']) {
-					console.log("left_tab");
-					this.socket.emit('left_tab');
-					this.toggles['q'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q).isDown) {
-				this.toggles['q'] = true;
-			}
-
-			if (this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
-				if (this.toggles['e']) {
-					console.log("right_tab");
-					this.socket.emit('right_tab');
-					this.toggles['e'] = false;
-				}
-			}
-			if (!this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E).isDown) {
-				this.toggles['e'] = true;
-			}
-
-
-			if (this.cursors.up.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 0; //up
-				velocity_y -= velocity_speed;
+				velocity_y = -velocity_speed;
 			}
-			if (this.cursors.down.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown) {
 				direction = 4; //down
-				velocity_y += velocity_speed;
+				velocity_y = velocity_speed;
 			}
-			if (this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 6; //left
-				velocity_x -= velocity_speed;
+				velocity_x = -velocity_speed;
 			}
-			if (this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 2; //right
-				velocity_x += velocity_speed;
+				velocity_x = velocity_speed;
 			}
 
-			if (this.cursors.up.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 7; //up left
-				var speed = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
+				var speed = (Math.sqrt(2) / 2) * -velocity_speed;
 				velocity_x = speed
 				velocity_y = speed;
 			}
-			if (this.cursors.up.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 1; //up right
-				velocity_x = Math.round((Math.sqrt(2) / 2) * velocity_speed);
-				velocity_y = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
+				velocity_x = (Math.sqrt(2) / 2) * velocity_speed;
+				velocity_y = (Math.sqrt(2) / 2) * -velocity_speed;
 			}
-			if (this.cursors.down.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 5; //down left
-				velocity_x = Math.round((Math.sqrt(2) / 2) * -velocity_speed);
-				velocity_y = Math.round((Math.sqrt(2) / 2) * velocity_speed);
+				velocity_x = (Math.sqrt(2) / 2) * -velocity_speed;
+				velocity_y = (Math.sqrt(2) / 2) * velocity_speed;
 			}
-			if (this.cursors.down.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 3; //down right
-				var speed = Math.round((Math.sqrt(2) / 2) * velocity_speed);
+				var speed = (Math.sqrt(2) / 2) * velocity_speed;
 				velocity_x = speed
 				velocity_y = speed;
 			}
 
-			if (this.cursors.down.isDown && this.cursors.up.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 8; //idle
 				velocity_x = 0;
 				velocity_y = 0;
 			}
-			if (this.cursors.left.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 8; //idle
 				velocity_x = 0;
 				velocity_y = 0;
 			}
 
-			if (this.cursors.up.isDown && this.cursors.right.isDown && this.cursors.down.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown) {
 				direction = 2; //right
 				velocity_x = velocity_speed;
 				velocity_y = 0;
 			}
-			if (this.cursors.right.isDown && this.cursors.down.isDown && this.cursors.left.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 4; //down
 				velocity_x = 0;
 				velocity_y = velocity_speed;
 			}
-			if (this.cursors.down.isDown && this.cursors.left.isDown && this.cursors.up.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown) {
 				direction = 6; //left
 				velocity_x = -velocity_speed;
 				velocity_y = 0;
 			}
-			if (this.cursors.left.isDown && this.cursors.up.isDown && this.cursors.right.isDown) {
+			if (this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown) {
 				direction = 0; //up
 				velocity_x = 0;
 				velocity_y = -velocity_speed;
 			}
 
-			if (!this.cursors.down.isDown && !this.cursors.up.isDown && !this.cursors.right.isDown && !this.cursors.left.isDown ||
-				this.cursors.down.isDown && this.cursors.up.isDown && this.cursors.right.isDown && this.cursors.left.isDown) {
+			if (!this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				!this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown ||
+				this.input.keyboard.addKey(current_inputs["movement_3"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_1"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_4"]["keycode"]).isDown && 
+				this.input.keyboard.addKey(current_inputs["movement_2"]["keycode"]).isDown) {
 				direction = 8;
 				velocity_x = 0;
 				velocity_y = 0;
 			}
 
-			this.player.setVelocityX(velocity_x);
-			this.player.setVelocityY(velocity_y);
-			this.player.direction = direction;
-
 			switch (direction) {
 				case 0:
 					this.player.anims.play('up', true);
-					console.log("up");
-					this.socket.emit('up');
+					if(this.direction_toggles["up"]) {
+						//console.log("up");
+						this.socket.emit('playerMoved', 0);
+						this.direction_toggles["up"] = false;
+						this.update_direction_toggles("up");
+					}
 					break;
 				case 1:
 					this.player.anims.play('upRight', true);
-					console.log("upRight");
-					this.socket.emit('upRight');
+					if(this.direction_toggles["upRight"]) {
+						//console.log("upRight");
+						this.socket.emit('playerMoved', 1);
+						this.direction_toggles["upRight"] = false;
+						this.update_direction_toggles("upRight");
+					}
 					break;
 				case 2:
 					this.player.anims.play('right', true);
-					console.log("right");
-					this.socket.emit('right');
+					if(this.direction_toggles["right"]) {
+						//console.log("right");
+						this.socket.emit('playerMoved', 2);
+						this.direction_toggles["right"] = false;
+						this.update_direction_toggles("right");
+					}
 					break;
 				case 3:
 					this.player.anims.play('downRight', true);
-					console.log("downRight");
-					this.socket.emit('downRight');
+					if(this.direction_toggles["downRight"]) {
+						//console.log("downRight");
+						this.socket.emit('playerMoved', 3);
+						this.direction_toggles["downRight"] = false;
+						this.update_direction_toggles("downRight");
+					}
 					break;
 				case 4:
 					this.player.anims.play('down', true);
-					console.log("down");
-					this.socket.emit('down');
+					if(this.direction_toggles["down"]) {
+						//console.log("down");
+						this.socket.emit('playerMoved', 4);
+						this.direction_toggles["down"] = false;
+						this.update_direction_toggles("down");
+					}
 					break;
 				case 5:
 					this.player.anims.play('downLeft', true);
-					console.log("downLeft");
-					this.socket.emit('downLeft');
+					if(this.direction_toggles["downLeft"]) {
+						//console.log("downLeft");
+						this.socket.emit('playerMoved', 5);
+						this.direction_toggles["downLeft"] = false;
+						this.update_direction_toggles("downLeft");
+					}
 					break;
 				case 6:
 					this.player.anims.play('left', true);
-					console.log("left");
-					this.socket.emit('left');
+					if(this.direction_toggles["left"]) {
+						//console.log("left");
+						this.socket.emit('playerMoved', 6);
+						this.direction_toggles["left"] = false;
+						this.update_direction_toggles("left");
+					}
 					break;
 				case 7:
 					this.player.anims.play('upLeft', true);
-					console.log("upLeft");
-					this.socket.emit('upLeft');
+					if(this.direction_toggles["upLeft"]) {
+						//console.log("upLeft");
+						this.socket.emit('playerMoved', 7);
+						this.direction_toggles["upLeft"] = false;
+						this.update_direction_toggles("upLeft");
+					}
 					break;
 				case 8:
 					this.player.anims.play('idle');
-					//console.log("idle");
-					//this.socket.emit('idle');
+					if(this.direction_toggles["idle"]) {
+						//console.log("idle");
+						this.socket.emit('playerMoved', 8);
+						this.direction_toggles["idle"] = false;
+						this.update_direction_toggles("idle");
+					}
 					break;
 			}
+
+			this.mapInfiniteLayer1.x += Math.round(delta_time * -velocity_x);
+			this.mapInfiniteLayer1.y += Math.round(delta_time * -velocity_y);
+
+			this.player.direction = direction;
+			
 			this.nameText.x = this.player.x - this.nameText.width / 2;
 			this.nameText.y = this.player.y - 55 - 12;
-			// emit player movement
-			var x = this.player.x;
-			var y = this.player.y;
-			var d = this.player.direction;
-			if (this.player.oldPosition && (x !== this.player.oldPosition.x || y !== this.player.oldPosition.y || d !== this.player.oldPosition.direction)) {
-				this.socket.emit('playerMovement', {
-					x: this.player.x,
-					y: this.player.y,
-					direction: this.player.direction,
-					name: this.player.name
-				});
-			}
-
-			// save old position data
-			this.player.oldPosition = {
-				x: this.player.x,
-				y: this.player.y,
-				direction: this.player.direction,
-				name: name
-			};
+			
+			//put other player's world cordinates into local cordinates
+			localizeOtherplayersPositions(this, this.mapInfiniteLayer1.x - this.map_center_x, this.mapInfiniteLayer1.y - this.map_center_y);
 		}
 	}
 }
-var name = '';
-var agvel = 0;
+
 var direction = 0; //0:up, 1:upRight, 2:right, 3:downRight, 4:down, 5:downLeft, 6:left, 7:upLeft
+var start_time = 0;
+var end_time = 0;
+var delta_time = 0;
 var velocity_x = 0;
 var velocity_y = 0;
-var velocity_speed = 160;
-function addPlayer(self, playerInfo) { }
+var velocity_speed = 0.2;
+
+function localizeOtherplayersPositions(self, x, y){
+	self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+		if(self.socket.id != otherPlayer.playerId && self.otherPlayersPositions[otherPlayer.playerId])
+			otherPlayer.setPosition(x + self.otherPlayersPositions[otherPlayer.playerId].x, y + self.otherPlayersPositions[otherPlayer.playerId].y);
+			self.otherPlayersName[otherPlayer.playerId].x = otherPlayer.x - self.otherPlayersName[otherPlayer.playerId].width / 2;
+			self.otherPlayersName[otherPlayer.playerId].y = otherPlayer.y - 55 - 12;
+	});
+}
+
+function addPlayer(self, playerInfo) {}
 
 function addOtherPlayers(self, playerInfo) {
 	const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'walk_template');
-	otherPlayer.setDepth(11);
+	otherPlayer.setDepth(10);
 	otherPlayer.playerId = playerInfo.playerId;
 	self.otherPlayers.add(otherPlayer);
+
+	self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+		self.optimizedOP[otherPlayer.playerId] = otherPlayer;
+	});
+
 	if (playerInfo.name.length) {
 		self.otherPlayersName[playerInfo.playerId] = self.add.text(playerInfo.x - (8 * playerInfo.name.length / 2), playerInfo.y - 55 - 12, playerInfo.name, {
 			fontSize: '12px',

@@ -19,8 +19,7 @@ jQuery.loadScript = function (url, callback) {
         async: false
     });
 }
-
-function start(name)
+function start()
 {
 	document.getElementById("login").classList.add("nodisplay");
 	document.getElementById("top_left_overlay").classList.add("nodisplay");
@@ -32,20 +31,24 @@ function start(name)
 		document.getElementsByClassName("addthis-smartlayers-desktop")[0].classList.add("nodisplay");
 	}
 	document.getElementById("feedback_button").classList.add("nodisplay");
-	
+	if(document.getElementById('nickname').value) {
+		console.log("name : " + document.getElementById('nickname').value);		
+	}
 	//Sleep for a second to let the main page fade out.
 	//TODO: make this div fade in eventually
 	setTimeout(function() {
-		document.getElementById("game_canvas").style.display = "initial";
+		document.getElementById("game_canvas").style.display = "block";
+		document.getElementById("game_canvas").height = "100vh";
 	}, 600);
 	//Loads the client game script dynamically
+	//TODO: Dynamically load all js in folder.
+	$.loadScript('js/globals.js', function(){
+	});
 	$.loadScript('js/character_scene.js', function(){
 	});
 	$.loadScript('js/settings_scene.js', function(){
 	});
 	$.loadScript('js/game_scene.js', function(){
-	});
-	$.loadScript('js/title_scene.js', function(){
 	});
 	$.loadScript('js/loading_scene.js', function(){
 	});
@@ -122,8 +125,7 @@ $(document).ready(function(){
 	}
 	//Login succeeded
 	if(window.location.href.includes("login_success")) {
-		var crpToken = window.location.href.split(/[=,&]+/)[2];
-		start(crpToken);
+		start();
 	}
 	//Signup failed
 	if(window.location.href.includes("signup_error")) {
@@ -140,8 +142,8 @@ $(document).ready(function(){
 	if(window.location.href.includes("signup_success")) {
 		var message = window.location.href.split(/[=,&]+/)[1];
 		message = message.replace(/%20/g, " ");
-		document.getElementById("signup_form_link").click();
-		document.getElementById("signup_message").innerHTML = "<span style='color:green;'>" + message + "</span>";
+		document.getElementById("login_form_link").click();
+		document.getElementById("login_message").innerHTML = "<span style='color:green;'>" + message + "</span>";
 		window.history.pushState("object or string", "Clear return params", "/#");
 	}
 	//Forgot succeeded

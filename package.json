@@ -20,10 +20,12 @@
     "mysql": "^2.16.0",
     "nodemailer": "^4.6.8",
     "npm": "^6.4.1",
+    "object-sizeof": "^1.4.0",
     "request": "^2.88.0",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
+    "@azerion/phaser-input": "^2.0.5",
     "nodemon": "^1.11.0"
   }
 }

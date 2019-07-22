@@ -67,7 +67,7 @@ exports.index = function(req, res) {
 				pass = bcrypt.hashSync(pass,salt);
 				
 				var sql = "INSERT INTO `users` (`email`, `password`, `resetPasswordToken`, `resetPasswordExpires`, `crpToken`, `loggedIn`, `socket`, `emailValidationToken`, `emailValidationExpires`, `validated`) VALUES (" + db.escape(email) + "," + db.escape(pass) + ",'" + undefined + "','" + undefined + "','" + undefined + "','" + 0 + "','" + null + "','" + undefined + "','" + undefined + "','" + 0 + "')";
-
+				//TODO: Insert a new row into the player_settings table with all default settings for this new account.
 				var query = db.query(sql, function(err, results) {
 					if (err) throw err;
 					if(results.affectedRows == 1) {

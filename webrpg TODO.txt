@@ -1,4 +1,281 @@
-TODO: 
+Features List:
+	[ ] make player shoot action https://rainingchain.com/tutorial/nodejs
+	[ ] make player health, magic stats in webrpg database
+	[ ] create collision detection and health removal of players shotting other players
+	[ ] dynamically load player/npc animations from json file
+	[ ] dynamically load/unload map chunks based on https://www.dynetisgames.com/2018/02/24/manage-big-maps-phaser-3/
+	[ ] dynamically load/unload player/npc animations based on map chunks loaded
+	[ ] ***(possibly) dynamically move clients in an out of game rooms on the server side. each room represents a map chunk loaded. to reduce the amount of emits to sockets are made
+	[ ] create a player count stat on the front page of webrpg.io per realm
+	[ ] figure out how to load animations automatically from a json file
+	[ ] Experience function per level (1/2 (1+4*x - sqrt(1+8*x)))+5.6*sin(x/3.14159)
+	[ ] create a backend script which auto logs out all accounts in database. Use: after stopping server each time.
+	[ ] Add a background image to index.html with game assets
+	[ ] make login responsive and not static size.
+	[ ] add percentage text to loading screen
+	[ ] add randomly selected concept art as loading screen background
+	[ ] create mini map code. Use the mini map example you found on forums
+	[ ] make mailing list page look better by centering and adding a colorful background image.
+	[ ] Make sure that all Audio is served both as .mp3 and .ogg
+	[ ] limit one connection per IP address
+	[ ] Look into payments for the game https://www.npmjs.com/package/node-payments  https://www.simplify.com/commerce/docs/sdk/nodejs  http://www.catonmat.net/blog/stripe-payments-with-node/
+	[ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
+	[ ] create background music to main page
+		[ ] add button to toggle background music on/off
+
+Go Live Checklist:
+	[ ] 
+
+Code base maintenance: 
+	[ ] Look into javascript obvuscator git hook library
+	[ ] edit the .editorconfig file to create a coding standard rule set for webrpg.io
+
+Marketing Strats:
+	[ ] Post about playing my game on "subreddit called “playmygame.”"
+	[ ] create a News RSS feed page
+	[ ] create a screenshot page
+	[X] create a features list page
+	[ ] create a requirements page
+	[ ] create a press kit
+	[X] create a share on twitter button
+	[X] create a share on reddit button
+	[X] create an itch.io account to post game to https://itch.io/developers
+	[ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums
+	[ ] http://www.indievideogames.com/pages/index.php
+	[ ] http://www.pixelprospector.com/contents-and-examples-of-press-kits/
+	[ ] http://www.pixelprospector.com/the-big-list-of-indie-game-sites/
+	[ ] http://www.pixelprospector.com/the-big-list-of-indie-game-marketing/
+	[ ] http://www.pixelprospector.com/the-marketing-guide-for-game-developers/
+	[ ] https://en.wikipedia.org/wiki/List_of_video_game_magazines
+	[ ] https://www.wikipedia.org/
+	[ ] https://forums.tigsource.com/index.php
+	[ ] https://www.indiedb.com/
+	[ ] https://www.moddb.com/
+	[ ] https://www.slidedb.com/
+	[ ] https://www.igda.org/default.aspx
+	[ ] http://www.pixelprospector.com/
+	[ ] https://www.kongregate.com/
+	[ ] https://armorgames.com/community
+	[ ] https://www.polygon.com/
+	[ ] https://www.metacritic.com/
+	[ ] https://videogamecaster.com/
+	[ ] https://www.badlogicgames.com/forum/
+	[ ] https://www.puzzlescript.net/
+	[ ] https://gamejolt.com/
+	[ ] https://www.kongregate.com/
+	[ ] https://www.twitch.tv/
+	[ ] https://www.moddb.com/
+	[ ] https://www.gog.com/
+	[ ] https://www.g2a.com
+	[ ] https://www.gamefront.com/
+	[ ] https://www.nexusmods.com/
+	[ ] https://gamebanana.com/
+	[ ] https://www.ign.com/
+	[ ] https://www.gamespot.com/
+	[ ] https://kotaku.com/
+	[ ] https://www.eurogamer.net/
+	[ ] https://www.metacritic.com/
+	[ ] https://gamefaqs.gamespot.com/
+	[ ] https://www.polygon.com/
+	[ ] https://www.gamesradar.com/
+	[ ] https://www.cnet.com/
+	[ ] https://www.gamerankings.com/
+	[ ] https://www.neogaf.com/
+	[ ] https://www.giantbomb.com/
+	[ ] https://www.rockpapershotgun.com/
+	[ ] https://www.gamefront.com/
+
+Bugs:
+	[ ] change forgot password token to forgot_password={token} for email generation, and GET response code
+
+Workflow/documentation:
+	[ ] write out workflow for pixel art creation
+	[ ] write out workflow for Tiled json file import into webrpg.io based on client.js code
+	[ ] write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
+
+Legal Stuff:
+	[ ] purchase privacy policy and terms of service and add them to webrpg.io site before going live with the game.
+	[ ] update terms of service page with more terms of service options from https://termsfeed.com/wizard/terms-conditions
+
+[ ] Regularly update checks:
+	[ ] update the README.md with game information, specs, controls, server configs etc
+	[ ] edit license with MIT license and any additional license used from other assets
+	[ ] update privacy policy and terms of service
+	[ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
+	[ ] Make sure that all Audio is served both as .mp3 and .ogg
+	[ ] update create_webrpg_db.js with all default tables and possibly some test/default entries
+	
+[ ] inside 'public':
+	[ ] edit the fav.io images with webrpg branding
+	[ ] edit the human.txt file with correct information
+	[ ] edit the robot.txt 
+	[ ] create a 404.html page with webrpg.io branding
+	[ ] edit the icon.png with webrpg.io branding
+	[ ] edit license with MIT license and any additional license used from other assets
+	[ ] edit the site.webmanifest file with correct information
+	[ ] edit tile.png with webrpg.io branding
+	[ ] edit tile-wide.png with webrpg.io branding
+	[ ] edit or remove .htaccess if node.js needs it or not.
+
+[ ] inside 'webrpg_Dev':
+	[ ] update the README.md with game information, specs, controls, server configs etc
+	[ ] edit .editorconfig with correct information
+	[ ] make sure .env-example is up-to-date with .env
+	[ ] edit .gitattributes with correct information
+	[ ] edit gitignore with correct file and directories to ignore.
+	[ ] update HTML5 video game tutorial with latest additions.
+	
+Game Ideas:
+	[ ] Terrain effects
+		[ ] Slow down in water
+		[ ] Slow down in sand
+		[ ] Speed up on conveyer belt
+		[ ] Damage on spikes
+		[ ] Look for more terrain types and effects
+		[ ] 24 different essent effects on terrians either boost or reduce essents effectiveness.
+		[ ] terrain that flashes/rotates through status effects from normal tiles to boost or reduced essences effects.
+	[ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do
+	[ ] questing should be quick to pick up quests and quick to finish them.
+	[ ] since quests are fast to complete there needs to be ample amounts of them to keep the game fun
+	[ ] stream lining quests will eventually allow for procedurally generated quests
+	[ ] essents are what all the elements are called
+	[ ] you can augment essent casts with a damage over time effect. damage over time has a time limit dependant on its level. three ticks for level 0 over a course of 9 seconds. intervals can shrink and time limit can increase as it is leveled
+	[ ] essents can be augmented with a stun effect. stun effect lasts 0.5 seconds for level 0 and can happen 2% of the time at level 0. both the duration and probability of a stun effect can increase as stun is leveled up stuns interupt any cast time spells
+	[ ] essents can be augmented with different area of effect shapes, 
+		[ ] circle area, 
+		[ ] cone area, 
+		[ ] donut area, 
+		[ ] line area
+	[ ] essents can be augmented with projectial shapes, 
+		[ ] single projectile,
+		[ ] double straight 
+		[ ] double front and back, 
+		[ ] triple straight 
+		[ ] triple even around, 
+		[ ] double V 
+		[ ] double left and right, 
+		[ ] triple W, 
+		[ ] quadrupal straight, 
+		[ ] quadrupal cross, 
+	[ ] essents can be augmented with a spread effect. near by enemies get hit with a diminishing returns essents hit
+	[ ] you can have essents orbs that circle you, up to 6 different orbs
+	[ ] orbs can be defensive or offensive
+	[ ] orbs can spin around player or be set to stay in a static position around the player
+	[ ] orbs can cast specific essents spells if augmented with an essents
+	[ ] orbs can damage enemies on contact if augmented to be hit with contact.. NOTE if essents are augmented to cast spells they don't damage on touch.
+
+	[ ] Systems:
+		[ ] equipment system
+		[ ] materia system
+		[ ] magic combo system
+		[ ] attack combo system
+		[ ] equipment upgrade system
+		[ ] magic upgrade system
+		[ ] enchantment system for all equipment
+		[ ] equipment familiarity leveling system
+		[ ] magic familiarity leveling system
+		[ ] planet orbiting buff system
+		[ ] temporary enhancement items
+		[ ] astrology soul shield system
+		[ ] mob ability/essense effectiveness learning system
+		[ ] orbital essense around player system
+
+	[ ] quest types: 
+		[ ] Collection quests = you go around and pick items up from spawned locations in the world
+		[ ] Unique item quests = obtain a unique item from a mob, or from creating a rare item with your job skills
+		[ ] Killing quests = kill certain mob(s) a certain number of times
+		[ ] Kill collection quests = kill mobs for drops of items to collect
+		[ ] purchasing quests = earn enough gold to buy a particular item from a shop
+		[ ] reputation quests = earn a favorable reputation with a faction in order to complete a quest
+		[ ] ability quests = use an ability or magic spell or attack to open or move or set fire to or unlock a particular spot.
+		[ ] quest lines = a line of quests which happen in serial to one another and have an ending with greater rewards
+		[ ] Have quest nodes which have colored ! Marks that signify which type of quest it is... Gold Collection quest, Red killing mob quest, Blue creating item, etc
+
+	[ ] create input for start,select,x,y,a,b,left_tab,right_tab
+	[ ] setup sprite sheet animation for 4 way movement
+	[ ] create a simple Stats character sheet including:
+		[ ] Attack
+		[ ] Defense
+		[ ] Speed
+		[ ] Health Points
+		[ ] Magic Points
+	[ ] create a monster with:
+		[ ] spritesheet
+		[ ] stats
+		[ ] movement AI
+		[ ] attack AI
+	[ ] create a shop
+	[ ] create a player with 3 different magic abilities
+	[ ] create 3 different monsters to test different effectiveness of spells against
+	[ ] create globe experience collection
+	[ ] create item collection triggers for different power ups / item collections
+	[ ] create a bestiary of all enemies
+		[ ] elemental affinities and status immunities are discovered after using a spell / ability on the enemy
+	[ ] status effects list:
+		[ ] poison
+		[ ] dazed
+		[ ] stunned
+		[ ] feared
+		[ ] berserked
+		[ ] zombied
+		[ ] slowed
+		[ ] silenced
+		[ ] smalled
+		[ ] enlarged
+		[ ] "sheeped" or random small animal
+		[ ] stoned
+		[ ] frozen
+		[ ] burning
+		[ ] confused
+		[ ] disarmed
+		[ ] 
+	[ ] have auto populated menu which brings the top items that can cure your current effect to the top of the menu automaticaly when you are affected by the status effect, along side other main actions such as attack defend etc.
+	[ ] in general make making choices quick in the game by automating dynamicaly to each enemy encounter
+	[ ] main choices: attack (either phyical or magical), defend (either phsyical or magical), remedy (either item or spell)
+	[ ] create charging attacks like secret of mana (both physical and magical)
+	[ ] be able to jump
+		[ ] have a double jump
+		[ ] allow for jump height(s) to increase in height by leveling
+			[ ] puzzles and areas are unreachable until you can jump heigh enough.
+	[ ] have item instanses where an item is visable to you until you have collected it once then it is no longer visable to you, but others who have not collected the item they can still see it in it's location for them to collect as well.
+	[ ] have special monsters which require unique abilities/magic/items/attacks/etc to defeat them and make long quests lines to learn or obtain the skill(s) nessasary to defeate the special type of monster.
+	[ ] have a quest log that is short and simple and to the point so at any time you can read it quickly and know where you are going and what you need to do in your quest... don't have long quest dialogs.
+	[ ] possibly be able to add two companions to your party and be able to switch between them... this feature will be on the back burner for a while tho.
+	[ ] Level Up Weapons by equipping them and using them
+	[ ] Level up materia by having them equiped and using them
+	[ ] Action RPG
+	[ ] Combo actions
+	[ ] Cast magic spells in real time
+	[ ] Cast buff magic
+	[ ] 12 or more different spell effects and elements
+	[ ] Towns with:
+		[ ] Smart NPC
+		[ ] Armor shops
+		[ ] Item shops
+		[ ] Specialty shops i.e. job specific items
+		[ ] ** maybe special item drops locations in boxes or jars or something
+		[ ] Quests from NPC's
+		[ ] Quests from builition boards
+	[ ] Weapons with elemental defenses
+	[ ] Each monster is particuarly weak against a players elements, but no two players elements are the same weakness.
+	[ ] Player's will be able to create auto load outs which automatically equip essesnes in choosen slots which are strongest against mobs.
+	[ ] players learn which essense are strongest against mobs by fighting mobs and looking at historical attack damage done by each type of essense and or skill used against a mob. 
+	[ ] there will be an achievment for finding out all information of different sets of mobs in the game... i.e. for all mobs in a given region you have discovered all weaknesses and status information about those mobs by fighting them enough times to map out all essense effects as well as learn any new skills the mob uses while attacking you.
+	[ ] there will also be different loot rewards for killing a mob fast. Each mob will be killable in 5 seconds or less with the correct load out and correct combination of attack and defend rotation. The quicker the mob is killed the more likely you will get better loot.
+	[ ] there will also be an achievement for killing mobs as fast as possible. Like in Final Fantasy 13.
+	[ ] monsters have an attack rotation like in Blade and soul, Players can memorize the attack rotation and use counter attacks or spells or defends against the monster. So a monster may attack high then low then middle, and a player may block the high attack or attack low then block the low attack and attack high then block the middle and then counter attack middle or something like this. Think in terms of Fighting games like "soul calibur" where certain attacks counter other attacks.
+	[ ] MMO
+	[ ] Global Score for things like killing monsters, earning levels, crafting weapons etc.
+	[ ] No level cap, infinite levels, but an ever increasing gap between exp earned to level up.
+	[ ] **Maybe perma death.
+	[ ] Playing options: Either persistant or session based
+		[ ] persistant means you need to create an account. prompt when a player leaves game
+			and when player first starts
+	[ ] 	session base means you don't mind losing your character after you stop playing.
+	[ ] Have a demo of the game that players can just hop into without creating an account.
+	[ ] Get the player right into the action.
+
+
 [X] Move project to C:\
 [X] move bottom links up more in the css file webrpg.css
 [X] move site into /public and node_module up one level
@@ -48,213 +325,45 @@ steps are to run npm update to update all package dependancies
 [X] create 'crpTokenHandshake' socket.io method instead of using 'requestEmail'
 [X] get Tiled json files loaded and displaying maps in client.js
 [X] remove the extra code on top of the webrpg.js file the canvas stuff
-
-[ ] Regularly update checks:
-	[ ] update the README.md with game information, specs, controls, server configs etc
-	[ ] edit license with MIT license and any additional license used from other assets
-	[ ] update privacy policy and terms of service
-	[ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
-	[ ] Make sure that all Audio is served both as .mp3 and .ogg
-	
-[ ] inside 'public'
-	[ ] edit the fav.io images with webrpg branding
-	[ ] edit the human.txt file with correct information
-	[ ] edit the robot.txt 
-	[ ] create a 404.html page with webrpg.io branding
-	[ ] edit the icon.png with webrpg.io branding
-	[ ] edit license with MIT license and any additional license used from other assets
-	[X] remove README.md
-	[ ] edit the site.webmanifest file with correct information
-	[ ] edit tile.png with webrpg.io branding
-	[ ] edit tile-wide.png with webrpg.io branding
-	[ ] edit or remove .htaccess if node.js needs it or not.
-[ ] inside 'webrpg_Dev'
-	[ ] update the README.md with game information, specs, controls, server configs etc
-	[ ] edit .editorconfig with correct information
-	[ ] make sure .env-example is up-to-date with .env
-	[ ] edit .gitattributes with correct information
-	[ ] edit gitignore with correct file and directories to ignore.
-	[ ] update HTML5 video game tutorial with latest additions.
-	[ ] figure out why webrpg_wrapper isn't working.
-	
-[ ] need to create a CRON job which tries to ping a client and if no responce sets crpToken to null and loggedIn to 0
-[ ] Add a background image to index.html with game assets
+[X] Change email validation link to show login form instead of signup form
+[X] List of settings here
+	[X] this.sound.pauseOnBlur
+	[X] Fullscreen option document.documentElement.requestFullscreen();
+	[X] sound effect volume
+	[X] music volume
+	[X] show ping / latency
+	[X] show FPS
+	[X] show player count
 [X] fix signup completion message to actually display 'Successfully signed up check your email to validate account.'
-[ ] set "Please select captcha first" message invisible when clicking login, signup etc.
-[ ] change forgot password token to forgot_password={token} for email generation, and GET response code
-[ ] make login responsive and not static size.
-[ ] write out workflow for pixel art creation
-[ ] write out workflow for Tiled json file import into webrpg.io based on client.js code
+[X] set "Please select captcha first" message invisible when clicking login, signup etc.
 [X] create loading screen 
-[ ] add percentage text to loading screen
-[ ] add randomly selected concept art as loading screen background
 [X] create scene transitions from loading screen to title scene
 [X] create scene transitions from title scene to settings scene
 [X] create scene transitions from title scene to character scene
 [X] create scene transitions from character scene to game scene
 [X] create scene transition from game scene to title scene
-[ ] create mini map code.
 [X] add AddThis buttons to main page.
 [X] add chimp mail email list to front page.
-[ ] make mailing list page look better by centering and adding a colorful background image.
 [X] compile all marketing notes from evernote AND USE THEM.
 [X] Call ZOHO customer service about email accounts not showing up on Mail Accounts. Newsletter and Admin
-[ ] purchase privacy policy and terms of service and add them to webrpg.io site before going live with the game.
-[ ] Make sure that all Audio is served both as .mp3 and .ogg
-[ ] In Settings have the option to set pause on blur or not 
-[ ] settings also will have master volume, SFX volume, Music volume
-[ ] run https://website.grader.com over webrpg.io and follow improvement suggestions
-[ ] limit one connection per IP address
-[ ] 
-
-	[ ] 
-	[ ] 
+[X] In Settings have the option to set pause on blur or not 
+[X] settings also will have master volume, SFX volume, Music volume
 [X] ***Finish Game Design Document Template
 [X] ***Finish evaluating Phaser Editor
 [X] ***Gut client.js code and put in new Tiled Workflow code.
-[X] ***Look into javascript obvuscator git hook library
-[ ] ***Create the 
+[X] ***Create the 
 	[X] 1)loading, 
 	[X] 2)Title, 
-	[ ] 3)settings, 
-	[ ] 4)character creation scenes
+	[X] 3)settings, 
+	[X] 4)character creation scenes
 	[X] 5)game scene
 [X] ***get piskel website locally setup evaluate it.
 [X] ***try piskel desktop app evaluate it.
-[X] ***write out all the tools that are being used for webrpg.io's development process: phaser, node.js, notepad++, Tiled, piskel, etc
-
-[ ] Terrain effects
-	[ ] Slow down in water
-	[ ] Slow down in sand
-	[ ] Speed up on conveyer belt
-	[ ] Damage on spikes
-	[ ] Look for more terrain types and effects
-	
-[ ] Use the mini map example you found on forums
-[ ] create quests which are simple to accomplish and take minimal text dialog to understand what you are suppose to do
-[ ] questing should be quick to pick up quests and quick to finish them.
-[ ] since quests are fast to complete there needs to be ample amounts of them to keep the game fun
-[ ] stream lining quests will eventually allow for procedurally generated quests
-[ ] essents are what all the elements are called
-[ ] you can augment essent casts with a damage over time effect. damage over time has a time limit dependant on its level. three ticks for level 0 over a course of 9 seconds. intervals can shrink and time limit can increase as it is leveled
-[ ] essents can be augmented with a stun effect. stun effect lasts 0.5 seconds for level 0 and can happen 2% of the time at level 0. both the duration and probability of a stun effect can increase as stun is leveled up stuns interupt any cast time spells
-[ ] essents can be augmented with different area of effect shapes, 
-	[ ] circle area, 
-	[ ] cone area, 
-	[ ] donut area, 
-	[ ] line area
-[ ] essents can be augmented with projectial shapes, 
-	[ ] single projectile,
-	[ ] double straight 
-	[ ] double front and back, 
-	[ ] triple straight 
-	[ ] trible even around, 
-	[ ] double V 
-	[ ] double left and right, 
-	[ ] triple W, 
-	[ ] quadrupal straight, 
-	[ ] quadrupal cross, 
-[ ] essents can be augmented with a spread effect. near by enemies get hit with a diminishing returns essents hit
-[ ] you can have essents orbs that circle you, up to 3 different orbs
-[ ] orbs can be defensive or offensive
-[ ] orbs can spin around player or be set to stay in a static position around the player
-[ ] orbs can cast specific essents spells if augmented with an essents
-[ ] orbs can damage enemies on contact if augmented to be hit with contact.. NOTE if essents are augmented to cast spells they don't damage on touch.
-
-[ ] quest types: 
-	[ ] Collection quests = you go around and pick items up from spawned locations in the world
-	[ ] Unique item quests = obtain a unique item from a mob, or from creating a rare item with your job skills
-	[ ] Killing quests = kill certain mob(s) a certain number of times
-	[ ] Kill collection quests = kill mobs for drops of items to collect
-	[ ] purchasing quests = earn enough gold to buy a particular item from a shop
-	[ ] reputation quests = earn a favorable reputation with a faction in order to complete a quest
-	[ ] ability quests = use an ability or magic spell or attack to open or move or set fire to or unlock a particular spot.
-	[ ] quest lines = a line of quests which happen in serial to one another and have an ending with greater rewards
-	[ ] Have quest nodes which have colored ! Marks that signify which type of quest it is... Good Collection quest, Red killing mob quest, Blue creating item, etc
-
-
-[ ] Create character creation/selection screen
-	[ ] have a name textbox 
-[ ] Look into payments for the game https://www.npmjs.com/package/node-payments  https://www.simplify.com/commerce/docs/sdk/nodejs  http://www.catonmat.net/blog/stripe-payments-with-node/
-[ ] add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
-[ ] move all except input to server side
-[X] create 4 way d-pad input keys
-[ ] create input for start,select,x,y,a,b,left_tab,right_tab
-[ ] setup sprite sheet animation for 4 way movement
-[ ] create a simple Stats character sheet including:
-	[ ] Attack
-	[ ] Defense
-	[ ] Speed
-	[ ] Health Points
-	[ ] Magic Points
-[ ] create a monster with:
-	[ ] spritesheet
-	[ ] stats
-	[ ] movement AI
-	[ ] attack AI
-[ ] create a shop
-[ ] create a player with 3 different magic abilities
-[ ] create 3 different monsters to test different effectiveness of spells against
-[ ] create globe experience collection
-[ ] create item collection triggers for different power ups / item collections
-[ ] create a bestiary of all enemies
-	[ ] elemental affinities and status immunities are discovered after using a spell / ability on the enemy
-[ ] status effects list:
-	[ ]
-[ ] have auto populated menu which brings the top items that can cure your current effect to the top of the menu automaticaly when you are affected by the status effect, along side other main actions such as attack defend etc.
-[ ] in general make making choices quick in the game by automating dynamicaly to each enemy encounter
-[ ] main choices: attack (either phyical or magical), defend (either phsyical or magical), remedy (either item or spell)
-[ ] create charging attacks like secret of mana (both physical and magical)
-[ ] be able to jump
-	[ ] have a double jump
-	[ ] allow for jump height(s) to increase in height by leveling
-		[ ] puzzles and areas are unreachable until you can jump heigh enough.
-[ ] have item instanses where an item is visable to you until you have collected it once then it is no longer visable to you, but others who have not collected the item they can still see it in it's location for them to collect as well.
-[ ] have special monsters which require unique abilities/magic/items/attacks/etc to defeat them and make long quests lines to learn or obtain the skill(s) nessasary to defeate the special type of monster.
-[ ] have a quest log that is short and simple and to the point so at any time you can read it quickly and know where you are going and what you need to do in your quest... don't have long quest dialogs.
-[ ] possibly be able to add two companions to your party and be able to switch between them... this feature will be on the back burner for a while tho.
-
-
-
-[ ] Level Up Weapons by equipping them and using them
-[ ] Level up materia by having them equiped and using them
-[ ] Action RPG
-[ ] Combo actions
-[ ] Cast magic spells in real time
-[ ] Cast buff magic
-[ ] 12 or more different spell effects and elements
-[ ] Towns with:
-	[ ] Smart NPC
-	[ ] Armor shops
-	[ ] Item shops
-	[ ] Specialty shops i.e. job specific items
-	[ ] ** maybe special item drops locations in boxes or jars or something
-	[ ] Quests from NPC's
-	[ ] Quests from builition boards
-[ ] Weapons with elemental defenses
-[ ] Each monster is particuarly weak against a players elements, but no two players elements are the same weakness.
-[ ] MMO
-[ ] Global Score for things like killing monsters, earning levels, crafting weapons etc.
-[ ] No level cap, infinite levels, but an ever increasing gap between exp earned to level up.
-[ ] **Maybe perma death.
-[ ] Playing options: Either persistant or session based
-	[ ] persistant means you need to create an account. prompt when a player leaves game
- 		and when player first starts
-[ ] 	session base means you don't mind losing your character after you stop playing.
-[ ] Have a demo of the game that players can just hop into without creating an account.
-[ ] Get the player right into the action.
-
-[ ] update terms of service page with more terms of service options from https://termsfeed.com/wizard/terms-conditions
-[ ] create a News RSS feed page
-[ ] create a screenshot page
-[ ] create a features list page
-[ ] create a requirements page
-[ ] create a press kit
+[X] Create character creation/selection screen
+	[X] have a name textbox 
 [X] create a Privacy Policy
 [X] create a Terms of Service
-[X] create a share on twitter button
-[X] create a share on reddit button
-[ ] create background music to main page
-[ ] add button to toggle background music on/off
-[X] create an itch.io account to post game to https://itch.io/developers
-[ ] create many game accounts to show off the game on i.e. jolt games, and others do a search for forums
+[X] move all except input to server side
+[X] create 4 way d-pad input keys
+[X] remove README.md
+[X] Add a delete character button on the character scene
