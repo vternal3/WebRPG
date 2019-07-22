@@ -1,9 +1,9 @@
 # webrpg.io
 An Action Role Playing Game for the web.
 
-#Features
+# Features
 
-#Applications, Technologies and Resources used
+# Applications, Technologies and Resources used
 * [Node.js](https://nodejs.org/)
 * [Socket.io](https://socket.io/)
 * [Phaser 3](https://phaser.io/phaser3)
@@ -24,12 +24,12 @@ An Action Role Playing Game for the web.
 * [CSS 3](https://www.w3schools.com/css/)
 * [Javascript](https://www.w3schools.com/js/)
 
-#Documentation
+# Documentation
 
-#Libraries
+# Libraries
 
-#Requirements
+# Requirements
 
-#References
+# References
 
-#Change Log
+# Change Log
