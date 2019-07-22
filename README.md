@@ -20,9 +20,9 @@ An Action Role Playing Game for the web.
 * [notepad++](https://notepad-plus-plus.org/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [Git](https://git-scm.com/)
-* HTML 5
-* CSS 3
-* Javascript
+* [HTML 5](https://www.w3schools.com/html/html5_intro.asp)
+* [CSS 3](https://www.w3schools.com/css/)
+* [Javascript](https://www.w3schools.com/js/)
 
 #Documentation
 
