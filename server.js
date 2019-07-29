@@ -80,8 +80,10 @@ app.get('/:token', user.index);
 
 // server socket.io code
 var players = {};
+var players_shots = {};
 var movementTime = {};
 var velocity_speed = 0.2;
+var server_update_frequency = 1000 / 60;
 
 io.on('connection', function(socket){
 	if(socket.handshake.address == '::ffff:194.44.240.61') //blacklist
@@ -328,6 +330,9 @@ io.on('connection', function(socket){
 			playerId: socket.id,
 			name: ""//characterName ? characterName : "tester-" + socket.id.substring(0, 4)
 		};
+		players_shots[socket.id] = {
+			time: 0
+		};
 		
 		console.log("Size of players: " + sizeof(players) + " bytes");
 		console.log("character name : " + characterName);
@@ -377,18 +382,33 @@ io.on('connection', function(socket){
 	socket.on('latency_ping', function() {
 		socket.emit('latency_pong');
 	});
+
+	socket.on('player_shot', function(point){
+		if(players_shots[socket.id].time > 1000){
+			console.log("x: " + point.x + " y: " + point.y);
+			players_shots[socket.id].time = 0;
+		} else {
+			console.log("too soon");
+		}
+	});
 });
 
 //Calculate player movement and colision detection
 setInterval(() => {
 	//check the list of player flags to see if any player is moving
+	
+	// players_shots[socket.id].time += server_update_frequency;
 	for(var player in players) {
+		//console.log(players);
+
+		var start_time = Date.now();
+		var delta = start_time - movementTime[players[player].playerId];
+		movementTime[players[player].playerId] = start_time;
+
+		players_shots[player].time += delta;
 		//not idle
 		if(players[player].direction != 8)
 		{
-			var start_time = Date.now();
-			var delta = start_time - movementTime[players[player].playerId];
-			movementTime[players[player].playerId] = start_time;
 			var velocity_x = 0;
 			var velocity_y = 0;
 			//set velocity_x and velocity_y according to direction
@@ -428,7 +448,7 @@ setInterval(() => {
 			players[player].y += Math.round(delta * velocity_y);
 		}
 	}
-}, 1000/60);
+}, server_update_frequency);
 
 //broadcast all player's positions
 setInterval(() => {

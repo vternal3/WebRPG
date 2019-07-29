@@ -59,6 +59,13 @@ class loading_scene extends Phaser.Scene {
 		this.load.image('save_settings_hover', "assets/images/save_settings_hover.png");
 
 		this.load.image('x_button', "assets/images/X_button.png");
+
+		this.load.image('bullet', "assets/spritesheets/bullet.png");
+
+		//TODO: Use this line to change the cursor when hovering over contexts
+		//in the game. Default to a aiming site [X] for shooting direction or
+		//a sword icon if attack with weapon is equipped, etc.
+		this.input.setDefaultCursor('url(assets/Cursors/cursor.cur), pointer');
 		
 		let loadingBar = this.add.graphics({
 			fillStyle: {

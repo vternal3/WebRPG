@@ -1,3 +1,19 @@
+class bullet {
+	constructor(x, y, angle) {
+		this.x = x;
+		this.y = y;
+		this.spdX = Math.cos(angle/180*Math.PI);
+		this.spdY = Math.sin(angle/180*Math.PI);
+		this.angle = angle;
+		this.alive = false;
+		this.bullet_speed = 0.5;
+	}
+	update(delta){
+		this.x += this.spdX * delta * this.bullet_speed;
+		this.y += this.spdY * delta * this.bullet_speed;
+	}
+}
+
 class game_scene extends Phaser.Scene {
 	constructor() {
 		super({
@@ -81,6 +97,9 @@ class game_scene extends Phaser.Scene {
 		this.player = this.physics.add.sprite(this.screen_center_x, this.screen_center_y, 'walk_template');
 		this.player.setDepth(11);
 
+		this.bullet = this.physics.add.sprite(0,0, 'bullet');
+		this.bullet.visible = false;
+
 		//Other Players Code
 		this.otherPlayers = this.physics.add.group();
 		this.otherPlayersPositions = {};
@@ -90,14 +109,23 @@ class game_scene extends Phaser.Scene {
 		//Directional Animation Code
 		//TODO: make a load from JSON function for all animations in the area
 		//the player is located at.
+		// this.anims.create({
+		// 	key: 'idle',
+		// 	frames: [{
+		// 		key: 'walk_template',
+		// 		frame: 8
+		// 	}
+		// 	],
+		// 	frameRate: 20
+		// });
 		this.anims.create({
 			key: 'idle',
-			frames: [{
-				key: 'walk_template',
-				frame: 8
-			}
-			],
-			frameRate: 20
+			frames: this.anims.generateFrameNumbers('walk_template', {
+				start: 8,
+				end: 8
+			}),
+			repeat: -1,
+			frameRate: 15
 		});
 		this.anims.create({
 			key: 'downLeft',
@@ -171,8 +199,13 @@ class game_scene extends Phaser.Scene {
 			repeat: -1,
 			frameRate: 15
 		});
+		//this.anims.remove('upRight');
+		
+		// console.log(this.anims.anims.entries);
 
 		//let ui_upscaled = this.add.sprite(0, 0, "ui_upscaled").setOrigin(0).setDepth(11);
+
+		
 
 		this.mapInfinite = this.make.tilemap({
 			key: "mapInfinite"
@@ -307,10 +340,21 @@ class game_scene extends Phaser.Scene {
 			"idle"		: true,
 		}
 		this.time_interval_counter = 0;
+		this.shot_interval_counter = 0;
 
-		// this.musicVolume_slider = new slider(500,340,400,4,0,"h", this);
-		// this.musicVolume_slider.trackImage.setDepth(5);
-		// this.musicVolume_slider.barImage.setDepth(5);
+		this.leftPressed = false;
+		this.input.on('pointerup', function (pointer) {
+			if(game.input.activePointer.buttons == 0) {
+				self.leftPressed = false;
+			}
+		});
+		this.input.on('pointerdown', function (pointer) {
+			if(game.input.activePointer.buttons == 1) {
+				self.leftPressed = true;
+			}
+		});
+
+		this.player_bullets = [];
 	}
 
 	//sets all direction toggles to true except the direction passed in.
@@ -328,11 +372,39 @@ class game_scene extends Phaser.Scene {
 		delta_time = start_time - end_time;
 		end_time = start_time;
 		this.time_interval_counter += delta_time;
+		this.shot_interval_counter += delta_time;
 		if(this.time_interval_counter > 3000){
 			if(this.showFPS) {
 				console.log("FPS: " + game.loop.actualFps);
 			}
 			this.time_interval_counter = 0;
+		}
+
+		if(this.shot_interval_counter > 1000 && this.leftPressed) { //left mouse button is pressed
+			//send the x and y cordinates to the server requesting to shoot
+			//check on client side if the shot interval time has been enough
+			//check on server side if shot interval has been long enough and reject 
+			//shot emits if time hasn't be long enough between shots.
+			this.socket.emit("player_shot", {x:game.input.activePointer.x, y:game.input.activePointer.y})
+			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
+			this.leftPressed = false;
+			this.shot_interval_counter = 0;
+
+			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
+			angle = Math.atan2(9+game.input.activePointer.y - this.player.y, 9+game.input.activePointer.x - this.player.x) / Math.PI * 180;
+			this.player_bullets[0] = new bullet(this.player.x, this.player.y, angle);
+			this.bullet.visible = true;
+			this.bullet.setDepth(6);
+			this.bullet.angle = angle - Math.PI * 90 + 9;
+			// this.bullet.x = game.input.activePointer.x;
+			// this.bullet.y = game.input.activePointer.y;
+
+		}
+
+		for(var key in this.player_bullets) {
+			this.player_bullets[key].update(delta_time);
+			this.bullet.x = this.player_bullets[key].x;
+			this.bullet.y = this.player_bullets[key].y;
 		}
 
 		//reset velocities to zero to remove previous calculations
