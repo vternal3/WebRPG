@@ -1,4 +1,7 @@
 Features List:
+	[ ] visitor counter on front page
+	[X] current number of players online
+	[ ] change how player nickname logins work by checking if they belong to an account via SQL query on their socket.id
 	[ ] make player shoot action https://rainingchain.com/tutorial/nodejs
 	[ ] make player health, magic stats in webrpg database
 	[ ] create collision detection and health removal of players shotting other players

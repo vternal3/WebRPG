@@ -391,11 +391,11 @@ class game_scene extends Phaser.Scene {
 			this.shot_interval_counter = 0;
 
 			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
-			angle = Math.atan2(9+game.input.activePointer.y - this.player.y, 9+game.input.activePointer.x - this.player.x) / Math.PI * 180;
-			this.player_bullets[0] = new bullet(this.player.x, this.player.y, angle);
+			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
+			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
 			this.bullet.visible = true;
 			this.bullet.setDepth(6);
-			this.bullet.angle = angle - Math.PI * 90 + 9;
+			this.bullet.angle = angle - Math.PI * 90 + 10;
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
 
@@ -403,8 +403,8 @@ class game_scene extends Phaser.Scene {
 
 		for(var key in this.player_bullets) {
 			this.player_bullets[key].update(delta_time);
-			this.bullet.x = this.player_bullets[key].x;
-			this.bullet.y = this.player_bullets[key].y;
+			this.bullet.x = this.player_bullets[key].x + this.mapInfiniteLayer1.x - this.map_center_x;
+			this.bullet.y = this.player_bullets[key].y + this.mapInfiniteLayer1.y - this.map_center_y;
 		}
 
 		//reset velocities to zero to remove previous calculations

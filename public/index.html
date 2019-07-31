@@ -76,6 +76,7 @@
 							<div align="center"><a href="javascript:;" id="forgot_form_link" onclick="forgot_form();">forgot password</a></div>
 						</form>
 					</div>
+					<div id="player_count" align="center" style="color: white">connected players: _</div>
 					<div align="center" id="signupform"  style="display:none;">
 						<div align="center"><label id="signup_message"></label></div>
 						<form method="post" action="/" autocomplete="off">
@@ -151,6 +152,13 @@
 		
 		<!-- Socket.io Scripts -->
 		<script src="/socket.io/socket.io.js"></script>
+		<!-- Open a socket to get player count information -->
+		<script>
+			var socket = io();
+			socket.on("player_count",function(count){
+				document.getElementById("player_count").innerHTML = "connected players: " + count;
+			});
+		</script>
 		
 		<!-- Google reCAPTCHA Scripts -->
 		<script src='https://www.google.com/recaptcha/api.js'></script>

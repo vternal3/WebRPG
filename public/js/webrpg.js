@@ -21,6 +21,7 @@ jQuery.loadScript = function (url, callback) {
 }
 function start()
 {
+	//Hide all front page content
 	document.getElementById("login").classList.add("nodisplay");
 	document.getElementById("top_left_overlay").classList.add("nodisplay");
 	document.getElementById("top_right_overlay").classList.add("nodisplay");
@@ -40,6 +41,8 @@ function start()
 		document.getElementById("game_canvas").style.display = "block";
 		document.getElementById("game_canvas").height = "100vh";
 	}, 600);
+	//disconnect socket for front page player_count information.
+	socket.disconnect();
 	//Loads the client game script dynamically
 	//TODO: Dynamically load all js in folder.
 	$.loadScript('js/globals.js', function(){
