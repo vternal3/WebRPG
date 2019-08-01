@@ -398,13 +398,18 @@ io.on('connection', function(socket){
 		socket.emit('latency_pong');
 	});
 
-	socket.on('player_shot', function(point){
+	socket.on('player_cast', function(spell){
+		
 		if(players_shots[socket.id].time > 1000){
-			console.log("x: " + point.x + " y: " + point.y);
-			players_shots[socket.id].time = 0;
+			console.log("x: " + spell.x + " y: " + spell.y + " Spell type: " + spell.type + " Essence type: " + spell.essence);
+			players_shots[socket.id].time = 0; 
 		} else {
 			console.log("too soon");
 		}
+
+		// check for spell 2
+
+		// check for spell 3
 	});
 });
 

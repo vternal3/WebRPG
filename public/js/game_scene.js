@@ -1,5 +1,8 @@
 class bullet {
-	constructor(x, y, angle) {
+	
+	constructor(x, y, angle, type, essence) {
+		this.type = type;
+		this.essence = essence;
 		this.x = x;
 		this.y = y;
 		this.spdX = Math.cos(angle/180*Math.PI);
@@ -12,6 +15,7 @@ class bullet {
 		this.x += this.spdX * delta * this.bullet_speed;
 		this.y += this.spdY * delta * this.bullet_speed;
 	}
+
 }
 
 class game_scene extends Phaser.Scene {
@@ -98,7 +102,12 @@ class game_scene extends Phaser.Scene {
 		this.player.setDepth(11);
 
 		this.bullet = this.physics.add.sprite(0,0, 'bullet');
+		this.bullet2 = this.physics.add.sprite(0,0, 'bullet2');
+		this.bullet3 = this.physics.add.sprite(0,0, 'bullet3');
 		this.bullet.visible = false;
+		this.bullet2.visible = false;
+		this.bullet3.visible = false;
+
 
 		//Other Players Code
 		this.otherPlayers = this.physics.add.group();
@@ -386,7 +395,7 @@ class game_scene extends Phaser.Scene {
 			//check on client side if the shot interval time has been enough
 			//check on server side if shot interval has been long enough and reject 
 			//shot emits if time hasn't be long enough between shots.
-			this.socket.emit("player_shot", {x:game.input.activePointer.x, y:game.input.activePointer.y})
+			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
 			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
 			this.leftPressed = false;
 			this.shot_interval_counter = 0;
@@ -399,29 +408,71 @@ class game_scene extends Phaser.Scene {
 			this.bullet.angle = angle - Math.PI * 90 + 10;
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
+
+			// Additional Effects
+			// - Logic: Essence (calculate how it impacts the object it is targeting)
+			// - Visual: Add an animation variable to be ran in the for loop below to be displayed
+			//  - Animation
+			//  - Additional effects such as: speed, distance, special effects such as duplicating, etc..
+			
 		}
 
 		// 2nd Spell
 		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_1"]["keycode"]).isDown)
 		{
-			// emit to server
+			//send the x and y cordinates to the server requesting to shoot
+			//check on client side if the shot interval time has been enough
+			//check on server side if shot interval has been long enough and reject 
+			//shot emits if time hasn't be long enough between shots.
+
+			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
+			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
+			this.leftPressed = false;
+			this.shot_interval_counter = 0;
+
+			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
+			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
+			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
+			this.bullet.visible = true;
+			this.bullet.setDepth(6);
+			this.bullet.angle = angle - Math.PI * 90 + 10;
+			// this.bullet.x = game.input.activePointer.x;
+			// this.bullet.y = game.input.activePointer.y;
+
+		
 			
-			// Adjust angle
 		}
 
 		// 3rd Spell
 		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_2"]["keycode"]).isDown)
 		{
-			// emit to server
+			//send the x and y cordinates to the server requesting to shoot
+			//check on client side if the shot interval time has been enough
+			//check on server side if shot interval has been long enough and reject 
+			//shot emits if time hasn't be long enough between shots.
+			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
+			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
+			this.leftPressed = false;
+			this.shot_interval_counter = 0;
 
-			// Adjust angle
+			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
+			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
+			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
+			this.bullet.visible = true;
+			this.bullet.setDepth(6);
+			this.bullet.angle = angle - Math.PI * 90 + 10;
+			// this.bullet.x = game.input.activePointer.x;
+			// this.bullet.y = game.input.activePointer.y;
+
+			
+
 		}
 
 		// Updates the sprites location
 		for(var key in this.player_bullets) {
 			this.player_bullets[key].update(delta_time);
 			this.bullet.x = this.player_bullets[key].x + this.mapInfiniteLayer1.x - this.map_center_x;
-			this.bullet.y = this.player_bullets[key].y + this.mapInfiniteLayer1.y - this.map_center_y;
+			this.bullet.y = this.player_bullets[key].y + this.mapInfiniteLayer1.y - this.map_center_y;			
 		}
 
 		//reset velocities to zero to remove previous calculations
