@@ -402,15 +402,15 @@ class game_scene extends Phaser.Scene {
 		}
 
 		// 2nd Spell
-		if(false)
+		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_1"]["keycode"]).isDown)
 		{
 			// emit to server
-
+			
 			// Adjust angle
 		}
 
 		// 3rd Spell
-		if(false)
+		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_2"]["keycode"]).isDown)
 		{
 			// emit to server
 
