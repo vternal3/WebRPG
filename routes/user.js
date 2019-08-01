@@ -6,7 +6,7 @@ require('dotenv').config();
 const request = require('request');
 
 var Recaptcha = require('express-recaptcha').Recaptcha;
-var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
+// var recaptcha = new Recaptcha(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
 
 
 var salt_factor = 12;

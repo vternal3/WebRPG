@@ -7,15 +7,30 @@ var express = require('express')
   , path = require('path');
 require('dotenv').config();
 var session = require('express-session');
+var sizeof = require('object-sizeof');
+var fs = require("fs");
+// var profiler = require('v8-profiler');
+// var startProfiling = function(duration) {
+// 	console.log("Starting profiler for : " + duration/1000 + " seconds");
+// 	profiler.startProfiling('1', true);
+// 	setTimeout(function(){
+// 		var profile1 = profiler.stopProfiling('1');
+// 		profile1.export(function(error, result){
+// 			fs.writeFile('./profile.cpuprofile', result);
+// 			profile1.delete();
+// 			console.log("Profile saved");
+// 			console.log("Stoping profiler");
+// 		});
+// 	},duration);
+// };
+// startProfiling(20000);
 var app = express();
-var sizeof = require('object-sizeof')
 //Redirect 'http' requests to secure 'https'
 http.createServer(function (req, res) {
 	//TODO: add in parameters 'req.params.' so that we can get SSL working for www.webrpg.io
     res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
     res.end();
 }).listen(process.env.HTTP_PORT);
-var fs = require("fs");
 const options = {
   key: fs.readFileSync(process.env.DOMAIN_KEY),
   cert: fs.readFileSync(process.env.DOMAIN_CERT)
