@@ -380,6 +380,7 @@ class game_scene extends Phaser.Scene {
 			this.time_interval_counter = 0;
 		}
 
+		// Bullet Spell
 		if(this.shot_interval_counter > 1000 && this.leftPressed) { //left mouse button is pressed
 			//send the x and y cordinates to the server requesting to shoot
 			//check on client side if the shot interval time has been enough
@@ -398,9 +399,25 @@ class game_scene extends Phaser.Scene {
 			this.bullet.angle = angle - Math.PI * 90 + 10;
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
-
 		}
 
+		// 2nd Spell
+		if(false)
+		{
+			// emit to server
+
+			// Adjust angle
+		}
+
+		// 3rd Spell
+		if(false)
+		{
+			// emit to server
+
+			// Adjust angle
+		}
+
+		// Updates the sprites location
 		for(var key in this.player_bullets) {
 			this.player_bullets[key].update(delta_time);
 			this.bullet.x = this.player_bullets[key].x + this.mapInfiniteLayer1.x - this.map_center_x;

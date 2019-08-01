@@ -61,6 +61,8 @@ class loading_scene extends Phaser.Scene {
 		this.load.image('x_button', "assets/images/X_button.png");
 
 		this.load.image('bullet', "assets/spritesheets/bullet.png");
+		this.load.image('bullet2', "assets/spritesheets/bullet2.png");
+		this.load.image('bullet3', "assets/spritesheets/bullet3.png");
 
 		//TODO: Use this line to change the cursor when hovering over contexts
 		//in the game. Default to a aiming site [X] for shooting direction or
