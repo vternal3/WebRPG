@@ -3,12 +3,18 @@ var config = {
   parent: 'game_canvas',
   // width: window.innerWidth * window.devicePixelRatio,
   // height: window.innerHeight * window.devicePixelRatio,
+  // physics: {
+  //   default: 'arcade',
+  //   arcade: {
+  //     debug: false,
+  //     gravity: { y: 0 }
+  //   }
+  // },
   physics: {
-    default: 'arcade',
-    arcade: {
-      debug: false,
-      gravity: { y: 0 }
-    }
+      default: "matter",
+      matter: {
+          // debug: true
+      }
   },
   render:{
 	  pixelArt: true,
