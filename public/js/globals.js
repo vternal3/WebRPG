@@ -1,3 +1,17 @@
+
+// Used in game_scene - Spell class
+const SPELL_TYPES = {
+    SUMMER: 'summer',
+    WINTER: 'winter',
+    SPRING: 'spring'
+}
+// Used in game_scene - Spell class
+const ESSENCE_TYPES = {
+    SHADOW: 'shadow',
+    DARK: 'dark',
+    SILVER: 'silver'
+}
+
 var inputs = {
     "movement_1"    : {
         "toggle" : true, 
@@ -133,3 +147,4 @@ var inputs = {
     },
 }
 var current_inputs = inputs;
+

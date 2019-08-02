@@ -10,6 +10,44 @@ class bullet {
 		this.angle = angle;
 		this.alive = false;
 		this.bullet_speed = 0.5;
+		this.cooldown = 1000;
+		
+		// this.type = SPELL_TYPES.SPRING;
+
+		// if(!this.type){
+		// 	throw new Error('Season is not defined')
+		// }
+
+		switch(this.type){
+			case SPELL_TYPES.SUMMER:
+			// Do something for summer
+			this.bullet_speed = 1;
+			this.cooldown = 500;
+			break;
+			case SPELL_TYPES.WINTER:
+			//Do something for winter
+			this.bullet_speed = .25;
+			this.cooldown = 250;
+			break;
+			case SPELL_TYPES.SPRING:
+			//Do something for spring
+			this.bullet_speed = 2;
+			this.cooldown = 2000;
+			break;
+		}
+
+		switch(this.essence){
+			case ESSENCE_TYPES.SHADOW:
+			// Do something for summer
+			// - This will be setup once Collisions is setup - it will have an effect on what it collides with (collision resolution)
+			break;
+			case ESSENCE_TYPES.DARK:
+			//Do something for winter
+			break;
+			case ESSENCE_TYPES.SILVER:
+			//Do something for spring
+			break;
+		}
 	}
 	update(delta){
 		this.x += this.spdX * delta * this.bullet_speed;
@@ -390,22 +428,32 @@ class game_scene extends Phaser.Scene {
 		}
 
 		// Bullet Spell
-		if(this.shot_interval_counter > 1000 && this.leftPressed) { //left mouse button is pressed
+		if(this.leftPressed) { //left mouse button is pressed
 			//send the x and y cordinates to the server requesting to shoot
 			//check on client side if the shot interval time has been enough
 			//check on server side if shot interval has been long enough and reject 
 			//shot emits if time hasn't be long enough between shots.
-			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
+			
 			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
 			this.leftPressed = false;
-			this.shot_interval_counter = 0;
+			
 
 			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
 			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
-			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
+			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle, SPELL_TYPES.SUMMER, ESSENCE_TYPES.SHADOW);
+			
 			this.bullet.visible = true;
 			this.bullet.setDepth(6);
 			this.bullet.angle = angle - Math.PI * 90 + 10;
+
+			if(this.shot_interval_counter > this.player_bullets[0].cooldown){
+				this.shot_interval_counter = 0;
+				this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:SPELL_TYPES.SUMMER});
+			}
+			else {
+				this.player_bullets[0] = null;
+			}
+			
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
 
@@ -418,53 +466,61 @@ class game_scene extends Phaser.Scene {
 		}
 
 		// 2nd Spell
-		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_1"]["keycode"]).isDown)
+		if(this.input.keyboard.addKey(current_inputs["action_1"]["keycode"]).isDown)
 		{
 			//send the x and y cordinates to the server requesting to shoot
 			//check on client side if the shot interval time has been enough
 			//check on server side if shot interval has been long enough and reject 
 			//shot emits if time hasn't be long enough between shots.
-
-			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
+			
 			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
-			this.leftPressed = false;
-			this.shot_interval_counter = 0;
+			this.leftPressed = false;			
 
 			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
 			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
-			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
+			this.player_bullets[1] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle, SPELL_TYPES.WINTER, ESSENCE_TYPES.DARK);
 			this.bullet.visible = true;
 			this.bullet.setDepth(6);
 			this.bullet.angle = angle - Math.PI * 90 + 10;
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
 
-		
+			if(this.shot_interval_counter > this.player_bullets[0].cooldown){
+				this.shot_interval_counter = 0;
+				this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:SPELL_TYPES.WINTER});
+			}
+			else {
+				this.player_bullets[0] = null;
+			}
 			
 		}
 
 		// 3rd Spell
-		if(this.shot_interval_counter > 1000 && this.input.keyboard.addKey(current_inputs["action_2"]["keycode"]).isDown)
+		if(this.input.keyboard.addKey(current_inputs["action_2"]["keycode"]).isDown)
 		{
 			//send the x and y cordinates to the server requesting to shoot
 			//check on client side if the shot interval time has been enough
 			//check on server side if shot interval has been long enough and reject 
-			//shot emits if time hasn't be long enough between shots.
-			this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:this.bullet.type})
+			//shot emits if time hasn't be long enough between shots.			
 			console.log("x: " + game.input.activePointer.x + " y: " + game.input.activePointer.y);
-			this.leftPressed = false;
-			this.shot_interval_counter = 0;
+			this.leftPressed = false;			
 
 			var angle = Math.atan2(game.input.activePointer.x, game.input.activePointer.y) / Math.PI * 180;
 			angle = Math.atan2(10+game.input.activePointer.y - this.player.y, 10+game.input.activePointer.x - this.player.x) / Math.PI * 180;
-			this.player_bullets[0] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle);
+			this.player_bullets[2] = new bullet(this.player.x - this.mapInfiniteLayer1.x + this.map_center_x, this.player.y - this.mapInfiniteLayer1.y + this.map_center_y, angle, SPELL_TYPES.SPRING, ESSENCE_TYPES.SILVER);
 			this.bullet.visible = true;
 			this.bullet.setDepth(6);
 			this.bullet.angle = angle - Math.PI * 90 + 10;
 			// this.bullet.x = game.input.activePointer.x;
 			// this.bullet.y = game.input.activePointer.y;
 
-			
+			if(this.shot_interval_counter > this.player_bullets[0].cooldown){
+				this.shot_interval_counter = 0;
+				this.socket.emit("player_cast", {x:game.input.activePointer.x, y:game.input.activePointer.y, type:SPELL_TYPES.SPRING});
+			}
+			else {
+				this.player_bullets[0] = null;
+			}
 
 		}
 
@@ -674,6 +730,10 @@ class game_scene extends Phaser.Scene {
 			//put other player's world cordinates into local cordinates
 			localizeOtherplayersPositions(this, this.mapInfiniteLayer1.x - this.map_center_x, this.mapInfiniteLayer1.y - this.map_center_y);
 		}
+
+		//Do all the rendering here:
+		//which includes: 
+
 	}
 }
 
